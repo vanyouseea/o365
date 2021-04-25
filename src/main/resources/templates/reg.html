@@ -1,0 +1,104 @@
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>404 MH</title>
+	<script type="text/javascript" src="jquery-easyui-1.9.14/jquery.min.js"></script>
+	<script type="text/javascript" src="jquery-easyui-1.9.14/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="jquery-easyui-1.9.14/locale/easyui-lang-zh_CN.js"></script>
+	<link rel="stylesheet" href="jquery-easyui-1.9.14/themes/default/easyui.css" />
+	<link rel="stylesheet" href="jquery-easyui-1.9.14/themes/icon.css" />
+	<style type="text/css">
+		body{
+			background-image:url('bg.jpg');
+		}
+		table{
+		    margin: auto;
+		}
+	</style>
+</head>
+<body>
+	<table>
+		<tr>
+			<td>
+				<div style="width:100%;max-width:400px;padding:30px 60px;border: 2px solid #000;">
+					<h2 align="center">注册管理员</h2>
+					<form id="ff" method="post" action="/reg" >
+						<div style="margin-bottom:20px">
+							<b>用户:</b><input id="userid" name="userid" style="width:100%" onblur="checkUserId()" /><div id="useridtip" style="font-size: 10px"><font color="red">尽量不要使用admin,root等常用用户名</font></div>
+						</div>
+						<div style="margin-bottom:20px">
+							<b>密码:</b><input id="pwd" name="pwd" type="password" style="width:100%" />
+						</div>
+						<div style="margin-bottom:20px">
+							<b>确认密码:</b><input id="rpwd" type="password" style="width:100%" onblur="checkPwd()" /><div id="rpwdtip" style="font-size: 10px"><font color="red">请确认密码</font></div>
+						</div>
+						<div align="center">
+							<input type="button" onclick="submitForm()" style="width:80px" value="注册" />
+							<input type="button" onclick="clearForm()" style="width:80px" value="重置" />
+						</div>
+					</form>
+					<a href="login"><font style="font-size: 10px">已有账号？点此登录</font></a>
+				</div>
+			</td>
+		</tr>
+	</table>
+	<script>
+		function submitForm(){
+			//easyUI封装的异步提交方法，页面不跳转，可得到返回值
+			//$('#ff').form('submit');
+			//原生方法，提交并跳转页面
+			if(checkUserId()&&checkPwd()){
+				$('#ff').submit();
+			}
+			//$('#ff').submit();
+		}
+		function clearForm(){
+			$('#ff').form('clear');
+		}
+		function checkUserId(){
+			var flag = false;
+			var userid = $('#userid').val();
+			if(userid==''){
+				$('#useridtip').html("<img src='jquery-easyui-1.9.14/themes/icons/no.png' /><font color='red'>请输入用户名</font></div>");
+			}
+			else{
+				$.ajax({
+					type : "POST",
+					url : "/chkUserId",
+					data : {
+						"userid" : userid
+					},
+					async : false,
+					success : function(result) {
+						if(result=="Y"){
+							$('#useridtip').html("<img src='jquery-easyui-1.9.14/themes/icons/ok.png' /><font color='green'>用户名可用</font></div>");
+							flag = true;
+						}
+						else{
+							$('#useridtip').html("<img src='jquery-easyui-1.9.14/themes/icons/no.png' /><font color='red'>用户名不可用</font></div>");
+						}
+					},
+					error : function(){
+						$('#useridtip').html("<img src='jquery-easyui-1.9.14/themes/icons/no.png' /><font color='red'>用户名不可用</font></div>");
+					}
+				});
+			}
+			return flag;
+		}
+		function checkPwd(){
+			var flag = false;
+			var pwd1 = $('#pwd').val();
+			var pwd2 = $('#rpwd').val();
+			if(pwd1!=''&&pwd2!=''&&pwd1==pwd2){
+				$('#rpwdtip').html("<img src='jquery-easyui-1.9.14/themes/icons/ok.png' /><font color='green'>密码一致</font></div>");
+				flag = true;
+			}
+			else{
+				$('#rpwdtip').html("<img src='jquery-easyui-1.9.14/themes/icons/no.png' /><font color='red'>两次密码不一致</font></div>");
+			}
+			return flag;
+		}
+	</script>
+
+</body>
+</html>
