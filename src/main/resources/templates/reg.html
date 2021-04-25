@@ -59,7 +59,7 @@
 			var flag = false;
 			var userid = $('#userid').val();
 			if(userid==''){
-				$('#useridtip').html("<img src='jquery-easyui-1.9.14/themes/icons/no.png' /><font color='red'>请输入用户名</font></div>");
+				$('#useridtip').html("<div><img src='jquery-easyui-1.9.14/themes/icons/no.png' /><div><font color='red'>请输入用户名</font></div>");
 			}
 			else{
 				$.ajax({
@@ -71,15 +71,15 @@
 					async : false,
 					success : function(result) {
 						if(result=="Y"){
-							$('#useridtip').html("<img src='jquery-easyui-1.9.14/themes/icons/ok.png' /><font color='green'>用户名可用</font></div>");
+							$('#useridtip').html("<div><img src='jquery-easyui-1.9.14/themes/icons/ok.png' /><font color='green'>用户名可用</font></div>");
 							flag = true;
 						}
 						else{
-							$('#useridtip').html("<img src='jquery-easyui-1.9.14/themes/icons/no.png' /><font color='red'>用户名不可用</font></div>");
+							$('#useridtip').html("<div><img src='jquery-easyui-1.9.14/themes/icons/no.png' /><font color='red'>用户名不可用</font></div>");
 						}
 					},
 					error : function(){
-						$('#useridtip').html("<img src='jquery-easyui-1.9.14/themes/icons/no.png' /><font color='red'>用户名不可用</font></div>");
+						$('#useridtip').html("<div><img src='jquery-easyui-1.9.14/themes/icons/no.png' /><font color='red'>用户名不可用</font></div>");
 					}
 				});
 			}
@@ -90,11 +90,11 @@
 			var pwd1 = $('#pwd').val();
 			var pwd2 = $('#rpwd').val();
 			if(pwd1!=''&&pwd2!=''&&pwd1==pwd2){
-				$('#rpwdtip').html("<img src='jquery-easyui-1.9.14/themes/icons/ok.png' /><font color='green'>密码一致</font></div>");
+				$('#rpwdtip').html("<div><img src='jquery-easyui-1.9.14/themes/icons/ok.png' /><font color='green'>密码一致</font></div>");
 				flag = true;
 			}
 			else{
-				$('#rpwdtip').html("<img src='jquery-easyui-1.9.14/themes/icons/no.png' /><font color='red'>两次密码不一致</font></div>");
+				$('#rpwdtip').html("<div><img src='jquery-easyui-1.9.14/themes/icons/no.png' /><font color='red'>两次密码不一致</font></div>");
 			}
 			return flag;
 		}

@@ -8,8 +8,52 @@
 	<link rel="stylesheet" href="jquery-easyui-1.9.14/themes/default/easyui.css" />
 	<link rel="stylesheet" href="jquery-easyui-1.9.14/themes/icon.css" />
 </head>
-<body>
-<h2>Welcome, <span th:text="${session.userName}"></span></h2>
-
+<body class="easyui-layout">
+	<div data-options="region:'north',border:false" style="height:60px;background:#B3DFDA;">
+		<h3>Welcome, <span th:text="${session.userName}"></span></h3>
+	</div>
+	<div data-options="region:'west',split:true,title:'West'" style="width:260px;padding:2px;">
+		<div id="aa" class="easyui-accordion" style="width:100%;height:220px;">
+		    <div title="Title1" data-options="iconCls:'icon-save'" style="overflow:auto">
+				<a href="javascript:void()" onclick="addPanel('配置')" >配置</a>
+		    </div>
+		    <div title="Title2" data-options="iconCls:'icon-reload',selected:true">
+				content2
+		    </div>
+		    <div title="Title3">
+				content3
+		    </div>
+		</div>
+	</div>
+	<div data-options="region:'south',border:false" style="height:25px;background:#A9FACD;">powered by hqr</div>
+	<div id="acc" class="easyui-tabs" data-options="region:'center'">
+		<div title="首页" style="padding:10px">
+			<p style="font-size:14px">jQuery EasyUI framework helps you build your web pages easily.</p>
+			<ul>
+				<li>easyui is a collection of user-interface plugin based on jQuery.</li>
+				<li>easyui provides essential functionality for building modem, interactive, javascript applications.</li>
+				<li>using easyui you don't need to write many javascript code, you usually defines user-interface by writing some HTML markup.</li>
+				<li>complete framework for HTML5 web page.</li>
+				<li>easyui save your time and scales while developing your products.</li>
+				<li>easyui is very easy but powerful.</li>
+			</ul>
+		</div>
+	</div>
+	
+	<script type="text/javascript">
+		function addPanel(name){
+			tab = $('#acc').tabs('getTab',name);
+			if(tab==null){
+				$('#acc').tabs('add',{
+					title: name,
+					content: '<div style="padding:10px">Content</div>',
+					closable: true
+				});
+			}
+			else{
+				$('#acc').tabs('select',name);
+			}
+		}
+	</script>
 </body>
 </html>
