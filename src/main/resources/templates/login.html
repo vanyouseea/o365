@@ -7,9 +7,66 @@
 	<script type="text/javascript" src="jquery-easyui-1.9.14/locale/easyui-lang-zh_CN.js"></script>
 	<link rel="stylesheet" href="jquery-easyui-1.9.14/themes/default/easyui.css" />
 	<link rel="stylesheet" href="jquery-easyui-1.9.14/themes/icon.css" />
+	<style type="text/css">
+		body{
+			background-image:url('bg.jpg');
+		}
+		table{
+		    margin: auto;
+		}
+	</style>
 </head>
 <body>
-<h2>Login Page</h2>
-
+	<table>
+		<tr>
+			<td>
+				<div style="width:100%;max-width:400px;padding:30px 60px;border: 2px solid #000;">
+					<h2 align="center">登录O365</h2>
+					<form id="ff" method="post" action="/login" >
+						<div style="margin-bottom:20px">
+							<b>用户:</b><input id="userid" name="userid" style="width:100%" onblur="checkUserId()" /><div id="useridtip" style="font-size: 10px"><font color="gray">请输入用户名</font></div>
+						</div>
+						<div style="margin-bottom:20px">
+							<b>密码:</b><input id="pwd" name="pwd" type="password" style="width:100%" /><div id="useridtip" style="font-size: 10px"><font color="gray">请输入密码</font></div>
+						</div>
+						<div align="center">
+							<input type="button" onclick="submitForm()" style="width:80px" value="登录" />
+							<input type="button" onclick="clearForm()" style="width:80px" value="重置" />
+						</div>
+					</form>
+				</div>
+			</td>
+		</tr>
+	</table>
+		<script>
+		function submitForm(){
+			//easyUI封装的异步提交方法，页面不跳转，可得到返回值
+			//$('#ff').form('submit');
+			//原生方法，提交并跳转页面
+			if(checkUserId()&&checkPwd()){
+				$('#ff').submit();
+			}
+			//$('#ff').submit();
+		}
+		function clearForm(){
+			$('#ff').form('clear');
+		}
+		function checkUserId(){
+			var flag = false;
+			var userid = $('#userid').val();
+			if(userid!=''){
+				flag = true;
+			}
+			return flag;
+		}
+		function checkPwd(){
+			var flag = false;
+			var pwd1 = $('#pwd').val();
+			if(pwd1!=''){
+				flag = true;
+			}
+			return flag;
+		}
+	</script>
 </body>
 </html>

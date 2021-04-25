@@ -6,13 +6,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import hqr.o365.domain.TaUser;
-import hqr.o365.service.SaveUser;
+import hqr.o365.service.RegUser;
 
 @Controller
 public class RegCtrl {
 	
 	@Autowired
-	private SaveUser su;
+	private RegUser su;
 	
 	@RequestMapping(value = "/reg")
 	public String regUser(@RequestParam(name="userid") String userid,@RequestParam(name="pwd") String pwd) {

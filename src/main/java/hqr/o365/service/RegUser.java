@@ -7,7 +7,7 @@ import hqr.o365.dao.TaUserRepo;
 import hqr.o365.domain.TaUser;
 
 @Service
-public class SaveUser {
+public class RegUser {
 	
 	@Autowired
 	private TaUserRepo tur;
