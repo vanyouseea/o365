@@ -2,26 +2,33 @@
 <head>
 	<meta charset="UTF-8">
 	<title>404 MH</title>
+	<link rel="stylesheet" href="jquery-easyui-1.9.14/themes/default/easyui.css" />
+	<link rel="stylesheet" href="jquery-easyui-1.9.14/themes/icon.css" />
 	<script type="text/javascript" src="jquery-easyui-1.9.14/jquery.min.js"></script>
 	<script type="text/javascript" src="jquery-easyui-1.9.14/jquery.easyui.min.js"></script>
 	<script type="text/javascript" src="jquery-easyui-1.9.14/locale/easyui-lang-zh_CN.js"></script>
-	<link rel="stylesheet" href="jquery-easyui-1.9.14/themes/default/easyui.css" />
-	<link rel="stylesheet" href="jquery-easyui-1.9.14/themes/icon.css" />
 </head>
-<body class="easyui-layout">
+<body class="easyui-layout" data-options="fit:true">
 	<div data-options="region:'north',border:false" style="height:60px;background:#B3DFDA;">
 		<h3><img src="logo.svg" /><span style="float: right">Welcome, <span th:text="${session.userName}"></span></span></h3> 
 	</div>
-	<div data-options="region:'west',split:true,title:'West'" style="width:260px;padding:2px;">
+	<div data-options="region:'west',split:true" style="width:260px;padding:2px;">
 		<div id="aa" class="easyui-accordion" style="width:100%;height:220px;">
-		    <div title="Title1" data-options="iconCls:'icon-save'" style="overflow:auto">
-				<a href="javascript:void()" onclick="addPanel('配置')" >配置</a>
+		    <div title="用户管理"  style="overflow:auto">
+		    	<ul class="easyui-tree">
+					<li><div onclick="addPanel('查看用户')">查看用户</div></li>
+				</ul>
 		    </div>
-		    <div title="Title2" data-options="iconCls:'icon-reload',selected:true">
-				content2
+		    <div title="许可证"  style="overflow:auto">
+		    	<ul class="easyui-tree">
+					<li><div onclick="addPanel('查看许可证')">查看许可证</div></li>
+				</ul>
 		    </div>
-		    <div title="Title3">
-				content3
+		    <div title="配置" style="overflow:auto">
+		    	<ul class="easyui-tree">
+		    		<li><div onclick="addPanel('新增配置')">新增配置</div></li>
+					<li><div onclick="addPanel('查看配置')">查看配置</div></li>
+				</ul>
 		    </div>
 		</div>
 	</div>
@@ -46,7 +53,8 @@
 			if(tab==null){
 				$('#acc').tabs('add',{
 					title: name,
-					content: '<div style="padding:10px">Content</div>',
+					href: 'dummy',
+					//content: '<div style="padding:10px">Content</div>',
 					closable: true
 				});
 			}
