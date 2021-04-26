@@ -13,6 +13,6 @@ public interface TaUserRepo extends JpaRepository<TaUser, Integer> {
 	@Query(value="select count(0) from ta_user where user_id= :userid ", nativeQuery = true)
 	int chkUserId(String userid);
 	
-	@Query(value="select * from ta_user where user_id= :userid and :pwd ", nativeQuery = true)
+	@Query(value="select * from ta_user where user_id= :userid and passwd=:pwd ", nativeQuery = true)
 	List<TaUser> checkCredential(String userid, String pwd);
 }

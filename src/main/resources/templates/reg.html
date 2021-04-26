@@ -17,40 +17,53 @@
 	</style>
 </head>
 <body>
-	<table>
-		<tr>
-			<td>
-				<div style="width:100%;max-width:400px;padding:30px 60px;border: 2px solid #000;">
-					<h2 align="center">注册管理员</h2>
-					<form id="ff" method="post" action="/reg" >
-						<div style="margin-bottom:20px">
-							<b>用户:</b><input id="userid" name="userid" style="width:100%" onblur="checkUserId()" /><div id="useridtip" style="font-size: 10px"><font color="red">尽量不要使用admin,root等常用用户名</font></div>
-						</div>
-						<div style="margin-bottom:20px">
-							<b>密码:</b><input id="pwd" name="pwd" type="password" style="width:100%" />
-						</div>
-						<div style="margin-bottom:20px">
-							<b>确认密码:</b><input id="rpwd" type="password" style="width:100%" onblur="checkPwd()" /><div id="rpwdtip" style="font-size: 10px"><font color="red">请确认密码</font></div>
-						</div>
-						<div align="center">
-							<input type="button" onclick="submitForm()" style="width:80px" value="注册" />
-							<input type="button" onclick="clearForm()" style="width:80px" value="重置" />
-						</div>
-					</form>
-					<a href="login"><font style="font-size: 10px">已有账号？点此登录</font></a>
+	<div id="dlg" class="easyui-dialog" title="注册管理员" style="width: 320px; height: 350px; padding: 10px">
+		<form id="ff" method="post" action="/reg">
+			<div style="margin-bottom: 18px">
+				<b>用户:</b><input id="userid" name="userid" style="width: 100%" onblur="checkUserId()" />
+				<div id="useridtip" style="font-size: 10px">
+					<font color="red">尽量不要使用admin,root等常用用户名</font>
 				</div>
-			</td>
-		</tr>
-	</table>
+			</div>
+			<div style="margin-bottom: 18px">
+				<b>密码:</b><input id="pwd" name="pwd" type="password" style="width: 100%" />
+			</div>
+			<div style="margin-bottom: 18px">
+				<b>确认密码:</b><input id="rpwd" type="password" style="width: 100%" onblur="checkPwd()" />
+				<div id="rpwdtip" style="font-size: 10px">
+					<font color="red">请确认密码</font>
+				</div>
+			</div>
+		</form>
+		<a href="login"><font style="font-size: 10px">已有账号？点此登录</font></a>
+	</div>
+
+
 	<script>
+		$('#dlg').dialog({
+		    cache: false,
+			iconCls: 'icon-man',
+			resizable: false,
+			closable: false,
+		    modal: true,
+			buttons: [{
+				text:'注册',
+				iconCls:'icon-ok',
+				handler:function(){
+					submitForm();
+				}
+			},{
+				text:'重置',
+				handler: function(){
+					clearForm();
+				}
+			}]
+		});
+	
 		function submitForm(){
-			//easyUI封装的异步提交方法，页面不跳转，可得到返回值
-			//$('#ff').form('submit');
-			//原生方法，提交并跳转页面
 			if(checkUserId()&&checkPwd()){
 				$('#ff').submit();
 			}
-			//$('#ff').submit();
 		}
 		function clearForm(){
 			$('#ff').form('clear');
@@ -59,7 +72,7 @@
 			var flag = false;
 			var userid = $('#userid').val();
 			if(userid==''){
-				$('#useridtip').html("<div><img src='jquery-easyui-1.9.14/themes/icons/no.png' /><div><font color='red'>请输入用户名</font></div>");
+				$('#useridtip').html("<div><img src='jquery-easyui-1.9.14/themes/icons/no.png' /><font color='red'>请输入用户名</font></div>");
 			}
 			else{
 				$.ajax({

@@ -17,36 +17,43 @@
 	</style>
 </head>
 <body>
-	<table>
-		<tr>
-			<td>
-				<div style="width:100%;max-width:400px;padding:30px 60px;border: 2px solid #000;">
-					<h2 align="center">登录O365</h2>
-					<form id="ff" method="post" action="/login" >
-						<div style="margin-bottom:20px">
-							<b>用户:</b><input id="userid" name="userid" style="width:100%" onblur="checkUserId()" /><div id="useridtip" style="font-size: 10px"><font color="gray">请输入用户名</font></div>
-						</div>
-						<div style="margin-bottom:20px">
-							<b>密码:</b><input id="pwd" name="pwd" type="password" style="width:100%" /><div id="useridtip" style="font-size: 10px"><font color="gray">请输入密码</font></div>
-						</div>
-						<div align="center">
-							<input type="button" onclick="submitForm()" style="width:80px" value="登录" />
-							<input type="button" onclick="clearForm()" style="width:80px" value="重置" />
-						</div>
-					</form>
-				</div>
-			</td>
-		</tr>
-	</table>
-		<script>
+	<div id="dlg" class="easyui-dialog" title="登录O365管理系统" style="width: 320px; height: 270px; padding: 10px">
+		<form id="ff" method="post" action="/login" >
+			<div style="margin-bottom:18px">
+				<b>用户:</b><input id="userid" name="userid" style="width:100%" onblur="checkUserId()" /><div id="useridtip" style="font-size: 10px"><font color="gray">请输入用户名</font></div>
+			</div>
+			<div style="margin-bottom:18px">
+				<b>密码:</b><input id="pwd" name="pwd" type="password" style="width:100%" /><div id="useridtip" style="font-size: 10px"><font color="gray">请输入密码</font></div>
+			</div>
+		</form>
+		<a href="reg"><font style="font-size: 10px">没有账号？点此注册</font></a>
+	</div>
+	
+	<script>
+		$('#dlg').dialog({
+		    cache: false,
+			iconCls: 'icon-man',
+			resizable: false,
+			closable: false,
+		    modal: true,
+			buttons: [{
+				text:'登录',
+				iconCls:'icon-ok',
+				handler:function(){
+					submitForm();
+				}
+			},{
+				text:'重置',
+				handler: function(){
+					clearForm();
+				}
+			}]
+		});
+	
 		function submitForm(){
-			//easyUI封装的异步提交方法，页面不跳转，可得到返回值
-			//$('#ff').form('submit');
-			//原生方法，提交并跳转页面
 			if(checkUserId()&&checkPwd()){
 				$('#ff').submit();
 			}
-			//$('#ff').submit();
 		}
 		function clearForm(){
 			$('#ff').form('clear');
