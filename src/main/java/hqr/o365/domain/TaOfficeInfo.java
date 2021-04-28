@@ -18,7 +18,7 @@ public class TaOfficeInfo {
 	private String appId;
 	private String secretId;
 	private String remarks;
-	private Date createDy;
+	private Date createDt;
 	private String lastUpdateId;
 	private Date lastUpdateDt;
 	public int getSeqNo() {
@@ -57,12 +57,6 @@ public class TaOfficeInfo {
 	public void setSecretId(String secretId) {
 		this.secretId = secretId;
 	}
-	public Date getCreateDy() {
-		return createDy;
-	}
-	public void setCreateDy(Date createDy) {
-		this.createDy = createDy;
-	}
 	public String getLastUpdateId() {
 		return lastUpdateId;
 	}
@@ -80,5 +74,11 @@ public class TaOfficeInfo {
 	}
 	public void setRemarks(String remarks) {
 		this.remarks = remarks;
+	}
+	public Date getCreateDt() {
+		return createDt;
+	}
+	public void setCreateDt(Date createDt) {
+		this.createDt = createDt;
 	}
 }
