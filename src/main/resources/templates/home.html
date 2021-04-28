@@ -12,7 +12,7 @@
 	<div data-options="region:'north',border:false" style="height:60px;background:#B3DFDA;">
 		<h3><img src="logo.svg" /><span style="float: right">Welcome, <span th:text="${session.userName}"></span></span></h3> 
 	</div>
-	<div data-options="region:'west',split:true" style="width:260px;padding:2px;">
+	<div data-options="region:'west',split:true,title:'管理'" style="width:260px;padding:2px;">
 		<div id="aa" class="easyui-accordion" style="width:100%;height:220px;">
 		    <div title="用户管理"  style="overflow:auto">
 		    	<ul class="easyui-tree">
@@ -53,7 +53,7 @@
 			if(tab==null){
 				$('#acc').tabs('add',{
 					title: name,
-					href: 'dummy',
+					href: 'tabs/config.html',
 					//content: '<div style="padding:10px">Content</div>',
 					closable: true
 				});
