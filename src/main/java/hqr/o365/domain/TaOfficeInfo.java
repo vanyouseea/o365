@@ -17,6 +17,7 @@ public class TaOfficeInfo {
 	private String tenantId;
 	private String appId;
 	private String secretId;
+	private String remarks;
 	private Date createDy;
 	private String lastUpdateId;
 	private Date lastUpdateDt;
@@ -73,5 +74,11 @@ public class TaOfficeInfo {
 	}
 	public void setLastUpdateDt(Date lastUpdateDt) {
 		this.lastUpdateDt = lastUpdateDt;
+	}
+	public String getRemarks() {
+		return remarks;
+	}
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
 	}
 }

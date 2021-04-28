@@ -10,7 +10,7 @@ import hqr.o365.domain.TaUser;
 
 @Repository
 public interface TaUserRepo extends JpaRepository<TaUser, Integer> {
-	@Query(value="select count(0) from ta_user where user_id= :userid ", nativeQuery = true)
+	@Query(value="select count(1) from ta_user where user_id= :userid ", nativeQuery = true)
 	int chkUserId(String userid);
 	
 	@Query(value="select * from ta_user where user_id= :userid and passwd=:pwd ", nativeQuery = true)

@@ -6,45 +6,192 @@
 
 </head>
 <body>
-	<table id="dg" class="easyui-datagrid" style="width:700px;height:300px" data-options="
+	<table id="tb1" class="easyui-datagrid" style="width:100%" data-options="
 				border:false,
 				fit:true,
-				rownumbers:true,
 				singleSelect:true,
 				autoRowHeight:false,
 				pagination:true,
-				pageSize:10">
+				pageSize:10,
+				url:'/getConfig',
+				method:'post',
+				toolbar:toolbar
+				">
 		<thead>
 			<tr >
-				<th field="inv" width="25%" >Inv No</th>
-				<th field="date" width="25%" >Date</th>
-				<th field="name" width="25%">Name</th>
-				<th field="amount" width="25%">Amount</th>
+				<th field="userId" >用户名</th>
+				<th field="passwd"  >密码</th>
+				<th field="tenantId">租户ID</th>
+				<th field="appId" >应用ID</th>
+				<th field="secretId" >应用密码</th>
+				<th field="remarks" >备注</th>
 			</tr>
 		</thead>
-		<tbody>
-			<tr>
-				<td>001</td><td>name1</td><td>2323</td>
-				<td>001</td><td>name1</td><td>2323</td>
-				<td>001</td><td>name1</td><td>2323</td>
-				<td>001</td><td>name1</td><td>2323</td>
-			</tr>
-			<tr>
-				<td>002</td><td>name2</td><td>4612</td>
-				<td>002</td><td>name2</td><td>4612</td>
-				<td>002</td><td>name2</td><td>4612</td>
-				<td>002</td><td>name2</td><td>4612</td>
-			</tr>
-			<tr>
-				<td>002</td><td>name2</td><td>4612</td>
-				<td>002</td><td>name2</td><td>4612</td>
-				<td>002</td><td>name2</td><td>4612</td>
-				<td>002</td><td>name2</td><td>4612</td>
-			</tr>
-		</tbody>
 	</table>
-	<script>
-
+	<div id="dlg" class="easyui-dialog" title="新增配置" style="width:380px;height:380px;padding:10px"
+			data-options="
+				iconCls: 'icon-add',
+				buttons: [{
+					text:'确定',
+					iconCls:'icon-ok',
+					handler:function(){
+						var firstName = $('#firstName').val();
+						var lastName = $('#lastName').val();
+						var emailId = $('#emailId').val();
+						
+						if(firstName!=''&&lastName!=''&&emailId!=''){
+							$.ajax({
+						     type : 'POST', 
+						     url : '/addUser',
+						     data : { 'firstName': firstName, 'lastName' : lastName, 'emailId' : emailId },
+						     success : function(result) {
+						      if ( result!='fail' ) {
+						      	$.messager.show({
+									title:'Create User',
+									msg:'The user '+ result +' has been created',
+									timeout:2000,
+									showType:'slide'
+								});
+								//assign license
+								if($('#assigned')[0].checked){
+									$.ajax({ 
+										 type : 'POST', 
+										 url : '/assignLicense',
+										 data : { 'uid': result },
+										 success : function(result1) {
+										  if ( result1=='succ' ) {
+										  	$.messager.show({
+												title:'Assign License',
+												msg:'License assigned',
+												timeout:2000,
+												showType:'slide'
+											});
+										  } else { 
+										   	$.messager.show({
+												title:'Assign License',
+												msg:'fail to assign license',
+												timeout:2000,
+												showType:'slide'
+											}); 
+										  } 
+										 } 
+									}); 
+								}
+						      	$('#tb1').datagrid('reload');
+						      } else { 
+						       	$.messager.show({
+									title:'Create User',
+									msg:'fail to create user, user already exist or API error',
+									timeout:2000,
+									showType:'slide'
+								}); 
+						      } 
+						      $('#dlg').dialog('close');
+						     } 
+						    }); 
+						}else{
+							$.messager.show({
+								title:'Bad Parameters',
+								msg:'Parameters not enough',
+								timeout:2000,
+								showType:'slide'
+							}); 
+						}
+					}
+				},{
+					text:'取消',
+					handler:function(){
+						$('#dlg').dialog('close');
+					}
+				}]
+			">
+		<div style="margin-bottom:10px">
+			用户名:
+			<input id="userid" class="easyui-validatebox tb" >
+		</div>
+		<div style="margin-bottom:10px">
+			密码:
+			<input id="passwd" class="easyui-validatebox tb" >
+		</div>
+		<div style="margin-bottom:10px">
+			租户ID:
+			<input id="tenantId" class="easyui-validatebox tb" data-options="required:true">
+		</div>
+		<div style="margin-bottom:10px">
+			应用ID:
+			<input id="appId" class="easyui-validatebox tb" data-options="required:true">
+		</div>
+		<div style="margin-bottom:10px">
+			应用密码:
+			<input id="secretId" class="easyui-validatebox tb" data-options="required:true">
+		</div>
+		<div style="margin-bottom:10px">
+			备注:
+			<input id="remarks" class="easyui-validatebox tb" data-options="validType:'length[0,200]'">
+		</div>
+	</div>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$('.window').css('display','none');
+			$('.window-shadow').css('display','none');
+		});
+		var toolbar = [{
+			text:'Add',
+			iconCls:'icon-add',
+			handler:function(){
+				$('#dlg').dialog('open');
+			}
+		},{
+			text:'Delete',
+			iconCls:'icon-remove',
+			handler:function(){
+				var row = $('#tb1').datagrid('getSelected');
+				$.ajax({ 
+			     type : "POST", 
+			     url : "/deleteUser",
+			     data : { "uid": row.id },
+			     success : function(result) {
+			      if ( result=="succ" ) {
+			      	$.messager.show({
+						title:'Delete User',
+						msg:'The user '+row.id+' has been deleted successfully',
+						timeout:2000,
+						showType:'slide'
+					});
+			      	$('#tb1').datagrid('reload');
+			      } else { 
+			       	$.messager.show({
+						title:'Delete User',
+						msg:'fail to delete user'+row.id,
+						timeout:2000,
+						showType:'slide'
+					}); 
+			      } 
+			     } 
+			    }); 
+			}
+		},{
+			text:'Edit',
+			iconCls:'icon-edit',
+			handler:function(){
+				alert('edit');
+			}
+		},{
+			text:'Refresh',
+			iconCls:'icon-reload',
+			handler:function(){
+				$('#tb1').datagrid('reload');
+			}
+		}];
 	</script>
+	<style scoped="scoped">
+		.tb{
+			width:100%;
+			margin:0;
+			padding:5px 4px;
+			border:1px solid #ccc;
+			box-sizing:border-box;
+		}
+	</style>
 </body>
 </html>

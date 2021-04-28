@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class ConfigTabCtrl {
 	@RequestMapping(value = {"/tabs/config.html"})
 	public String dummy() {
-		System.out.println("Go to here");
 		return "tabs/config";
 	}
 }
