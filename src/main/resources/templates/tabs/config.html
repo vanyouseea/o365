@@ -28,9 +28,10 @@
 			</tr>
 		</thead>
 	</table>
-	<div id="dlg" class="easyui-dialog" title="新增配置" style="padding:10px"
+	<div id="dlg" class="easyui-dialog" title="配置信息" style="padding:10px"
 			data-options="
 				iconCls: 'icon-add',
+				modal : true,
 				buttons: [{
 					text:'确定',
 					iconCls:'icon-ok',
@@ -41,35 +42,41 @@
 						var appId = $('#appId').val();
 						var secretId = $('#secretId').val();
 						var remarks = $('#remarks').val();
+						var seqNo = -1;
 					
+						if(row!=null){
+							seqNo = row.seqNo;
+						}
+						console.log('seqNo:'+seqNo);
 						if(tenantId!='' && appId!='' && secretId!=''){
 							$.ajax({
-						     type : 'POST', 
-						     url : '/saveConfig',
-						     data : { 'userid': userid, 'passwd' : passwd, 'tenantId' : tenantId, 'appId': appId, 'secretId' : secretId, 'remarks': remarks },
-						     success : function(result) {
-						      if ( result ) {
-						      	$.messager.show({
-									title:'Create User',
-									msg:'Office info has been created',
-									timeout:2000,
-									showType:'slide'
-								});
-						      	$('#tb1').datagrid('reload');
-						      } else { 
-						       	$.messager.show({
-									title:'成功',
-									msg:'office信息已保存',
-									timeout:2000,
-									showType:'slide'
-								}); 
-						      } 
-						      $('#dlg').dialog('close');
-						     }
-						    }); 
+								type : 'POST', 
+								url : '/saveConfig',
+								data : { 'seqNo': seqNo , 'userid': userid, 'passwd' : passwd, 'tenantId' : tenantId, 'appId': appId, 'secretId' : secretId, 'remarks': remarks },
+								success : function(result) {
+									if ( result ) {
+										$.messager.show({
+											title:'成功',
+											msg:'office信息已保存',
+											timeout:2000,
+											showType:'slide'
+										});
+										$('#tb1').datagrid('reload');
+									} else { 
+										$.messager.show({
+											title:'失败',
+											msg:'office信息保存失败',
+											timeout:2000,
+											showType:'slide'
+										}); 
+									} 
+									$('#dlg').dialog('close');
+								}
+							});
+						    row = null;
 						}else{
 							$.messager.show({
-								title:'参数不足',
+								title:'失败',
 								msg:'缺少必填项，请检查',
 								timeout:2000,
 								showType:'slide'
@@ -111,50 +118,79 @@
 		</table>
 	</div>
 	<script type="text/javascript">
+		var row;
 		$(document).ready(function(){
 			$('.window').css('display','none');
 			$('.window-shadow').css('display','none');
+			$('#dlg').dialog('close');
 		});
 		var toolbar = [{
 			text:'Add',
 			iconCls:'icon-add',
 			handler:function(){
+				$('#userid').val('');
+				$('#passwd').val('');
+				$('#tenantId').val('');
+				$('#appId').val('');
+				$('#secretId').val('');
+				$('#remarks').val('');
+				row = null;
 				$('#dlg').dialog('open');
 			}
 		},{
 			text:'Delete',
 			iconCls:'icon-remove',
 			handler:function(){
-				var row = $('#tb1').datagrid('getSelected');
-				$.ajax({ 
-			     type : "POST", 
-			     url : "/deleteUser",
-			     data : { "uid": row.id },
-			     success : function(result) {
-			      if ( result=="succ" ) {
-			      	$.messager.show({
-						title:'Delete User',
-						msg:'The user '+row.id+' has been deleted successfully',
-						timeout:2000,
-						showType:'slide'
-					});
-			      	$('#tb1').datagrid('reload');
-			      } else { 
-			       	$.messager.show({
-						title:'Delete User',
-						msg:'fail to delete user'+row.id,
-						timeout:2000,
-						showType:'slide'
-					}); 
-			      } 
-			     } 
-			    }); 
+				row = $('#tb1').datagrid('getSelected');
+				var appId = row.appId;
+				$.ajax({
+				    type : "POST", 
+				    url : "/delConfig",
+				    data : { "seqNo": row.seqNo },
+				    success : function(result) {
+					      if ( result ) {
+						      	$.messager.show({
+									title:'成功',
+									msg:'配置 '+appId+' 已成功被删除',
+									timeout:2000,
+									showType:'slide'
+								});
+						      	$('#tb1').datagrid('reload');
+						  } else { 
+						       	$.messager.show({
+									title:'失败',
+									msg:'删除配置失败，请重试',
+									timeout:2000,
+									showType:'slide'
+								}); 
+						  }
+					},
+					error : function(){
+				       	$.messager.show({
+							title:'失败',
+							msg:'删除配置失败，请重试',
+							timeout:2000,
+							showType:'slide'
+						}); 
+					}
+			    });
+				row = null;
 			}
 		},{
 			text:'Edit',
 			iconCls:'icon-edit',
 			handler:function(){
-				alert('edit');
+			    row = $('#tb1').datagrid('getSelected');
+				if(row!=null){
+					$('#userid').val(row.userId);
+					$('#passwd').val(row.passwd);
+					$('#tenantId').val(row.tenantId);
+					$('#appId').val(row.appId);
+					$('#secretId').val(row.secretId);
+					$('#remarks').val(row.remarks);
+					
+					$('#dlg').dialog('open');
+				}
 			}
 		},{
 			text:'Refresh',
