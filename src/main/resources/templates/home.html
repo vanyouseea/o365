@@ -26,7 +26,6 @@
 		    </div>
 		    <div title="配置" style="overflow:auto">
 		    	<ul class="easyui-tree">
-		    		<li><div onclick="addPanel('新增配置')">新增配置</div></li>
 					<li><div onclick="addPanel('查看配置')">查看配置</div></li>
 				</ul>
 		    </div>
@@ -51,12 +50,30 @@
 		function addPanel(name){
 			tab = $('#acc').tabs('getTab',name);
 			if(tab==null){
-				$('#acc').tabs('add',{
-					title: name,
-					href: 'tabs/config.html',
-					//content: '<div style="padding:10px">Content</div>',
-					closable: true
-				});
+				if(name=='查看用户'){
+					$('#acc').tabs('add',{
+						title: name,
+						href: 'tabs/user.html',
+						//content: '<div style="padding:10px">Content</div>',
+						closable: true
+					});
+				}
+				else if(name=='查看许可证'){
+					$('#acc').tabs('add',{
+						title: name,
+						href: 'tabs/config.html',
+						//content: '<div style="padding:10px">Content</div>',
+						closable: true
+					});
+				}
+				else if(name=='查看配置'){
+					$('#acc').tabs('add',{
+						title: name,
+						href: 'tabs/license.html',
+						//content: '<div style="padding:10px">Content</div>',
+						closable: true
+					});
+				}
 			}
 			else{
 				$('#acc').tabs('select',name);

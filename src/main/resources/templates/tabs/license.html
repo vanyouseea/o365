@@ -6,7 +6,7 @@
 
 </head>
 <body>
-	<table id="tb1" class="easyui-datagrid" style="width:100%" data-options="
+	<table id="tb2" class="easyui-datagrid" style="width:100%" data-options="
 				border:false,
 				fit:true,
 				singleSelect:true,
@@ -19,7 +19,7 @@
 				">
 		<thead>
 			<tr >
-				<th field="userId"  >用户名</th>
+				<th field="userId" >用户名</th>
 				<th field="passwd"  >密码</th>
 				<th field="tenantId">租户ID</th>
 				<th field="appId" >应用ID</th>
@@ -28,7 +28,7 @@
 			</tr>
 		</thead>
 	</table>
-	<div id="dlg1" class="easyui-dialog" title="配置信息" style="padding:10px"
+	<div id="dlg2" class="easyui-dialog" title="配置信息" style="padding:10px"
 			data-options="
 				iconCls: 'icon-add',
 				modal : true,
@@ -62,7 +62,7 @@
 											timeout:2000,
 											showType:'slide'
 										});
-										$('#tb1').datagrid('reload');
+										$('#tb2').datagrid('reload');
 									} else { 
 										$.messager.show({
 											title:'失败',
@@ -71,7 +71,7 @@
 											showType:'slide'
 										}); 
 									} 
-									$('#dlg1').dialog('close');
+									$('#dlg2').dialog('close');
 								}
 							});
 						    row = null;
@@ -87,14 +87,14 @@
 				},{
 					text:'取消',
 					handler:function(){
-						$('#dlg1').dialog('close');
+						$('#dlg2').dialog('close');
 					}
 				}]
 			">
 		<table>
 			<tr>
 				<td>用户名:</td>
-				<td><input id="userid" class="easyui-validatebox tb" style="width: 280px"></td>
+				<td><input id="userid" class="easyui-validatebox tb" style="width: 280px" ></td>
 			</tr>
 			<tr>
 				<td>密码:</td>
@@ -132,13 +132,13 @@
 				$('#secretId').val('');
 				$('#remarks').val('');
 				row = null;
-				$('#dlg1').dialog('open');
+				$('#dlg2').dialog('open');
 			}
 		},{
 			text:'Delete',
 			iconCls:'icon-remove',
 			handler:function(){
-				row = $('#tb1').datagrid('getSelected');
+				row = $('#tb2').datagrid('getSelected');
 				var appId = row.appId;
 				$.ajax({
 				    type : "POST", 
@@ -152,7 +152,7 @@
 									timeout:2000,
 									showType:'slide'
 								});
-						      	$('#tb1').datagrid('reload');
+						      	$('#tb2').datagrid('reload');
 						  } else { 
 						       	$.messager.show({
 									title:'失败',
@@ -177,7 +177,7 @@
 			text:'Edit',
 			iconCls:'icon-edit',
 			handler:function(){
-			    row = $('#tb1').datagrid('getSelected');
+			    row = $('#tb2').datagrid('getSelected');
 				if(row!=null){
 					$('#userid').val(row.userId);
 					$('#passwd').val(row.passwd);
@@ -186,14 +186,14 @@
 					$('#secretId').val(row.secretId);
 					$('#remarks').val(row.remarks);
 					
-					$('#dlg1').dialog('open');
+					$('#dlg2').dialog('open');
 				}
 			}
 		},{
 			text:'Refresh',
 			iconCls:'icon-reload',
 			handler:function(){
-				$('#tb1').datagrid('reload');
+				$('#tb2').datagrid('reload');
 			}
 		}];
 	</script>
