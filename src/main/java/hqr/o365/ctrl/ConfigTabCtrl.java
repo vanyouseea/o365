@@ -13,6 +13,7 @@ import hqr.o365.domain.TaOfficeInfo;
 import hqr.o365.service.DeleteOfficeInfo;
 import hqr.o365.service.GetOfficeInfo;
 import hqr.o365.service.SaveOfficeInfo;
+import hqr.o365.service.ValidateAppInfo;
 
 @Controller
 public class ConfigTabCtrl {
@@ -25,6 +26,9 @@ public class ConfigTabCtrl {
 	
 	@Autowired
 	private DeleteOfficeInfo di;
+	
+	@Autowired
+	private ValidateAppInfo vai;
 	
 	@RequestMapping(value = {"/tabs/config.html"})
 	public String dummy() {
@@ -70,6 +74,13 @@ public class ConfigTabCtrl {
 	public boolean delete(@RequestParam(name="seqNo") int seqNo) {
 		System.out.println("SeqNo:"+seqNo);
 		return di.delete(seqNo);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = {"/valiateAppInfo"}, method = RequestMethod.POST)
+	public boolean validate(@RequestParam(name="tenantId") String tenantId,@RequestParam(name="appId") String appId,@RequestParam(name="secretId") String secretId) {
+		System.out.println("tenantId"+tenantId);
+		return vai.check(tenantId, appId, secretId);
 	}
 	
 }
