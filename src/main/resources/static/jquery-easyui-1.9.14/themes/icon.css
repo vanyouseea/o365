@@ -10,6 +10,9 @@
 .icon-clear{
 	background:url('icons/clear.png') no-repeat center center;
 }
+.icon-check{
+	background:url('icons/check.png') no-repeat center center;
+}
 .icon-remove{
 	background:url('icons/edit_remove.png') no-repeat center center;
 }
@@ -45,6 +48,9 @@
 }
 .icon-redo{
 	background:url('icons/redo.png') no-repeat center center;
+}
+.icon-switch{
+	background:url('icons/switch.ico') no-repeat center center;
 }
 .icon-back{
 	background:url('icons/back.png') no-repeat center center;

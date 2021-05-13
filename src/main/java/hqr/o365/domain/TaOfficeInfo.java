@@ -17,9 +17,12 @@ public class TaOfficeInfo {
 	private String tenantId;
 	private String appId;
 	private String secretId;
-	private Date createDy;
+	private String remarks;
+	private Date createDt;
 	private String lastUpdateId;
 	private Date lastUpdateDt;
+	//default is not selected
+	private String selected = "否";
 	public int getSeqNo() {
 		return seqNo;
 	}
@@ -56,12 +59,6 @@ public class TaOfficeInfo {
 	public void setSecretId(String secretId) {
 		this.secretId = secretId;
 	}
-	public Date getCreateDy() {
-		return createDy;
-	}
-	public void setCreateDy(Date createDy) {
-		this.createDy = createDy;
-	}
 	public String getLastUpdateId() {
 		return lastUpdateId;
 	}
@@ -73,5 +70,23 @@ public class TaOfficeInfo {
 	}
 	public void setLastUpdateDt(Date lastUpdateDt) {
 		this.lastUpdateDt = lastUpdateDt;
+	}
+	public String getRemarks() {
+		return remarks;
+	}
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
+	}
+	public Date getCreateDt() {
+		return createDt;
+	}
+	public void setCreateDt(Date createDt) {
+		this.createDt = createDt;
+	}
+	public String getSelected() {
+		return selected;
+	}
+	public void setSelected(String selected) {
+		this.selected = selected;
 	}
 }

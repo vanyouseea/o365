@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Client Side Pagination in DataGrid - jQuery EasyUI Demo</title>
+
+</head>
+<body>
+	<table id="tb1" class="easyui-datagrid" style="width:100%" data-options="
+				border:false,
+				fit:true,
+				singleSelect:true,
+				autoRowHeight:false,
+				pagination:true,
+				pageSize:10,
+				url:'/getConfig',
+				method:'post',
+				toolbar:toolbar
+				">
+		<thead>
+			<tr >
+				<th field="selected" >当前全局</th>
+				<th field="userId"  >用户名</th>
+				<th field="passwd"  >密码</th>
+				<th field="tenantId">租户ID</th>
+				<th field="appId" >应用ID</th>
+				<th field="secretId" >应用密码</th>
+				<th field="remarks" >备注</th>
+			</tr>
+		</thead>
+	</table>
+	<div id="dlg1" class="easyui-dialog" title="配置信息" style="padding:10px"
+			data-options="
+				iconCls: 'icon-add',
+				modal : true,
+				closed : true,
+				buttons: [{
+					text:'确定',
+					iconCls:'icon-ok',
+					handler:function(){
+						var userid = $('#userid').val();
+						var passwd = $('#passwd').val();
+						var tenantId = $('#tenantId').val();
+						var appId = $('#appId').val();
+						var secretId = $('#secretId').val();
+						var remarks = $('#remarks').val();
+						var selected = '否';
+						var seqNo = -1;
+					
+						if(row!=null){
+							seqNo = row.seqNo;
+							selected = row.selected;
+							row = null;
+						}
+						
+						console.log('seqNo:'+seqNo);
+						if(tenantId!='' && appId!='' && secretId!=''){
+							$.ajax({
+								type : 'POST', 
+								url : '/saveConfig',
+								data : { 'seqNo': seqNo , 'userid': userid, 'passwd' : passwd, 'tenantId' : tenantId, 'appId': appId, 'secretId' : secretId, 'remarks': remarks, 'selected' : selected },
+								success : function(result) {
+									if ( result ) {
+										$.messager.show({
+											title:'成功',
+											msg:'office信息已保存',
+											timeout:2000,
+											showType:'slide'
+										});
+										$('#tb1').datagrid('reload');
+									} else { 
+										$.messager.show({
+											title:'失败',
+											msg:'office信息保存失败',
+											timeout:2000,
+											showType:'slide'
+										}); 
+									} 
+									$('#dlg1').dialog('close');
+								}
+							});
+						    row = null;
+						}else{
+							$.messager.show({
+								title:'失败',
+								msg:'缺少必填项，请检查',
+								timeout:2000,
+								showType:'slide'
+							}); 
+						}
+					}
+				},{
+					text:'取消',
+					handler:function(){
+						$('#dlg1').dialog('close');
+					}
+				}]
+			">
+		<table>
+			<tr>
+				<td>用户名:</td>
+				<td><input id="userid" class="easyui-validatebox tb" style="width: 280px"></td>
+			</tr>
+			<tr>
+				<td>密码:</td>
+				<td><input id="passwd" class="easyui-validatebox tb" style="width: 280px"></td>
+			</tr>
+			<tr>
+				<td>租户ID:</td>
+				<td><input id="tenantId" class="easyui-validatebox tb" data-options="required:true" style="width: 280px"></td>
+			</tr>
+			<tr>
+				<td>应用ID:</td>
+				<td><input id="appId" class="easyui-validatebox tb" data-options="required:true" style="width: 280px"></td>
+			</tr>
+			<tr>
+				<td>应用密码:</td>
+				<td><input id="secretId" class="easyui-validatebox tb" data-options="required:true" style="width: 280px"></td>
+			</tr>
+			<tr>
+				<td>备注:</td>
+				<td><input id="remarks" class="easyui-validatebox tb" data-options="validType:'length[0,200]'" style="width: 280px"></td>
+			</tr>
+		</table>
+	</div>
+	<script type="text/javascript">
+		var row;
+
+		var toolbar = [{
+			text:'新增',
+			iconCls:'icon-add',
+			handler:function(){
+				$('#userid').val('');
+				$('#passwd').val('');
+				$('#tenantId').val('');
+				$('#appId').val('');
+				$('#secretId').val('');
+				$('#remarks').val('');
+				row = null;
+				$('#dlg1').dialog('open');
+			}
+		},{
+			text:'删除',
+			iconCls:'icon-remove',
+			handler:function(){
+				row = $('#tb1').datagrid('getSelected');
+				var appId = row.appId;
+				$.ajax({
+				    type : "POST", 
+				    url : "/delConfig",
+				    data : { "seqNo": row.seqNo },
+				    success : function(result) {
+					      if ( result ) {
+						      	$.messager.show({
+									title:'成功',
+									msg:'配置 '+appId+' 已成功被删除',
+									timeout:2000,
+									showType:'slide'
+								});
+						      	$('#tb1').datagrid('reload');
+						  } else { 
+						       	$.messager.show({
+									title:'失败',
+									msg:'删除配置失败，请重试',
+									timeout:2000,
+									showType:'slide'
+								}); 
+						  }
+					},
+					error : function(){
+				       	$.messager.show({
+							title:'失败',
+							msg:'删除配置失败，请重试',
+							timeout:2000,
+							showType:'slide'
+						}); 
+					}
+			    });
+				row = null;
+			}
+		},{
+			text:'修改',
+			iconCls:'icon-edit',
+			handler:function(){
+			    row = $('#tb1').datagrid('getSelected');
+				if(row!=null){
+					$('#userid').val(row.userId);
+					$('#passwd').val(row.passwd);
+					$('#tenantId').val(row.tenantId);
+					$('#appId').val(row.appId);
+					$('#secretId').val(row.secretId);
+					$('#remarks').val(row.remarks);
+					
+					$('#dlg1').dialog('open');
+				}
+				else{
+					$.messager.show({
+						title:'错误',
+						msg:'请先选择一行',
+						timeout:2000,
+						showType:'slide'
+					});
+				}
+				
+			}
+		},{
+			text:'刷新',
+			iconCls:'icon-reload',
+			handler:function(){
+				$('#tb1').datagrid('reload');
+			}
+		},{
+			text:'切换全局',
+			iconCls:'icon-redo',
+			handler:function(){
+			    row = $('#tb1').datagrid('getSelected');
+				if(row!=null){
+					var userid = row.userId;
+					var passwd = row.passwd;
+					var tenantId = row.tenantId;
+					var appId = row.appId;
+					var secretId = row.secretId;
+					var remarks = row.remarks;
+					var seqNo = row.seqNo;
+					var selected = '是';
+					$.ajax({
+					    type : "POST", 
+					    url : "/switchConfig",
+					    data : { 'seqNo': seqNo , 'userid': userid, 'passwd' : passwd, 'tenantId' : tenantId, 'appId': appId, 'secretId' : secretId, 'remarks': remarks, 'selected' : selected },
+					    success : function(result) {
+						      if ( result ) {
+							      	$.messager.show({
+										title:'成功',
+										msg:'已成功切换全局',
+										timeout:2000,
+										showType:'slide'
+									});
+							      	$('#tb1').datagrid('reload');
+							  } else { 
+							       	$.messager.show({
+										title:'失败',
+										msg:'切换全局失败，请重试',
+										timeout:2000,
+										showType:'slide'
+									});
+							  }
+						},
+						error : function(e){
+					       	$.messager.show({
+								title:'失败',
+								msg:'检验失败，这可能是由于服务器出现问题引起的 '+e,
+								timeout:2000,
+								showType:'slide'
+							}); 
+						}
+			    	});
+					row = null;
+				}
+				else{
+					$.messager.show({
+						title:'错误',
+						msg:'请先选择一行',
+						timeout:2000,
+						showType:'slide'
+					});
+				}
+			}
+		},{
+			text:'校验',
+			iconCls:'icon-check',
+			handler:function(){
+			    row = $('#tb1').datagrid('getSelected');
+				if(row!=null){
+					$.ajax({
+					    type : "POST", 
+					    url : "/valiateAppInfo",
+					    data : { "tenantId": row.tenantId, "appId" : row.appId, "secretId" : row.secretId },
+					    success : function(result) {
+					    	if(result){
+						       	$.messager.show({
+									title:'成功',
+									msg:'校验成功，这是一条有效的配置',
+									timeout:2000,
+									showType:'slide'
+								}); 
+					    	}
+					    	else{
+						       	$.messager.show({
+									title:'失败',
+									msg:'检验失败，请检查配置',
+									timeout:2000,
+									showType:'slide'
+								}); 
+					    	}
+					    },
+						error : function(e){
+					       	$.messager.show({
+								title:'失败',
+								msg:'检验失败，这可能是由于服务器出现问题引起的 '+e,
+								timeout:2000,
+								showType:'slide'
+							}); 
+						}
+					});
+					row = null;
+				}
+				else{
+					$.messager.show({
+						title:'错误',
+						msg:'请先选择一行',
+						timeout:2000,
+						showType:'slide'
+					});
+				}
+			}
+		}];
+	</script>
+	<style scoped="scoped">
+		.tb1{
+			width:100%;
+			margin:0;
+			padding:5px 4px;
+			border:1px solid #ccc;
+			box-sizing:border-box;
+		}
+	</style>
+</body>
+</html>
