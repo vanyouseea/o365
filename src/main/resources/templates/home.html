@@ -1,12 +1,12 @@
-<html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="UTF-8">
 	<title>404 MH</title>
 	<link rel="stylesheet" href="jquery-easyui-1.9.14/themes/default/easyui.css" />
 	<link rel="stylesheet" href="jquery-easyui-1.9.14/themes/icon.css" />
-	<script type="text/javascript" src="jquery-easyui-1.9.14/jquery.min.js"></script>
-	<script type="text/javascript" src="jquery-easyui-1.9.14/jquery.easyui.min.js"></script>
-	<script type="text/javascript" src="jquery-easyui-1.9.14/locale/easyui-lang-zh_CN.js"></script>
+	<script type="text/javascript" src="jquery-easyui-1.9.14/jquery.min.js" th:inline="none"></script>
+	<script type="text/javascript" src="jquery-easyui-1.9.14/jquery.easyui.min.js" th:inline="none"></script>
+	<script type="text/javascript" src="jquery-easyui-1.9.14/locale/easyui-lang-zh_CN.js" th:inline="none"></script>
 </head>
 <body class="easyui-layout" data-options="fit:true">
 	<div data-options="region:'north',border:false" style="height:60px;background:#B3DFDA;">
@@ -46,7 +46,7 @@
 		</div>
 	</div>
 	
-	<script type="text/javascript">
+	<script type="text/javascript"  >
 		function addPanel(name){
 			tab = $('#acc').tabs('getTab',name);
 			if(tab==null){
@@ -69,7 +69,7 @@
 				else if(name=='查看配置'){
 					$('#acc').tabs('add',{
 						title: name,
-						href: 'tabs/config.html',
+						href: 'tabs/config2.html',
 						//content: '<div style="padding:10px">Content</div>',
 						closable: true
 					});

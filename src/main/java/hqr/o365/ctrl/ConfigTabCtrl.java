@@ -34,9 +34,9 @@ public class ConfigTabCtrl {
 	@Autowired
 	private SwitchConfig sc;
 	
-	@RequestMapping(value = {"/tabs/config.html"})
+	@RequestMapping(value = {"/tabs/config2.html"})
 	public String dummy() {
-		return "tabs/config";
+		return "tabs/config2";
 	}
 	
 	@ResponseBody
