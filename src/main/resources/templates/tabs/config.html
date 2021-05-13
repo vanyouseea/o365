@@ -19,6 +19,7 @@
 				">
 		<thead>
 			<tr >
+				<th field="selected" >当前全局</th>
 				<th field="userId"  >用户名</th>
 				<th field="passwd"  >密码</th>
 				<th field="tenantId">租户ID</th>
@@ -43,17 +44,22 @@
 						var appId = $('#appId').val();
 						var secretId = $('#secretId').val();
 						var remarks = $('#remarks').val();
+						var selected = '否';
 						var seqNo = -1;
 					
 						if(row!=null){
 							seqNo = row.seqNo;
+							selected = row.selected;
+							console.log(row);
+							row = null;
 						}
+						
 						console.log('seqNo:'+seqNo);
 						if(tenantId!='' && appId!='' && secretId!=''){
 							$.ajax({
 								type : 'POST', 
 								url : '/saveConfig',
-								data : { 'seqNo': seqNo , 'userid': userid, 'passwd' : passwd, 'tenantId' : tenantId, 'appId': appId, 'secretId' : secretId, 'remarks': remarks },
+								data : { 'seqNo': seqNo , 'userid': userid, 'passwd' : passwd, 'tenantId' : tenantId, 'appId': appId, 'secretId' : secretId, 'remarks': remarks, 'selected' : selected },
 								success : function(result) {
 									if ( result ) {
 										$.messager.show({
@@ -102,19 +108,19 @@
 			</tr>
 			<tr>
 				<td>租户ID:</td>
-				<td><input id="tenantId" class="easyui-validatebox tb" data-options="required:true"></td>
+				<td><input id="tenantId" class="easyui-validatebox tb" data-options="required:true" style="width: 280px"></td>
 			</tr>
 			<tr>
 				<td>应用ID:</td>
-				<td><input id="appId" class="easyui-validatebox tb" data-options="required:true"></td>
+				<td><input id="appId" class="easyui-validatebox tb" data-options="required:true" style="width: 280px"></td>
 			</tr>
 			<tr>
 				<td>应用密码:</td>
-				<td><input id="secretId" class="easyui-validatebox tb" data-options="required:true"></td>
+				<td><input id="secretId" class="easyui-validatebox tb" data-options="required:true" style="width: 280px"></td>
 			</tr>
 			<tr>
 				<td>备注:</td>
-				<td><input id="remarks" class="easyui-validatebox tb" data-options="validType:'length[0,200]'"></td>
+				<td><input id="remarks" class="easyui-validatebox tb" data-options="validType:'length[0,200]'" style="width: 280px"></td>
 			</tr>
 		</table>
 	</div>
@@ -196,6 +202,7 @@
 						showType:'slide'
 					});
 				}
+				
 			}
 		},{
 			text:'刷新',
@@ -204,12 +211,68 @@
 				$('#tb1').datagrid('reload');
 			}
 		},{
+			text:'切换全局',
+			iconCls:'icon-redo',
+			handler:function(){
+			    row = $('#tb1').datagrid('getSelected');
+				if(row!=null){
+					var userid = $('#userid').val();
+					var passwd = $('#passwd').val();
+					var tenantId = $('#tenantId').val();
+					var appId = $('#appId').val();
+					var secretId = $('#secretId').val();
+					var remarks = $('#remarks').val();
+					var seqNo = row.seqNo;
+					var selected = '是';
+					
+					$.ajax({
+					    type : "POST", 
+					    url : "/switchConfig",
+					    data : { 'seqNo': seqNo , 'userid': userid, 'passwd' : passwd, 'tenantId' : tenantId, 'appId': appId, 'secretId' : secretId, 'remarks': remarks, 'selected' : selected },
+					    success : function(result) {
+						      if ( result ) {
+							      	$.messager.show({
+										title:'成功',
+										msg:'已成功切换全局',
+										timeout:2000,
+										showType:'slide'
+									});
+							      	$('#tb1').datagrid('reload');
+							  } else { 
+							       	$.messager.show({
+										title:'失败',
+										msg:'切换全局失败，请重试',
+										timeout:2000,
+										showType:'slide'
+									});
+							  }
+						},
+						error : function(e){
+					       	$.messager.show({
+								title:'失败',
+								msg:'检验失败，这可能是由于服务器出现问题引起的 '+e,
+								timeout:2000,
+								showType:'slide'
+							}); 
+						}
+			    	});
+					row = null;
+				}
+				else{
+					$.messager.show({
+						title:'错误',
+						msg:'请先选择一行',
+						timeout:2000,
+						showType:'slide'
+					});
+				}
+			}
+		},{
 			text:'校验',
 			iconCls:'icon-check',
 			handler:function(){
 			    row = $('#tb1').datagrid('getSelected');
 				if(row!=null){
-					console.log("row:"+row.tenantId);
 					$.ajax({
 					    type : "POST", 
 					    url : "/valiateAppInfo",

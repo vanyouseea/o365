@@ -18,11 +18,11 @@ public class GetOfficeInfo {
 	@Autowired
 	private TaOfficeInfoRepo repo;
 	
-	public String getAllOfficeInfo() {
+	public String getAllOfficeInfo(int intRows, int intPage) {
 		long total = repo.count();
 		List<TaOfficeInfo> rows = new ArrayList<TaOfficeInfo>();
 		if(total>0) {
-			rows = repo.findAll();
+			rows = repo.getOfficeInfos(intRows * (intPage - 1), intRows * intPage );
 		}
 		
 		HashMap map = new HashMap();

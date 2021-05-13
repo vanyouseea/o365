@@ -21,6 +21,8 @@ public class TaOfficeInfo {
 	private Date createDt;
 	private String lastUpdateId;
 	private Date lastUpdateDt;
+	//default is not selected
+	private String selected = "否";
 	public int getSeqNo() {
 		return seqNo;
 	}
@@ -80,5 +82,11 @@ public class TaOfficeInfo {
 	}
 	public void setCreateDt(Date createDt) {
 		this.createDt = createDt;
+	}
+	public String getSelected() {
+		return selected;
+	}
+	public void setSelected(String selected) {
+		this.selected = selected;
 	}
 }
