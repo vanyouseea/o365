@@ -50,7 +50,6 @@
 						if(row!=null){
 							seqNo = row.seqNo;
 							selected = row.selected;
-							console.log(row);
 							row = null;
 						}
 						
@@ -216,15 +215,14 @@
 			handler:function(){
 			    row = $('#tb1').datagrid('getSelected');
 				if(row!=null){
-					var userid = $('#userid').val();
-					var passwd = $('#passwd').val();
-					var tenantId = $('#tenantId').val();
-					var appId = $('#appId').val();
-					var secretId = $('#secretId').val();
-					var remarks = $('#remarks').val();
+					var userid = row.userId;
+					var passwd = row.passwd;
+					var tenantId = row.tenantId;
+					var appId = row.appId;
+					var secretId = row.secretId;
+					var remarks = row.remarks;
 					var seqNo = row.seqNo;
 					var selected = '是';
-					
 					$.ajax({
 					    type : "POST", 
 					    url : "/switchConfig",
