@@ -186,7 +186,7 @@
 			handler:function(){
 				$('#tb1').datagrid('reload');
 			}
-		},{
+		},'-',{
 			text:'切换全局',
 			iconCls:'icon-redo',
 			handler:function(){
@@ -241,6 +241,16 @@
 						showType:'slide'
 					});
 				}
+			}
+		},{
+			text:'更新密钥',
+			iconCls:'icon-key',
+			handler:function(){
+				$.messager.confirm('更新', '将创建一个过期时间为2099-12-31的新密钥，成功后会替换现有密钥，若不想更改现有密钥，请取消', function(r){
+					if (r){
+						console.log('sure');
+					}
+				});
 			}
 		},{
 			text:'校验',
@@ -354,14 +364,5 @@
 		
 		
 	</script>
-	<style scoped="scoped">
-		.tb1{
-			width:100%;
-			margin:0;
-			padding:5px 4px;
-			border:1px solid #ccc;
-			box-sizing:border-box;
-		}
-	</style>
 </body>
 </html>

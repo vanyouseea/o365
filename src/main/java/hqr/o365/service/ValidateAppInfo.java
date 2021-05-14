@@ -18,7 +18,6 @@ import com.alibaba.fastjson.JSONObject;
 import hqr.o365.util.Brower;
 
 /**
- * 
  POST https://login.microsoftonline.com/48350e78-b3d8-4148-a266-34b602b1d51a/oauth2/v2.0/token
  Media Type: application/x-www-form-urlencoded
  Body:
