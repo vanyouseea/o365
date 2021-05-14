@@ -246,11 +246,49 @@
 			text:'更新密钥',
 			iconCls:'icon-key',
 			handler:function(){
-				$.messager.confirm('更新', '将创建一个过期时间为2099-12-31的新密钥，成功后会替换现有密钥，若不想更改现有密钥，请取消', function(r){
-					if (r){
-						console.log('sure');
-					}
-				});
+			    row = $('#tb1').datagrid('getSelected');
+				if(row!=null){
+					console.log(row);
+					var seqNo = row.seqNo;
+					var tenantId = row.tenantId;
+					var appId = row.appId;
+					var secretId = row.secretId;
+					$.messager.confirm('更新', '将创建一个过期时间为2099-12-31的新密钥，成功后会替换现有密钥，若不想更改现有密钥，请取消', function(r){
+						if (r){
+							$.ajax({
+							    type : "POST", 
+							    url : "/addPassword",
+							    data : { 'seqNo': seqNo , 'tenantId' : tenantId, 'appId': appId, 'secretId' : secretId },
+							    success : function(result) {
+							      	$.messager.show({
+										title:'结果',
+										msg: result,
+										timeout:2000,
+										showType:'slide'
+									});
+							      	$('#tb1').datagrid('reload');
+							    },
+							    error : function(e){
+							       	$.messager.show({
+										title:'失败',
+										msg:'更新失败，这可能是由于服务器出现问题引起的 '+e,
+										timeout:2000,
+										showType:'slide'
+									}); 
+							    }
+							});
+						}
+					});
+					row = null;
+				}
+				else{
+					$.messager.show({
+						title:'错误',
+						msg:'请先选择一行',
+						timeout:2000,
+						showType:'slide'
+					});
+				}
 			}
 		},{
 			text:'校验',
@@ -274,7 +312,7 @@
 					    	else{
 						       	$.messager.show({
 									title:'失败',
-									msg:'检验失败，请检查配置',
+									msg:'校验失败，请检查配置，如果你更新过密钥请等待1分钟后再校验',
 									timeout:2000,
 									showType:'slide'
 								}); 
@@ -302,10 +340,6 @@
 			}
 		}];
 		
-		//
-		//$('#tb1').datagrid({
-//
-		//});
 		
 		$('#tb1').datagrid({
 			url : '/getConfig',

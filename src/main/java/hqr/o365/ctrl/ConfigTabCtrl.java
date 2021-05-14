@@ -1,6 +1,7 @@
 package hqr.o365.ctrl;
 
 import java.util.Date;
+import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import hqr.o365.domain.TaOfficeInfo;
+import hqr.o365.service.AddPassword;
 import hqr.o365.service.DeleteOfficeInfo;
 import hqr.o365.service.GetOfficeInfo;
 import hqr.o365.service.SaveOfficeInfo;
@@ -33,6 +35,9 @@ public class ConfigTabCtrl {
 	
 	@Autowired
 	private SwitchConfig sc;
+	
+	@Autowired
+	private AddPassword ap;
 	
 	@RequestMapping(value = {"/tabs/config.html"})
 	public String dummy() {
@@ -76,13 +81,15 @@ public class ConfigTabCtrl {
 		if(seqNo!=-1) {
 			ti.setSeqNo(seqNo);
 		}
+		else {
+			ti.setCreateDt(new Date());
+		}
 		ti.setUserId(userid);
 		ti.setPasswd(passwd);
 		ti.setTenantId(tenantId);
 		ti.setAppId(appId);
 		ti.setSecretId(secretId);
 		ti.setRemarks(remarks);
-		ti.setCreateDt(new Date());
 		ti.setLastUpdateDt(new Date());
 		ti.setLastUpdateId("mjj");
 		ti.setSelected(selected);
@@ -121,18 +128,38 @@ public class ConfigTabCtrl {
 		if(seqNo!=-1) {
 			ti.setSeqNo(seqNo);
 		}
+		else {
+			ti.setCreateDt(new Date());
+		}
 		ti.setUserId(userid);
 		ti.setPasswd(passwd);
 		ti.setTenantId(tenantId);
 		ti.setAppId(appId);
 		ti.setSecretId(secretId);
 		ti.setRemarks(remarks);
-		ti.setCreateDt(new Date());
 		ti.setLastUpdateDt(new Date());
 		ti.setLastUpdateId("mjj");
 		ti.setSelected("是");
 		
 		return sc.updateConfig(ti);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = {"/addPassword"}, method = RequestMethod.POST)
+	public String addPassword(@RequestParam(name="seqNo") int seqNo, 
+			@RequestParam(name="tenantId") String tenantId, 
+			@RequestParam(name="appId") String appId , 
+			@RequestParam(name="secretId") String secretId) {
+		
+		HashMap<String, String> map = ap.add(seqNo, tenantId, appId, secretId);
+		String status = map.get("status");
+		
+		if("0".equals(status)) {
+			return "已成功添加了一个新的密钥";
+		}
+		else {
+			return map.get("message");
+		}
 	}
 	
 }

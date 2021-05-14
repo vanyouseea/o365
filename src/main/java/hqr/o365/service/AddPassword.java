@@ -1,7 +1,6 @@
 package hqr.o365.service;
 
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -50,7 +49,7 @@ public class AddPassword {
 				
 				String accessToken = jo.getString("access_token");
 				if(accessToken!=null) {
-					endpoint = "https://graph.microsoftonline.com/v1.0/applications?$select=id,appId";
+					endpoint = "https://graph.microsoft.com/v1.0/applications?$select=id,appId";
 					HttpGet get = new HttpGet(endpoint);
 					get.setConfig(Brower.getRequestConfig());
 					get.setHeader("Authorization", accessToken);
@@ -64,30 +63,30 @@ public class AddPassword {
 								JSONObject jb = (JSONObject)object;
 								objId = jb.getString("id");
 								tmpAppId = jb.getString("appId");
-								System.out.println("objId:"+objId+" AppId:"+tmpAppId);
 								if(tmpAppId.equals(appId)) {
 									System.out.println("found it "+tmpAppId);
 									break;
 								}
 							}
 							
-							endpoint = "https://graph.microsoftonline.com/v1.0/applications/"+objId+"/addPassword";
+							endpoint = "https://graph.microsoft.com/v1.0/applications/"+objId+"/addPassword";
 							HttpPost post2 = new HttpPost(endpoint);
 							post2.setConfig(Brower.getRequestConfig());
+							post2.setHeader("Authorization", accessToken);
 							
 							json = "{\"passwordCredential\": {\"displayName\": \"mjj\",\"endDateTime\": \"2099-12-31T06:30:23.9074306Z\" }}";
-							post2.setEntity(new StringEntity(json, ContentType.APPLICATION_FORM_URLENCODED));
+							post2.setEntity(new StringEntity(json, ContentType.APPLICATION_JSON));
 							try(CloseableHttpResponse cl3 = httpclient.execute(post2,httpClientContext);) {
 								if(cl3.getStatusLine().getStatusCode()==200) {
 									JSONObject jo3 = JSON.parseObject(EntityUtils.toString(cl3.getEntity()));
 									String newSecretId = jo3.getString("secretText");
-									System.out.println("newSecretId is "+newSecretId);
-									map.put("status", "0");
 									Optional<TaOfficeInfo> opt = repo.findById(seqNo);
 									if(opt.isPresent()) {
 										TaOfficeInfo ta = opt.get();
 										ta.setSecretId(newSecretId);
 										repo.saveAndFlush(ta);
+										map.put("status", "0");
+										map.put("message", "succ");
 									}
 									else {
 										map.put("status", "1");
@@ -95,16 +94,14 @@ public class AddPassword {
 									}
 								}
 								else {
-									System.out.println("failed:" + EntityUtils.toString(cl3.getEntity()));
 									map.put("status", "1");
-									map.put("message", "Fail to get app object id");
+									map.put("message", EntityUtils.toString(cl3.getEntity()));
 								}
 							}
 						}
 						else {
-							System.out.println("failed:" + EntityUtils.toString(cl2.getEntity()));
 							map.put("status", "1");
-							map.put("message", "Fail to get app object id");
+							map.put("message", EntityUtils.toString(cl2.getEntity()));
 						}
 					}
 				}
@@ -114,14 +111,13 @@ public class AddPassword {
 				}
 			}
 			else {
-				System.out.println("failed:" + EntityUtils.toString(cl.getEntity()));
 				map.put("status", "1");
-				map.put("message", "Return code is 200");
+				map.put("message", EntityUtils.toString(cl.getEntity()));
 			}
 			httpclient.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			map.put("status", "1");
+			map.put("status", "2");
 			map.put("message", "Fail to connect to microsoft");
 		}
 		
