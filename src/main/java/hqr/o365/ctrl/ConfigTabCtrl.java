@@ -34,9 +34,9 @@ public class ConfigTabCtrl {
 	@Autowired
 	private SwitchConfig sc;
 	
-	@RequestMapping(value = {"/tabs/config2.html"})
+	@RequestMapping(value = {"/tabs/config.html"})
 	public String dummy() {
-		return "tabs/config2";
+		return "tabs/config";
 	}
 	
 	@ResponseBody
@@ -44,7 +44,6 @@ public class ConfigTabCtrl {
 	public String getConfig(String page, String rows) {
 		int intPage = 1;
 		int intRows = 10;
-		
 		try {
 			intPage = Integer.valueOf(page);
 		}

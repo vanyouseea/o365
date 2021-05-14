@@ -6,29 +6,7 @@
 
 </head>
 <body>
-	<table id="tb1" class="easyui-datagrid" style="width:100%" data-options="
-				border:false,
-				fit:true,
-				singleSelect:true,
-				autoRowHeight:false,
-				pagination:true,
-				pageSize:10,
-				url:'/getConfig',
-				method:'post',
-				toolbar:toolbar
-				">
-		<thead>
-			<tr >
-				<th field="selected" >当前全局</th>
-				<th field="userId"  >用户名</th>
-				<th field="passwd"  >密码</th>
-				<th field="tenantId">租户ID</th>
-				<th field="appId" >应用ID</th>
-				<th field="secretId" >应用密码</th>
-				<th field="remarks" >备注</th>
-			</tr>
-		</thead>
-	</table>
+	<div id="tb1" ></div>
 	<div id="dlg1" class="easyui-dialog" title="配置信息" style="padding:10px"
 			data-options="
 				iconCls: 'icon-add',
@@ -122,7 +100,7 @@
 			</tr>
 		</table>
 	</div>
-	<script type="text/javascript">
+	<script type="text/javascript" th:inline="none">
 		var row;
 
 		var toolbar = [{
@@ -314,13 +292,66 @@
 			}
 		}];
 		
+		//
+		//$('#tb1').datagrid({
+//
+		//});
+		
 		$('#tb1').datagrid({
+			url : '/getConfig',
+			border : false,
+			fit : true,
+			singleSelect : true,
+			autoRowHeight : false,
+			pagination:true,
+			pageSize:10,
+			method:'post',
+			toolbar:toolbar,
+			columns : [[
+				{field : 'selected',title : '当前全局',align : 'center',
+					formatter: function(value,row,index){
+						return "<font size='2'>"+value+"</font>";
+					}
+				}, 
+				{field : 'userId',title : '用户名',align : 'center',
+					formatter: function(value,row,index){
+						return "<font size='2'>"+value+"</font>";
+					}
+				}, 
+				{field : 'passwd',title : '密码',align : 'center',
+					formatter: function(value,row,index){
+						return "<font size='2'>"+value+"</font>";
+					}
+				}, 
+				{field : 'tenantId',title : '租户ID',align : 'center',
+					formatter: function(value,row,index){
+						return "<font size='2'>"+value+"</font>";
+					}
+				}, 
+				{field : 'appId',title : '应用ID',align : 'center',
+					formatter: function(value,row,index){
+						return "<font size='2'>"+value+"</font>";
+					}
+				}, 
+				{field : 'secretId',title : '应用密码',align : 'center',
+					formatter: function(value,row,index){
+						return "<font size='2'>"+value+"</font>";
+					}
+				}, 
+				{field : 'remarks',title : '备注',align : 'center',
+					formatter: function(value,row,index){
+						return "<font size='2'>"+value+"</font>";
+					}
+				}
+			]],
 			rowStyler:function(index,row){
 				if (row.selected=='是'){
-					return 'font-size:6px;background-color:#CEFFCE;font-weight:bold';
+					return 'background-color:#CEFFCE;font-weight:bold';
 				}
 			}
+			
 		});
+		
 		
 	</script>
 	<style scoped="scoped">
