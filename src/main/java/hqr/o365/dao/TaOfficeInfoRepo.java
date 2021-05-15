@@ -22,4 +22,7 @@ public interface TaOfficeInfoRepo extends JpaRepository<TaOfficeInfo, Integer> {
 	@Query(value="update ta_office_info set selected='否'", nativeQuery = true)
 	void updateAllNo();
 	
+	@Query(value="select * from ta_office_info where selected='是'", nativeQuery = true)
+	List<TaOfficeInfo> getSelectedApp();
+	
 }

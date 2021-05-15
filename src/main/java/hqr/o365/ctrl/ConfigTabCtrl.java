@@ -108,8 +108,7 @@ public class ConfigTabCtrl {
 	@ResponseBody
 	@RequestMapping(value = {"/valiateAppInfo"}, method = RequestMethod.POST)
 	public boolean validate(@RequestParam(name="tenantId") String tenantId,@RequestParam(name="appId") String appId,@RequestParam(name="secretId") String secretId) {
-		System.out.println("tenantId"+tenantId);
-		return vai.check(tenantId, appId, secretId);
+		return vai.checkAndGet(tenantId, appId, secretId);
 	}
 	
 	@ResponseBody
