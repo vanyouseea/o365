@@ -6,29 +6,7 @@
 
 </head>
 <body>
-	<table id="tb1" class="easyui-datagrid" style="width:100%" data-options="
-				border:false,
-				fit:true,
-				singleSelect:true,
-				autoRowHeight:false,
-				pagination:true,
-				pageSize:10,
-				url:'/getConfig',
-				method:'post',
-				toolbar:toolbar
-				">
-		<thead>
-			<tr >
-				<th field="selected" >当前全局</th>
-				<th field="userId"  >用户名</th>
-				<th field="passwd"  >密码</th>
-				<th field="tenantId">租户ID</th>
-				<th field="appId" >应用ID</th>
-				<th field="secretId" >应用密码</th>
-				<th field="remarks" >备注</th>
-			</tr>
-		</thead>
-	</table>
+	<div id="tb1" ></div>
 	<div id="dlg1" class="easyui-dialog" title="配置信息" style="padding:10px"
 			data-options="
 				iconCls: 'icon-add',
@@ -53,7 +31,6 @@
 							row = null;
 						}
 						
-						console.log('seqNo:'+seqNo);
 						if(tenantId!='' && appId!='' && secretId!=''){
 							$.ajax({
 								type : 'POST', 
@@ -123,7 +100,7 @@
 			</tr>
 		</table>
 	</div>
-	<script type="text/javascript">
+	<script type="text/javascript" th:inline="none">
 		var row;
 
 		var toolbar = [{
@@ -209,7 +186,7 @@
 			handler:function(){
 				$('#tb1').datagrid('reload');
 			}
-		},{
+		},'-',{
 			text:'切换全局',
 			iconCls:'icon-redo',
 			handler:function(){
@@ -266,6 +243,54 @@
 				}
 			}
 		},{
+			text:'更新密钥',
+			iconCls:'icon-key',
+			handler:function(){
+			    row = $('#tb1').datagrid('getSelected');
+				if(row!=null){
+					console.log(row);
+					var seqNo = row.seqNo;
+					var tenantId = row.tenantId;
+					var appId = row.appId;
+					var secretId = row.secretId;
+					$.messager.confirm('更新', '将创建一个过期时间为2099-12-31的新密钥，成功后会替换现有密钥，若不想更改现有密钥，请取消', function(r){
+						if (r){
+							$.ajax({
+							    type : "POST", 
+							    url : "/addPassword",
+							    data : { 'seqNo': seqNo , 'tenantId' : tenantId, 'appId': appId, 'secretId' : secretId },
+							    success : function(result) {
+							      	$.messager.show({
+										title:'结果',
+										msg: result,
+										timeout:2000,
+										showType:'slide'
+									});
+							      	$('#tb1').datagrid('reload');
+							    },
+							    error : function(e){
+							       	$.messager.show({
+										title:'失败',
+										msg:'更新失败，这可能是由于服务器出现问题引起的 '+e,
+										timeout:2000,
+										showType:'slide'
+									}); 
+							    }
+							});
+						}
+					});
+					row = null;
+				}
+				else{
+					$.messager.show({
+						title:'错误',
+						msg:'请先选择一行',
+						timeout:2000,
+						showType:'slide'
+					});
+				}
+			}
+		},{
 			text:'校验',
 			iconCls:'icon-check',
 			handler:function(){
@@ -287,7 +312,7 @@
 					    	else{
 						       	$.messager.show({
 									title:'失败',
-									msg:'检验失败，请检查配置',
+									msg:'校验失败，请检查配置，如果你更新过密钥请等待1分钟后再校验',
 									timeout:2000,
 									showType:'slide'
 								}); 
@@ -314,15 +339,64 @@
 				}
 			}
 		}];
+		
+		
+		$('#tb1').datagrid({
+			url : '/getConfig',
+			border : false,
+			fit : true,
+			singleSelect : true,
+			autoRowHeight : false,
+			pagination:true,
+			pageSize:10,
+			method:'post',
+			toolbar:toolbar,
+			columns : [[
+				{field : 'selected',title : '当前全局',align : 'center',
+					formatter: function(value,row,index){
+						return "<font size='2'>"+value+"</font>";
+					}
+				}, 
+				{field : 'userId',title : '用户名',align : 'center',
+					formatter: function(value,row,index){
+						return "<font size='2'>"+value+"</font>";
+					}
+				}, 
+				{field : 'passwd',title : '密码',align : 'center',
+					formatter: function(value,row,index){
+						return "<font size='2'>"+value+"</font>";
+					}
+				}, 
+				{field : 'tenantId',title : '租户ID',align : 'center',
+					formatter: function(value,row,index){
+						return "<font size='2'>"+value+"</font>";
+					}
+				}, 
+				{field : 'appId',title : '应用ID',align : 'center',
+					formatter: function(value,row,index){
+						return "<font size='2'>"+value+"</font>";
+					}
+				}, 
+				{field : 'secretId',title : '应用密码',align : 'center',
+					formatter: function(value,row,index){
+						return "<font size='2'>"+value+"</font>";
+					}
+				}, 
+				{field : 'remarks',title : '备注',align : 'center',
+					formatter: function(value,row,index){
+						return "<font size='2'>"+value+"</font>";
+					}
+				}
+			]],
+			rowStyler:function(index,row){
+				if (row.selected=='是'){
+					return 'background-color:#CEFFCE;font-weight:bold';
+				}
+			}
+			
+		});
+		
+		
 	</script>
-	<style scoped="scoped">
-		.tb1{
-			width:100%;
-			margin:0;
-			padding:5px 4px;
-			border:1px solid #ccc;
-			box-sizing:border-box;
-		}
-	</style>
 </body>
 </html>

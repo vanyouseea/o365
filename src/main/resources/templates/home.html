@@ -1,12 +1,12 @@
-<html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="UTF-8">
 	<title>404 MH</title>
 	<link rel="stylesheet" href="jquery-easyui-1.9.14/themes/default/easyui.css" />
 	<link rel="stylesheet" href="jquery-easyui-1.9.14/themes/icon.css" />
-	<script type="text/javascript" src="jquery-easyui-1.9.14/jquery.min.js"></script>
-	<script type="text/javascript" src="jquery-easyui-1.9.14/jquery.easyui.min.js"></script>
-	<script type="text/javascript" src="jquery-easyui-1.9.14/locale/easyui-lang-zh_CN.js"></script>
+	<script type="text/javascript" src="jquery-easyui-1.9.14/jquery.min.js" th:inline="none"></script>
+	<script type="text/javascript" src="jquery-easyui-1.9.14/jquery.easyui.min.js" th:inline="none"></script>
+	<script type="text/javascript" src="jquery-easyui-1.9.14/locale/easyui-lang-zh_CN.js" th:inline="none"></script>
 </head>
 <body class="easyui-layout" data-options="fit:true">
 	<div data-options="region:'north',border:false" style="height:60px;background:#B3DFDA;">
@@ -16,7 +16,7 @@
 		<div id="aa" class="easyui-accordion" style="width:100%;height:220px;">
 		    <div title="用户管理"  style="overflow:auto">
 		    	<ul class="easyui-tree">
-					<li><div onclick="addPanel('查看用户')">查看用户</div></li>
+					<li><div onclick="addPanel('管理用户')">管理用户</div></li>
 				</ul>
 		    </div>
 		    <div title="许可证"  style="overflow:auto">
@@ -26,7 +26,7 @@
 		    </div>
 		    <div title="配置" style="overflow:auto">
 		    	<ul class="easyui-tree">
-					<li><div onclick="addPanel('查看配置')">查看配置</div></li>
+					<li><div onclick="addPanel('管理配置')">管理配置</div></li>
 				</ul>
 		    </div>
 		</div>
@@ -46,11 +46,11 @@
 		</div>
 	</div>
 	
-	<script type="text/javascript">
+	<script type="text/javascript"  >
 		function addPanel(name){
 			tab = $('#acc').tabs('getTab',name);
 			if(tab==null){
-				if(name=='查看用户'){
+				if(name=='管理用户'){
 					$('#acc').tabs('add',{
 						title: name,
 						href: 'tabs/user.html',
@@ -66,7 +66,7 @@
 						closable: true
 					});
 				}
-				else if(name=='查看配置'){
+				else if(name=='管理配置'){
 					$('#acc').tabs('add',{
 						title: name,
 						href: 'tabs/config.html',

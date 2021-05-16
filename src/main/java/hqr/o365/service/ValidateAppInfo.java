@@ -1,24 +1,16 @@
 package hqr.o365.service;
 
-import java.io.IOException;
-
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.protocol.HttpClientContext;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.util.EntityUtils;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
-import hqr.o365.util.Brower;
-
 /**
- * 
  POST https://login.microsoftonline.com/48350e78-b3d8-4148-a266-34b602b1d51a/oauth2/v2.0/token
  Media Type: application/x-www-form-urlencoded
  Body:
@@ -31,40 +23,41 @@ import hqr.o365.util.Brower;
 @Service
 public class ValidateAppInfo {
 	
-	public boolean check(String tenantId, String appId, String secretId) {
+	private RestTemplate restTemplate = new RestTemplate();
+	
+	private String accessToken = "";
+	
+	public String getAccessToken() {
+		return accessToken;
+	}
+	public void setAccessToken(String accessToken) {
+		this.accessToken = accessToken;
+	}
+
+	public boolean checkAndGet(String tenantId, String appId, String secretId) {
 		boolean flag = false;
 		
 		String endpoint = "https://login.microsoftonline.com/" + tenantId + "/oauth2/v2.0/token";
-		//open browser
-		CloseableHttpClient httpclient = Brower.getCloseableHttpClient();
-		//html context
-		HttpClientContext httpClientContext = Brower.getHttpClientContext();
-		
-		HttpPost post = new HttpPost(endpoint);
-		post.setConfig(Brower.getRequestConfig());
-		
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 		String json = "client_id="+appId+"&client_secret="+secretId+"&grant_type=client_credentials&scope=https://graph.microsoft.com/.default";
-		post.setEntity(new StringEntity(json, ContentType.APPLICATION_FORM_URLENCODED));
-		
-		try(CloseableHttpResponse cl = httpclient.execute(post,httpClientContext);) {
-			if(cl.getStatusLine().getStatusCode()==200) {
-				JSONObject jo = JSON.parseObject(EntityUtils.toString(cl.getEntity()));
-				
-				String accessToken = jo.getString("access_token");
-				if(accessToken!=null) {
-					flag = true;
-					System.out.println("accessToken:"+accessToken);
-				}
-				else {
-					flag = false;
-				}
+		HttpEntity<String> requestEntity = new HttpEntity<String>(json, headers);
+
+		try{
+			ResponseEntity<String> response= restTemplate.postForEntity(endpoint, requestEntity, String.class);
+			if(response.getStatusCodeValue()==200) {
+				JSONObject jo = JSON.parseObject(response.getBody());
+				accessToken = jo.getString("access_token");
+				flag = true;
 			}
 			else {
-				System.out.println("failed:" + EntityUtils.toString(cl.getEntity()));
+				System.out.println("failed:" + response.getBody());
+				accessToken = "";
+				flag = false;
 			}
-			httpclient.close();
 		} catch (Exception e) {
 			e.printStackTrace();
+			accessToken = "";
 			flag = false;
 		}
 		
