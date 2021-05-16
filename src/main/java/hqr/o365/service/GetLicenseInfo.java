@@ -35,9 +35,6 @@ public class GetLicenseInfo {
 		List<LicenseInfo> ll = new ArrayList<LicenseInfo>();
 		HashMap jsonTmp = new HashMap();
 		
-		jsonTmp.put("total", 0);
-		jsonTmp.put("rows", "");
-		
 		List<TaOfficeInfo> list = repo.getSelectedApp();
 		if(list!=null&&list.size()>0) {
 			TaOfficeInfo ta = list.get(0);
@@ -87,7 +84,7 @@ public class GetLicenseInfo {
 				catch (Exception e) {
 					e.printStackTrace();
 					map.put("status", "1");
-					map.put("message", JSON.toJSON(jsonTmp).toString());
+					map.put("message", "无法获得正确的状态或无法连接到microsoft");
 				}
 			}
 			else {

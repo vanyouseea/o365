@@ -7,6 +7,18 @@
 .icon-edit{
 	background:url('icons/pencil.png') no-repeat center center;
 }
+.icon-medal{
+	background:url('icons/medal.png') no-repeat center center;
+}
+.icon-warning{
+	background:url('icons/warning.png') no-repeat center center;
+}
+.icon-enable{
+	background:url('icons/enable.png') no-repeat center center;
+}
+.icon-disable{
+	background:url('icons/disable.png') no-repeat center center;
+}
 .icon-clear{
 	background:url('icons/clear.png') no-repeat center center;
 }

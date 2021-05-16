@@ -26,11 +26,20 @@
 				text:'帮助',
 				iconCls:'icon-help',
 				handler:function(){
-					$.messager.alert('帮助','要查看订阅，请先配置中选择一个有效的全局，当切换全局后，点击刷新可以查看新切换全局的订阅','info');
+					$.messager.alert('帮助','要查看订阅，请先在配置中选择一个有效的全局，当切换全局后，点击刷新可以查看新切换全局的订阅','info');
 				}
 			}],
 			columns : [[
-				{field : 'capabilityStatus',title : '状态',align : 'center'}, 
+				{field : 'capabilityStatus',title : '订阅状态',align : 'center',
+					formatter: function(value,row,index){
+						if(value=='Enabled'){
+							return "<font color='green'>可用</font>";
+						}
+						else{
+							return "<font color='red'>禁用</font>";
+						}
+					}
+				}, 
 				{field : 'skuId',title : 'SKUID',align : 'center'}, 
 				{field : 'skuPartNumber',title : '名称',align : 'center'}, 
 				{field : 'consumedUnits',title : '已分配',align : 'center'}, 
