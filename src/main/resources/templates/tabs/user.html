@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="UTF-8">
 	<title>Client Side Pagination in DataGrid - jQuery EasyUI Demo</title>
@@ -7,8 +7,21 @@
 </head>
 <body>
 	<div id="tb3"></div>
+	<div id="dlg3"></div>
+	
 	<script type="text/javascript" th:inline="none">
 		var row3;
+		//create user dialog
+		$('#dlg3').dialog({
+		    title: '新建用户',
+			iconCls: 'icon-add',
+			modal : true,
+			closed : true,
+			width: 390,
+			height: 240,
+		    cache: false,
+		    href: 'tabs/dialogs/createUser.html'
+		});
 		
 		$('#tb3').datagrid({
 			border:false,
@@ -26,7 +39,7 @@
 				text:'添加',
 				iconCls:'icon-add',
 				handler:function(){
-					$.messager.alert('错误', '添加' ,'info');
+					$('#dlg3').dialog('open');
 				}
 			},{
 				text:'删除',
@@ -74,7 +87,7 @@
 				text:'搜索',
 				iconCls:'icon-search',
 				handler:function(){
-					$.messager.prompt('请输入关键字', '可以搜索名字和邮件前缀', function(r){
+					$.messager.prompt('请输入关键字', '可以搜索名字和邮箱前缀', function(r){
 						if (r){
 							alert(r);
 						}
@@ -98,8 +111,8 @@
 						}
 					}
 				}, 
-				{field : 'uid',title : 'UID',align : 'center'}, 
-				{field : 'userPrincipalName',title : '邮件地址',align : 'center'}, 
+				{field : 'id',title : 'UID',align : 'center'}, 
+				{field : 'userPrincipalName',title : '邮箱',align : 'center'}, 
 				{field : 'displayName',title : '名字',align : 'center'},
 				{field : 'usageLocation',title : '国家',align : 'center'}
 			]],
@@ -109,8 +122,10 @@
 				$('#tb3').datagrid('loadData',{'total':0,'rows':[]});
             }
 		});
+		
 
 		
 	</script>
+	
 </body>
 </html>

@@ -1,7 +1,11 @@
 package hqr.o365.ctrl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,9 +14,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import hqr.o365.domain.LicenseInfo;
 import hqr.o365.domain.TaOfficeInfo;
 import hqr.o365.service.AddPassword;
 import hqr.o365.service.DeleteOfficeInfo;
+import hqr.o365.service.GetLicenseInfo;
 import hqr.o365.service.GetOfficeInfo;
 import hqr.o365.service.SaveOfficeInfo;
 import hqr.o365.service.SwitchConfig;
@@ -38,6 +44,10 @@ public class ConfigTabCtrl {
 	
 	@Autowired
 	private AddPassword ap;
+	
+	@Autowired
+	private GetLicenseInfo gli;
+	
 	
 	@RequestMapping(value = {"/tabs/config.html"})
 	public String dummy() {
@@ -120,7 +130,8 @@ public class ConfigTabCtrl {
 			@RequestParam(name="appId") String appId , 
 			@RequestParam(name="secretId") String secretId, 
 			@RequestParam(name="remarks") String remarks,
-			@RequestParam(name="selected") String selected) {
+			@RequestParam(name="selected") String selected, 
+			HttpServletRequest req) {
 		
 		TaOfficeInfo ti = new TaOfficeInfo();
 		//seqNo==-1 -> insert; seqNo!=-1 -> update
@@ -140,7 +151,20 @@ public class ConfigTabCtrl {
 		ti.setLastUpdateId("mjj");
 		ti.setSelected("是");
 		
-		return sc.updateConfig(ti);
+		boolean flag = sc.updateConfig(ti);
+		if(flag) {
+			HashMap<String, Object> map2 = gli.getLicenses();
+			List<LicenseInfo> vo = new ArrayList<LicenseInfo>();
+			Object obj = map2.get("licenseVo");
+			if(obj!=null) {
+				vo = (List<LicenseInfo>)obj;
+			}
+			req.getSession().setAttribute("licenseVo", vo);
+		}
+		else {
+			System.out.println("invalid info, skip to init/update licenseVo");
+		}
+		return flag;
 	}
 	
 	@ResponseBody

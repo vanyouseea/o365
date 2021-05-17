@@ -30,8 +30,8 @@ public class GetLicenseInfo {
 	@Autowired
 	private ValidateAppInfo vai;
 	
-	public HashMap<String, String> getLicenses() {
-		HashMap<String, String> map = new HashMap<String, String>();
+	public HashMap<String, Object> getLicenses() {
+		HashMap<String, Object> map = new HashMap<String, Object>();
 		List<LicenseInfo> ll = new ArrayList<LicenseInfo>();
 		HashMap jsonTmp = new HashMap();
 		
@@ -75,6 +75,7 @@ public class GetLicenseInfo {
 						
 						map.put("status", "0");
 						map.put("message", JSON.toJSON(jsonTmp).toString());
+						map.put("licenseVo", ll);
 					}
 					else {
 						map.put("status", "1");

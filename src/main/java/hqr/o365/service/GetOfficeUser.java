@@ -119,7 +119,7 @@ public class GetOfficeUser {
 						OfficeUser ou = new OfficeUser();
 						ou.setAccountEnabled(accountEnabled);
 						ou.setUsageLocation(usageLocation);
-						ou.setUid(uid);
+						ou.setId(uid);
 						ou.setUserPrincipalName(userPrincipalName);
 						ou.setDisplayName(displayName);
 						ll.add(ou);
@@ -172,7 +172,7 @@ public class GetOfficeUser {
 				OfficeUser ou = new OfficeUser();
 				ou.setAccountEnabled(accountEnabled);
 				ou.setUsageLocation(usageLocation);
-				ou.setUid(uid);
+				ou.setId(uid);
 				ou.setUserPrincipalName(userPrincipalName);
 				ou.setDisplayName(displayName);
 				ll.add(ou);
