@@ -18,6 +18,7 @@ import hqr.o365.domain.LicenseInfo;
 import hqr.o365.domain.TaOfficeInfo;
 import hqr.o365.service.AddPassword;
 import hqr.o365.service.DeleteOfficeInfo;
+import hqr.o365.service.GetDomainInfo;
 import hqr.o365.service.GetLicenseInfo;
 import hqr.o365.service.GetOfficeInfo;
 import hqr.o365.service.SaveOfficeInfo;
@@ -48,6 +49,8 @@ public class ConfigTabCtrl {
 	@Autowired
 	private GetLicenseInfo gli;
 	
+	@Autowired
+	private GetDomainInfo gdi;
 	
 	@RequestMapping(value = {"/tabs/config.html"})
 	public String dummy() {
@@ -153,6 +156,7 @@ public class ConfigTabCtrl {
 		
 		boolean flag = sc.updateConfig(ti);
 		if(flag) {
+			//change license
 			HashMap<String, Object> map2 = gli.getLicenses();
 			List<LicenseInfo> vo = new ArrayList<LicenseInfo>();
 			Object obj = map2.get("licenseVo");
@@ -160,6 +164,11 @@ public class ConfigTabCtrl {
 				vo = (List<LicenseInfo>)obj;
 			}
 			req.getSession().setAttribute("licenseVo", vo);
+			
+			//change domains
+			String domainVo = gdi.getDomains();
+			req.getSession().setAttribute("domainVo", domainVo);
+			
 		}
 		else {
 			System.out.println("invalid info, skip to init/update licenseVo");

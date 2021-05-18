@@ -13,9 +13,9 @@
 		</tr>
 		<tr>
 			<td>邮箱：</td>
-			<td><input id="prefix" class="easyui-validatebox tb" data-options="required:true" style="width: 100px" ></td>
+			<td><input id="prefix" class="easyui-validatebox tb" data-options="required:true" style="width: 110px" ></td>
 			<td>
-				<input id="cc" name="dept" value="aa">
+				<input id="cc1" name="dept" value="Loading...">
 			</td>
 		</tr>
 		<tr>
@@ -34,15 +34,21 @@
 		</tr>
 	</table>
 	<script type="text/javascript" th:inline="none">
-		$('#cc').combobox({
+		$('#cc1').combobox({
 		    url:'/getDomains',
 		    valueField:'id',
 		    textField:'text'
 		});
 	
 		function submitForm(){
-			console.log($('#displayNm').val());
-			console.log($('#prefix').val());
+			var mailNickname = $('#prefix').val();
+			var userPrincipalName = $('#prefix').val() +  $('#cc1').combobox('getText');
+			var displayNm = $('#displayNm').val();
+			
+			console.log("mailNickname:"+mailNickname);
+			console.log("userPrincipalName:"+userPrincipalName);
+			console.log("displayNm:"+displayNm);
+			
 			var licenses ;
 			$('input:checkbox[name=checkbox1]:checked').each(function(i){
 				if(0==i){

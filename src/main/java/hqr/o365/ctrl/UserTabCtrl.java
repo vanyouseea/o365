@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.hutool.http.server.HttpServerRequest;
 import hqr.o365.domain.LicenseInfo;
+import hqr.o365.service.GetDomainInfo;
 import hqr.o365.service.GetLicenseInfo;
 import hqr.o365.service.GetOfficeUser;
 
@@ -24,6 +25,9 @@ public class UserTabCtrl {
 	@Autowired
 	private GetLicenseInfo gli;
 	
+	@Autowired
+	private GetDomainInfo gdi;
+	
 	@RequestMapping(value = {"/tabs/user.html"})
 	public String dummy() {
 		return "tabs/user";
@@ -31,8 +35,8 @@ public class UserTabCtrl {
 	
 	@RequestMapping(value = {"tabs/dialogs/createUser.html"})
 	public String dummyCreateUser(HttpServletRequest req) {
-		Object tmp = req.getSession().getAttribute("licenseVo");
-		if(tmp==null) {
+		Object tmp2 = req.getSession().getAttribute("licenseVo");
+		if(tmp2==null) {
 			HashMap<String, Object> map2 = gli.getLicenses();
 			List<LicenseInfo> vo = new ArrayList<LicenseInfo>();
 			Object obj = map2.get("licenseVo");
@@ -45,6 +49,22 @@ public class UserTabCtrl {
 			System.out.println("licenseVo already exist,skip to get");
 		}
 		return "tabs/dialogs/createUser";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = {"/getDomains"})
+	public String getDomains(HttpServletRequest req) {
+		Object tmp = req.getSession().getAttribute("domainVo");
+		if(tmp==null) {
+			String json = gdi.getDomains();
+			req.getSession().setAttribute("domainVo", json);
+			return json;
+		}
+		else {
+			System.out.println("domainVo already exist,use old one");
+			return (String)tmp;
+		}
+		
 	}
 	
 	@ResponseBody
