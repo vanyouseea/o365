@@ -171,7 +171,10 @@ public class ConfigTabCtrl {
 			
 		}
 		else {
-			System.out.println("invalid info, skip to init/update licenseVo");
+			List<LicenseInfo> vo = new ArrayList<LicenseInfo>();
+			req.getSession().setAttribute("licenseVo", null);
+			req.getSession().setAttribute("domainVo", "[]");
+			System.out.println("invalid info, update the licenseVo & domain Vo to null");
 		}
 		return flag;
 	}
