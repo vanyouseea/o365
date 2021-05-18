@@ -9,20 +9,20 @@
 	<table style="padding:10px;margin-bottom: 10px">
 		<tr>
 			<td>名字：</td>
-			<td colSpan="2"><input id="displayNm" class="easyui-validatebox tb" data-options="required:true" style="width: 290px" ></td>
+			<td colSpan="2"><input id="displayNm" class="easyui-validatebox tb" data-options="required:true" style="width: 330px" ></td>
 		</tr>
 		<tr>
 			<td>邮箱：</td>
-			<td><input id="prefix" class="easyui-validatebox tb" data-options="required:true" style="width: 110px" ></td>
+			<td><input id="prefix" class="easyui-validatebox tb" data-options="required:true" style="width: 90px" ></td>
 			<td>
-				<input id="cc1" name="dept" value="Loading...">
+				<input id="cc1" name="dept" value="Loading..." style="width: 236px">
 			</td>
 		</tr>
 		<tr>
 			<td>订阅：</td>
 			<td colSpan="2" id="licenseTd">
-				<div th:each="list : ${session.licenseVo}">
-					<input class="easyui-checkbox" name="checkbox1" th:value="${list.skuId}" th:label="${list.skuPartNumber}" labelWidth="270px" ><br>
+				<div th:each="list : ${session.licenseVo}" style="font-size: 2px">
+					<input class="easyui-checkbox" name="checkbox1" th:value="${list.skuId}" th:label="${list.skuPartNumber}" labelWidth="310px" ><br>
 				</div>
 			</td>
 		</tr>
