@@ -19,7 +19,8 @@ import hqr.o365.service.DeleteOfficeUser;
 import hqr.o365.service.GetDomainInfo;
 import hqr.o365.service.GetLicenseInfo;
 import hqr.o365.service.GetOfficeUser;
-import hqr.o365.service.getOfficeUserRole;
+import hqr.o365.service.GetOfficeUserRole;
+import hqr.o365.service.UpdateOfficeUser;
 
 @Controller
 public class UserTabCtrl {
@@ -40,7 +41,10 @@ public class UserTabCtrl {
 	private DeleteOfficeUser dou;
 	
 	@Autowired
-	private getOfficeUserRole gour;
+	private GetOfficeUserRole gour;
+	
+	@Autowired
+	private UpdateOfficeUser uou;
 	
 	@RequestMapping(value = {"/tabs/user.html"})
 	public String dummy() {
@@ -120,7 +124,7 @@ public class UserTabCtrl {
 	@RequestMapping(value = {"/deleteOfficeUser"}, method = RequestMethod.POST)
 	public boolean deleteUser(@RequestParam(name="uid") String uid) {
 		return dou.deleteUser(uid);
-	}	
+	}
 	
 	@ResponseBody
 	@RequestMapping(value = {"/getOfficeUserDtls"}, method = RequestMethod.POST)
@@ -128,4 +132,9 @@ public class UserTabCtrl {
 		return gour.getRole(uid);
 	}
 	
+	@ResponseBody
+	@RequestMapping(value = {"/updateOfficeUser"}, method = RequestMethod.POST)
+	public boolean patchUser(@RequestParam(name="uid") String uid, @RequestParam(name="accountEnabled") String accountEnabled) {
+		return uou.patchOfficeUser(uid, accountEnabled);
+	}	
 }

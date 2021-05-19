@@ -146,13 +146,105 @@
 				text:'启用',
 				iconCls:'icon-enable',
 				handler:function(){
-					$.messager.alert('错误', 'disable' ,'info');
+					row3 = $('#tb3').datagrid('getSelected');
+					if(row3!=null){
+						var id = row3.id;
+						var accountEnabled = "true";
+						
+						$.ajax({
+						    type : "POST", 
+						    url : "/updateOfficeUser",
+						    data : { "uid": id , "accountEnabled" : accountEnabled},
+						    success : function(result) {
+								if(result){
+							       	$.messager.show({
+										title:'提示',
+										msg:'成功启用此用户',
+										timeout:2000,
+										showType:'slide'
+									}); 
+							       	$('#tb3').datagrid('reload');
+								}
+								else{
+							       	$.messager.show({
+										title:'提示',
+										msg:'启用此用户失败',
+										timeout:2000,
+										showType:'slide'
+									}); 
+								}
+							},
+							error : function(){
+						       	$.messager.show({
+									title:'失败',
+									msg:'启用此用户失败，请重试',
+									timeout:2000,
+									showType:'slide'
+								}); 
+							}							
+						});
+						row3 = null;
+					}
+					else{
+						$.messager.show({
+							title:'错误',
+							msg:'请先选择一行',
+							timeout:2000,
+							showType:'slide'
+						});
+					}
 				}
 			},{
 				text:'禁用',
 				iconCls:'icon-disable',
 				handler:function(){
-					$.messager.alert('错误', 'disable' ,'info');
+					row3 = $('#tb3').datagrid('getSelected');
+					if(row3!=null){
+						var id = row3.id;
+						var accountEnabled = "false";
+						
+						$.ajax({
+						    type : "POST", 
+						    url : "/updateOfficeUser",
+						    data : { "uid": id , "accountEnabled" : accountEnabled},
+						    success : function(result) {
+								if(result){
+							       	$.messager.show({
+										title:'提示',
+										msg:'成功禁用此用户',
+										timeout:2000,
+										showType:'slide'
+									}); 
+							       	$('#tb3').datagrid('reload');
+								}
+								else{
+							       	$.messager.show({
+										title:'提示',
+										msg:'禁用此用户失败',
+										timeout:2000,
+										showType:'slide'
+									}); 
+								}
+							},
+							error : function(){
+						       	$.messager.show({
+									title:'失败',
+									msg:'禁用此用户失败，请重试',
+									timeout:2000,
+									showType:'slide'
+								}); 
+							}							
+						});
+						row3 = null;
+					}
+					else{
+						$.messager.show({
+							title:'错误',
+							msg:'请先选择一行',
+							timeout:2000,
+							showType:'slide'
+						});
+					}
 				}
 			},{
 				text:'提权',
