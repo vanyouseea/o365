@@ -45,13 +45,96 @@
 				text:'删除',
 				iconCls:'icon-remove',
 				handler:function(){
-					$.messager.alert('错误', 'delete' ,'info');
+					row3 = $('#tb3').datagrid('getSelected');
+					var uid = row3.id;
+					var name = row3.userPrincipalName;
+					if(row3!=null){
+						$.messager.confirm('删除用户', '将删除'+name+"，数据无法被恢复，你确定吗", function(r){
+							if (r){
+								$.ajax({
+								    type : "POST", 
+								    url : "/deleteOfficeUser",
+								    data : { "uid": uid },
+								    success : function(result) {
+								    	if(result){
+									       	$.messager.show({
+												title:'删除用户',
+												msg:'用户已被删除',
+												timeout:2000,
+												showType:'slide'
+											}); 
+									       	$('#tb3').datagrid('reload');
+								    	}
+								    	else{
+									       	$.messager.show({
+												title:'删除用户',
+												msg:'无法删除用户',
+												timeout:2000,
+												showType:'slide'
+											}); 
+								    	}
+								    },
+									error : function(e){
+								       	$.messager.show({
+											title:'删除用户',
+											msg:'删除用户失败，这可能是由于服务器出现问题引起的 '+e,
+											timeout:2000,
+											showType:'slide'
+										}); 
+									}
+								});
+							}
+						});
+						row3 = null;
+					}
+					else{
+						$.messager.show({
+							title:'错误',
+							msg:'请先选择一行',
+							timeout:2000,
+							showType:'slide'
+						});
+					}
 				}
 			},{
 				text:'详情',
 				iconCls:'icon-more',
 				handler:function(){
-					$.messager.alert('错误', 'detail' ,'info');
+					row3 = $('#tb3').datagrid('getSelected');
+					if(row3!=null){
+						var id = row3.id;
+						var userPrincipalName = row3.userPrincipalName;
+						var displayName = row3.displayName;
+						var usageLocation = row3.usageLocation;
+						var licenses = row3.assignedLicenses;
+						
+						$.ajax({
+						    type : "POST", 
+						    url : "/getOfficeUserDtls",
+						    data : { "uid": id },
+						    success : function(result) {
+								$.messager.alert('详情', 'UID:'+id+'<br>邮件:'+ userPrincipalName + '<br>名字:'
+										+displayName+'<br>国家:'+usageLocation+'<br>订阅:'+licenses+'<br>身份:'+result,'');
+							},
+							error : function(){
+						       	$.messager.show({
+									title:'失败',
+									msg:'获取详情失败，请重试',
+									timeout:2000,
+									showType:'slide'
+								}); 
+							}							
+						});
+						row3 = null;
+					}
+					else{
+						$.messager.show({
+							title:'错误',
+							msg:'请先选择一行',
+							timeout:2000,
+							showType:'slide'
+						});
+					}
 				}
 			},{
 				text:'刷新',

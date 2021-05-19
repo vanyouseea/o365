@@ -8,13 +8,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.hutool.http.server.HttpServerRequest;
 import hqr.o365.domain.LicenseInfo;
+import hqr.o365.service.CreateOfficeUser;
+import hqr.o365.service.DeleteOfficeUser;
 import hqr.o365.service.GetDomainInfo;
 import hqr.o365.service.GetLicenseInfo;
 import hqr.o365.service.GetOfficeUser;
+import hqr.o365.service.getOfficeUserRole;
 
 @Controller
 public class UserTabCtrl {
@@ -27,6 +32,15 @@ public class UserTabCtrl {
 	
 	@Autowired
 	private GetDomainInfo gdi;
+	
+	@Autowired
+	private CreateOfficeUser cou;
+	
+	@Autowired
+	private DeleteOfficeUser dou;
+	
+	@Autowired
+	private getOfficeUserRole gour;
 	
 	@RequestMapping(value = {"/tabs/user.html"})
 	public String dummy() {
@@ -88,6 +102,30 @@ public class UserTabCtrl {
 		HashMap<String,String> map = gou.getUsers(intPage, intRows);
 		
 		return map.get("message");
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = {"/createOfficeUser"}, method = RequestMethod.POST)
+	public String createUser(@RequestParam(name="mailNickname") String mailNickname,
+			@RequestParam(name="userPrincipalName") String userPrincipalName,
+			@RequestParam(name="displayName") String displayName,
+			@RequestParam(name="licenses") String licenses) {
+		
+		HashMap<String, String> map = cou.createCommonUser(mailNickname, userPrincipalName, displayName, licenses);
+		
+		return map.get("message");
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = {"/deleteOfficeUser"}, method = RequestMethod.POST)
+	public boolean deleteUser(@RequestParam(name="uid") String uid) {
+		return dou.deleteUser(uid);
+	}	
+	
+	@ResponseBody
+	@RequestMapping(value = {"/getOfficeUserDtls"}, method = RequestMethod.POST)
+	public String getOfficeUserDtls(@RequestParam(name="uid") String uid) {
+		return gour.getRole(uid);
 	}
 	
 }

@@ -1,15 +1,33 @@
 package hqr.o365.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
+/*
+ * {
+	    "accountEnabled": "true",
+	    "displayName": "Du Yong5",
+	    "mailNickname": "duyong5",
+	    "passwordPolicies": "DisablePasswordExpiration, DisableStrongPassword",
+	    "passwordProfile": {
+	        "password": "123",
+	        "forceChangePasswordNextSignIn": false
+	    },
+	    "userPrincipalName": "11@11.com",
+	    "usageLocation": "CN"
+	}
+ */
+
 public class OfficeUser {
 	private String id;
-	private String accountEnabled;
+	private String accountEnabled="true";
 	private String displayName;
 	private String mailNickname;
 	private String passwordPolicies = "DisablePasswordExpiration, DisableStrongPassword";
 	private PasswordProfile passwordProfile = new PasswordProfile();
 	private String userPrincipalName;
 	private String usageLocation="CN";
-
+	private List<String> assignedLicenses = new ArrayList<String>();
 	public String getAccountEnabled() {
 		return accountEnabled;
 	}
@@ -58,21 +76,26 @@ public class OfficeUser {
 	public void setPasswordProfile(PasswordProfile passwordProfile) {
 		this.passwordProfile = passwordProfile;
 	}
-
-	class PasswordProfile{
+	public List<String> getAssignedLicenses() {
+		return assignedLicenses;
+	}
+	public void setAssignedLicenses(List<String> assignedLicenses) {
+		this.assignedLicenses = assignedLicenses;
+	}
+	public class PasswordProfile{
 		private String password;
-		private boolean forceChangePasswordNextSignin = false;
+		private boolean forceChangePasswordNextSignIn = true;
 		public String getPassword() {
 			return password;
 		}
 		public void setPassword(String password) {
 			this.password = password;
 		}
-		public boolean isForceChangePasswordNextSignin() {
-			return forceChangePasswordNextSignin;
+		public boolean isForceChangePasswordNextSignIn() {
+			return forceChangePasswordNextSignIn;
 		}
-		public void setForceChangePasswordNextSignin(boolean forceChangePasswordNextSignin) {
-			this.forceChangePasswordNextSignin = forceChangePasswordNextSignin;
+		public void setForceChangePasswordNextSignIn(boolean forceChangePasswordNextSignIn) {
+			this.forceChangePasswordNextSignIn = forceChangePasswordNextSignIn;
 		}
 	}
 	
