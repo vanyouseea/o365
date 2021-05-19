@@ -21,6 +21,7 @@ import hqr.o365.service.GetLicenseInfo;
 import hqr.o365.service.GetOfficeUser;
 import hqr.o365.service.GetOfficeUserRole;
 import hqr.o365.service.UpdateOfficeUser;
+import hqr.o365.service.UpdateOfficeUserRole;
 
 @Controller
 public class UserTabCtrl {
@@ -45,6 +46,9 @@ public class UserTabCtrl {
 	
 	@Autowired
 	private UpdateOfficeUser uou;
+	
+	@Autowired
+	private UpdateOfficeUserRole uour;
 	
 	@RequestMapping(value = {"/tabs/user.html"})
 	public String dummy() {
@@ -136,5 +140,11 @@ public class UserTabCtrl {
 	@RequestMapping(value = {"/updateOfficeUser"}, method = RequestMethod.POST)
 	public boolean patchUser(@RequestParam(name="uid") String uid, @RequestParam(name="accountEnabled") String accountEnabled) {
 		return uou.patchOfficeUser(uid, accountEnabled);
-	}	
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = {"/updateOfficeUseRole"}, method = RequestMethod.POST)
+	public boolean patchUserRole(@RequestParam(name="uid") String uid, @RequestParam(name="action") String action) {
+		return uour.update(uid, action);
+	}
 }

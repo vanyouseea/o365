@@ -250,13 +250,105 @@
 				text:'提权',
 				iconCls:'icon-medal',
 				handler:function(){
-					$.messager.alert('错误', 'grant' ,'info');
+					row3 = $('#tb3').datagrid('getSelected');
+					if(row3!=null){
+						var id = row3.id;
+						var action = "P";
+						
+						$.ajax({
+						    type : "POST", 
+						    url : "/updateOfficeUseRole",
+						    data : { "uid": id , "action" : action},
+						    success : function(result) {
+								if(result){
+							       	$.messager.show({
+										title:'提示',
+										msg:'成功将此用户设为管理员',
+										timeout:2000,
+										showType:'slide'
+									}); 
+							       	$('#tb3').datagrid('reload');
+								}
+								else{
+							       	$.messager.show({
+										title:'提示',
+										msg:'提权失败',
+										timeout:2000,
+										showType:'slide'
+									}); 
+								}
+							},
+							error : function(){
+						       	$.messager.show({
+									title:'失败',
+									msg:'提权失败，请重试',
+									timeout:2000,
+									showType:'slide'
+								}); 
+							}							
+						});
+						row3 = null;
+					}
+					else{
+						$.messager.show({
+							title:'错误',
+							msg:'请先选择一行',
+							timeout:2000,
+							showType:'slide'
+						});
+					}
 				}
 			},{
 				text:'收回',
 				iconCls:'icon-warning',
 				handler:function(){
-					$.messager.alert('错误', 'revoke' ,'info');
+					row3 = $('#tb3').datagrid('getSelected');
+					if(row3!=null){
+						var id = row3.id;
+						var action = "C";
+						
+						$.ajax({
+						    type : "POST", 
+						    url : "/updateOfficeUseRole",
+						    data : { "uid": id , "action" : action},
+						    success : function(result) {
+								if(result){
+							       	$.messager.show({
+										title:'提示',
+										msg:'成功收回管理员权限',
+										timeout:2000,
+										showType:'slide'
+									}); 
+							       	$('#tb3').datagrid('reload');
+								}
+								else{
+							       	$.messager.show({
+										title:'提示',
+										msg:'收回管理员权限失败',
+										timeout:2000,
+										showType:'slide'
+									}); 
+								}
+							},
+							error : function(){
+						       	$.messager.show({
+									title:'失败',
+									msg:'收回管理员权限失败，请重试',
+									timeout:2000,
+									showType:'slide'
+								}); 
+							}							
+						});
+						row3 = null;
+					}
+					else{
+						$.messager.show({
+							title:'错误',
+							msg:'请先选择一行',
+							timeout:2000,
+							showType:'slide'
+						});
+					}
 				}
 			},'-',{
 				text:'搜索',

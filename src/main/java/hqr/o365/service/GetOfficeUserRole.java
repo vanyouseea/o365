@@ -34,7 +34,7 @@ public class GetOfficeUserRole {
 	private TaMasterCdRepo tmc;
 	
 	public String getRole(String uid) {
-		String role = "NA";
+		String role = "";
 		List<TaOfficeInfo> list = repo.getSelectedApp();
 		if(list!=null&&list.size()>0) {
 			TaOfficeInfo ta = list.get(0);
