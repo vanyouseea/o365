@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -31,6 +32,9 @@ public class UpdateOfficeUserRole {
 	@Autowired
 	private TaMasterCdRepo tmc;
 	
+	@Value("${UA}")
+    private String ua;
+
 	public boolean update(String uid, String action) {
 		boolean flag = false;
 		
@@ -54,6 +58,7 @@ public class UpdateOfficeUserRole {
 				if("P".equals(action)) {
 					endpoint = "https://graph.microsoft.com/v1.0/directoryRoles/roleTemplateId="+roleId+"/members/$ref";
 					HttpHeaders headers = new HttpHeaders();
+					headers.set(HttpHeaders.USER_AGENT, ua);
 					headers.add("Authorization", "Bearer "+accessToken);
 					headers.setContentType(MediaType.APPLICATION_JSON);
 					String body = "{\"@odata.id\": \"https://graph.microsoft.com/v1.0/directoryObjects/"+uid+"\"}";
@@ -72,6 +77,7 @@ public class UpdateOfficeUserRole {
 				else {
 					endpoint = "https://graph.microsoft.com/v1.0/directoryRoles/roleTemplateId="+roleId+"/members/"+uid+"/$ref";
 					HttpHeaders headers = new HttpHeaders();
+					headers.set(HttpHeaders.USER_AGENT, ua);
 					headers.add("Authorization", "Bearer "+accessToken);
 					headers.setContentType(MediaType.APPLICATION_JSON);
 					String body = "";

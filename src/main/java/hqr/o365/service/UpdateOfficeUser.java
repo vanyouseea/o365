@@ -3,6 +3,7 @@ package hqr.o365.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -26,6 +27,9 @@ public class UpdateOfficeUser {
 	@Autowired
 	private ValidateAppInfo vai;
 	
+	@Value("${UA}")
+    private String ua;
+
 	public boolean patchOfficeUser(String uid, String accountEnabled) {
 		boolean flag = false;
 		List<TaOfficeInfo> list = repo.getSelectedApp();
@@ -39,6 +43,7 @@ public class UpdateOfficeUser {
 			if(!"".equals(accessToken)) {
 				String endpoint = "https://graph.microsoft.com/v1.0/users/"+uid;
 				HttpHeaders headers = new HttpHeaders();
+				headers.set(HttpHeaders.USER_AGENT, ua);
 				headers.add("Authorization", "Bearer "+accessToken);
 				headers.setContentType(MediaType.APPLICATION_JSON);
 				String body = "{\"accountEnabled\": \""+accountEnabled+"\"}";

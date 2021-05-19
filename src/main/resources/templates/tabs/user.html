@@ -364,7 +364,10 @@
 				text:'帮助',
 				iconCls:'icon-help',
 				handler:function(){
-					$.messager.alert('帮助','Tip is missing','info');
+					$.messager.alert('帮助','<b>1.</b>请确保配置的可用性可以在这里<a href=javascript:addPanel("管理配置")>管理配置</a><br>'+
+							'<b>2.</b>详情可以看到用户的订阅skuid和身份,skuid对应的产品名称可以在<a href=javascript:addPanel("查看许可证")>查看许可证</a>找到<br>' +
+							'<b>3.</b>启用和禁用用户只会对普通用户有效<br>'+
+							'<b>4.</b>提权和收回分别是提升一个用户为全局管理员和收回一个用户的全局管理员权限 ','');
 				}
 			}],
 			columns : [[
@@ -381,7 +384,7 @@
 				{field : 'id',title : 'UID',align : 'center'}, 
 				{field : 'userPrincipalName',title : '邮箱',align : 'center'}, 
 				{field : 'displayName',title : '名字',align : 'center'},
-				{field : 'usageLocation',title : '国家',align : 'center'}
+				{field : 'usageLocation',title : '国家/地区',align : 'center'}
 			]],
             onLoadError: function (data){
             	console.log(data);
@@ -390,7 +393,38 @@
             }
 		});
 		
-
+		function addPanel(name){
+			tab = $('#acc').tabs('getTab',name);
+			if(tab==null){
+				if(name=='管理用户'){
+					$('#acc').tabs('add',{
+						title: name,
+						href: 'tabs/user.html',
+						//content: '<div style="padding:10px">Content</div>',
+						closable: true
+					});
+				}
+				else if(name=='查看许可证'){
+					$('#acc').tabs('add',{
+						title: name,
+						href: 'tabs/license.html',
+						//content: '<div style="padding:10px">Content</div>',
+						closable: true
+					});
+				}
+				else if(name=='管理配置'){
+					$('#acc').tabs('add',{
+						title: name,
+						href: 'tabs/config.html',
+						//content: '<div style="padding:10px">Content</div>',
+						closable: true
+					});
+				}
+			}
+			else{
+				$('#acc').tabs('select',name);
+			}
+		}
 		
 	</script>
 	

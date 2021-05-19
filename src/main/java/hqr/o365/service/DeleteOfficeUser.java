@@ -3,6 +3,7 @@ package hqr.o365.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -24,6 +25,9 @@ public class DeleteOfficeUser {
 	@Autowired
 	private ValidateAppInfo vai;
 	
+	@Value("${UA}")
+    private String ua;
+
 	public boolean deleteUser(String uid) {
 		boolean flag = false;
 		
@@ -39,6 +43,7 @@ public class DeleteOfficeUser {
 			if(!"".equals(accessToken)) {
 				String endpoint = "https://graph.microsoft.com/v1.0/users/"+uid;
 				HttpHeaders headers = new HttpHeaders();
+				headers.set(HttpHeaders.USER_AGENT, ua);
 				String body = "";
 				headers.add("Authorization", "Bearer "+accessToken);
 				HttpEntity<String> requestEntity = new HttpEntity<String>(body, headers);

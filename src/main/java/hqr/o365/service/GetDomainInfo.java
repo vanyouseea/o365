@@ -1,21 +1,18 @@
 package hqr.o365.service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-
 import hqr.o365.dao.TaOfficeInfoRepo;
 import hqr.o365.domain.TaOfficeInfo;
 
@@ -30,6 +27,9 @@ public class GetDomainInfo {
 	@Autowired
 	private ValidateAppInfo vai;
 	
+	@Value("${UA}")
+    private String ua;
+
 	public String getDomains(){
 		String json = "[]";
 		List<ComboboxDo> ll = new ArrayList<ComboboxDo>();
@@ -44,6 +44,7 @@ public class GetDomainInfo {
 			if(!"".equals(accessToken)) {
 				String endpoint = "https://graph.microsoft.com/v1.0/domains?$select=id";
 				HttpHeaders headers = new HttpHeaders();
+				headers.set(HttpHeaders.USER_AGENT, ua);
 				headers.add("Authorization", "Bearer "+accessToken);
 				String body="";
 				HttpEntity<String> requestEntity = new HttpEntity<String>(body, headers);

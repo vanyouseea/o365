@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -30,6 +31,9 @@ public class GetLicenseInfo {
 	@Autowired
 	private ValidateAppInfo vai;
 	
+	@Value("${UA}")
+    private String ua;
+
 	public HashMap<String, Object> getLicenses() {
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		List<LicenseInfo> ll = new ArrayList<LicenseInfo>();
@@ -46,6 +50,7 @@ public class GetLicenseInfo {
 			if(!"".equals(accessToken)) {
 				String endpoint = "https://graph.microsoft.com/v1.0/subscribedSkus?$select=capabilityStatus,skuid,skuPartNumber,consumedUnits,prepaidUnits";
 				HttpHeaders headers = new HttpHeaders();
+				headers.set(HttpHeaders.USER_AGENT, ua);
 				headers.add("Authorization", "Bearer "+accessToken);
 				String body="";
 				HttpEntity<String> requestEntity = new HttpEntity<String>(body, headers);

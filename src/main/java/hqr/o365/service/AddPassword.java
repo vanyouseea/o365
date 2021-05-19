@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -29,6 +30,9 @@ public class AddPassword {
 	@Autowired
 	private TaOfficeInfoRepo repo;
 	
+	@Value("${UA}")
+    private String ua;
+	
 	public HashMap<String, String> add(int seqNo, String tenantId, String appId, String secretId) {
 		HashMap<String, String> map = new HashMap<String, String>();
 		
@@ -38,6 +42,7 @@ public class AddPassword {
 		if(!"".equals(accessToken)) {
 			String endpoint = "https://graph.microsoft.com/v1.0/applications?$select=id,appId";
 			HttpHeaders headers = new HttpHeaders();
+			headers.set(HttpHeaders.USER_AGENT, ua);
 			headers.add("Authorization", "Bearer "+accessToken);
 			String body="";
 			HttpEntity<String> requestEntity = new HttpEntity<String>(body, headers);

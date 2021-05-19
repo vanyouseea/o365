@@ -1,23 +1,19 @@
 package hqr.o365.service;
 
 import java.util.List;
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-
-import hqr.o365.dao.TaMasterCdRepo;
 import hqr.o365.dao.TaOfficeInfoRepo;
-import hqr.o365.domain.TaMasterCd;
 import hqr.o365.domain.TaOfficeInfo;
 
 @Service
@@ -30,9 +26,9 @@ public class GetOfficeUserRole {
 	@Autowired
 	private ValidateAppInfo vai;
 	
-	@Autowired
-	private TaMasterCdRepo tmc;
-	
+	@Value("${UA}")
+    private String ua;
+
 	public String getRole(String uid) {
 		String role = "";
 		List<TaOfficeInfo> list = repo.getSelectedApp();
@@ -46,6 +42,7 @@ public class GetOfficeUserRole {
 			if(!"".equals(accessToken)) {
 				String endpoint = "https://graph.microsoft.com/v1.0/directoryObjects/"+uid+"/getMemberObjects";
 				HttpHeaders headers = new HttpHeaders();
+				headers.set(HttpHeaders.USER_AGENT, ua);
 				headers.add("Authorization", "Bearer "+accessToken);
 				headers.setContentType(MediaType.APPLICATION_JSON);
 				String body = "{\"securityEnabledOnly\": true}";
@@ -56,13 +53,27 @@ public class GetOfficeUserRole {
 						JSONObject jo = JSON.parseObject(response.getBody());
 						JSONArray ja = jo.getJSONArray("value");
 						for (Object roleId : ja) {
-							Optional<TaMasterCd> opt = tmc.findById(roleId.toString());
-							if(opt.isPresent()) {
-								TaMasterCd tm = opt.get();
-								role = role + tm.getCd() + "<br>";
+							endpoint = "https://graph.microsoft.com/v1.0/directoryRoles/"+roleId.toString()+"?$select=displayName";
+							HttpHeaders headers2 = new HttpHeaders();
+							headers2.set(HttpHeaders.USER_AGENT, ua);
+							headers2.add("Authorization", "Bearer "+accessToken);
+							String body2 = "{\"securityEnabledOnly\": true}";
+							HttpEntity<String> requestEntity2 = new HttpEntity<String>(body2, headers2);
+							try {
+								ResponseEntity<String> response2 = restTemplate.exchange(endpoint, HttpMethod.GET, requestEntity2, String.class);
+								if(response2.getStatusCodeValue()==200) {
+									JSONObject jo2 = JSON.parseObject(response2.getBody());
+									role = role + jo2.getString("displayName") + ",";
+								}
 							}
-							else {
-								role = role + roleId + "<br>";
+							catch (Exception e) {
+								e.printStackTrace();
+							}
+						}
+						if(!"".equals(role)) {
+							String str = role.substring(role.length()-1);
+							if(",".equals(str)) {
+								role = role.substring(0, role.length()-1);
 							}
 						}
 					}

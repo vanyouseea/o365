@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
@@ -18,6 +19,9 @@ public class GetOfficeInfo {
 	@Autowired
 	private TaOfficeInfoRepo repo;
 	
+	@Value("${UA}")
+    private String ua;
+
 	public String getAllOfficeInfo(int intRows, int intPage) {
 		long total = repo.count();
 		List<TaOfficeInfo> rows = new ArrayList<TaOfficeInfo>();

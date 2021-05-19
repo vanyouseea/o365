@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -44,6 +45,9 @@ public class CreateOfficeUser {
 	@Autowired
 	private TaMasterCdRepo tmr;
 	
+	@Value("${UA}")
+    private String ua;
+	
 	public HashMap<String, String> createCommonUser(String mailNickname, String userPrincipalName, String displayName, String licenses){
 		HashMap<String, String> map = new HashMap<String, String>();
 		String password = "Mjj@1234";
@@ -60,7 +64,6 @@ public class CreateOfficeUser {
 		ou.getPasswordProfile().setPassword(password);
 		
 		String createUserJson = JSON.toJSONString(ou);
-		System.out.println("createUserJson:"+createUserJson);
 		
 		String message = "";
 		
@@ -76,6 +79,7 @@ public class CreateOfficeUser {
 			if(!"".equals(accessToken)) {
 				String endpoint = "https://graph.microsoft.com/v1.0/users";
 				HttpHeaders headers = new HttpHeaders();
+				headers.set(HttpHeaders.USER_AGENT, ua);
 				headers.add("Authorization", "Bearer "+accessToken);
 				headers.setContentType(MediaType.APPLICATION_JSON);
 				HttpEntity<String> requestEntity = new HttpEntity<String>(createUserJson, headers);
@@ -97,6 +101,7 @@ public class CreateOfficeUser {
 								endpoint = "https://graph.microsoft.com/v1.0/users/"+ou.getUserPrincipalName()+"/assignLicense";
 								
 								HttpHeaders headers2 = new HttpHeaders();
+								headers2.set(HttpHeaders.USER_AGENT, ua);
 								headers2.add("Authorization", "Bearer "+accessToken);
 								headers2.setContentType(MediaType.APPLICATION_JSON);
 								HttpEntity<String> requestEntity2 = new HttpEntity<String>(licenseJson, headers2);
