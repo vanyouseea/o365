@@ -3,11 +3,14 @@ package hqr.o365.domain;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
 public class TaMasterCd {
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private String keyTy;
 	private String cd;
 	private String decode;
