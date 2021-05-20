@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Client Side Pagination in DataGrid - jQuery EasyUI Demo</title>
+
+</head>
+<body>
+	<div id="tb4" ></div>
+	<div id="dlg4" class="easyui-dialog" title="配置信息" style="padding:10px"
+			data-options="				
+				iconCls: 'icon-edit',
+				modal : true,
+				closed : true,
+				width : 400,
+				buttons: [{
+					text:'确定',
+					handler:function(){
+						var keyTy = $('#keyTy').val();
+						var cd = $('#cd').val();
+						var decode = $('#decode').val();
+						var lastUpdateId = $('#lastUpdateId').val();
+						$.ajax({
+							type : 'POST', 
+							url : '/updateSystemInfo',
+							data : { 'keyTy': keyTy , 'cd': cd , 'decode' : decode, 'lastUpdateId' : lastUpdateId },
+							success : function(result) {
+								if ( result ) {
+									$.messager.show({
+										title:'成功',
+										msg:'更新系统配置成功',
+										timeout:2000,
+										showType:'slide'
+									});
+									$('#tb4').datagrid('reload');
+								} else { 
+									$.messager.show({
+										title:'失败',
+										msg:'更新系统配置失败',
+										timeout:2000,
+										showType:'slide'
+									}); 
+								} 
+							},
+							error : function(){
+						       	$.messager.show({
+									title:'失败',
+									msg:'更新系统配置失败，请重试',
+									timeout:2000,
+									showType:'slide'
+								}); 
+							}
+						});
+						$('#dlg4').dialog('close');
+					}
+				},{
+					text:'取消',
+					handler:function(){
+						$('#dlg4').dialog('close');
+					}
+				}]
+	">
+		<table>
+			<tr>
+				<td>关键字:</td>
+				<td><input id="keyTy" disabled="disabled" type="text" style="width: 300px"></td>
+			</tr>			
+			<tr>
+				<td>值:</td>
+				<td><input id="cd"  type="text" style="width: 300px"></td>
+			</tr>			
+			<tr>
+				<td>描述:</td>
+				<td><input id="decode" type="text" style="width: 300px"></td>
+			</tr>
+			<tr>
+				<td>更新者:</td>
+				<td><input id="lastUpdateId" disabled="disabled" type="text" style="width: 300px"></td>
+			</tr>
+		</table>
+	</div>
+	<script type="text/javascript" th:inline="none">
+		var row4;
+	
+		$('#tb4').datagrid({
+			border:false,
+			fit:true,
+			singleSelect:true,
+			autoRowHeight:false,
+			url:'/getSystemInfo',
+			method:'post',
+			toolbar: [{
+				text:'编辑',
+				iconCls:'icon-edit',
+				handler:function(){
+					row4 = $('#tb4').datagrid('getSelected');
+					if(row4!=null){
+						var keyTy = row4.keyTy;
+						var cd = row4.cd;
+						var decode = row4.decode;
+						var lastUpdateId = row4.lastUpdateId;
+						
+						$("#keyTy").val(keyTy);
+						$("#cd").val(cd);
+						$("#decode").val(decode);
+						$("#lastUpdateId").val(lastUpdateId);
+						
+						$('#dlg4').dialog('open');
+						
+						row4 = null;
+					}
+					else{
+						$.messager.show({
+							title:'错误',
+							msg:'请先选择一行',
+							timeout:2000,
+							showType:'slide'
+						});
+					}
+					
+				}
+			},{
+				text:'刷新',
+				iconCls:'icon-reload',
+				handler:function(){
+					$('#tb4').datagrid('reload');
+				}
+			},{
+				text:'帮助',
+				iconCls:'icon-help',
+				handler:function(){
+					$.messager.alert('帮助','除非你知道自己在做什么否则请勿修改任何系统参数','info');
+				}
+			}],
+			columns : [[
+				{field : 'keyTy',title : '关键字',align : 'center'}, 
+				{field : 'cd',title : '值',align : 'center'}, 
+				{field : 'decode',title : '描述',align : 'center'}, 
+				{field : 'lastUpdateId',title : '更新者',align : 'center'},
+			]],
+            onLoadError: function (data){
+            	console.log(data);
+            	$.messager.alert('错误', data.responseText ,'error');
+				$('#tb4').datagrid('loadData',{'total':0,'rows':[]});
+            }
+		});
+	</script>
+</body>
+</html>

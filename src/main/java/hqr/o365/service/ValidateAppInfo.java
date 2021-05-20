@@ -1,5 +1,6 @@
 package hqr.o365.service;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -33,12 +34,16 @@ public class ValidateAppInfo {
 	public void setAccessToken(String accessToken) {
 		this.accessToken = accessToken;
 	}
+	
+	@Value("${UA}")
+    private String ua;
 
 	public boolean checkAndGet(String tenantId, String appId, String secretId) {
 		boolean flag = false;
 		
 		String endpoint = "https://login.microsoftonline.com/" + tenantId + "/oauth2/v2.0/token";
 		HttpHeaders headers = new HttpHeaders();
+		headers.set(HttpHeaders.USER_AGENT, ua);
 		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 		String json = "client_id="+appId+"&client_secret="+secretId+"&grant_type=client_credentials&scope=https://graph.microsoft.com/.default";
 		HttpEntity<String> requestEntity = new HttpEntity<String>(json, headers);

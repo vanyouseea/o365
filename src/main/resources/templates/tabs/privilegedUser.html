@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Client Side Pagination in DataGrid - jQuery EasyUI Demo</title>
+
+</head>
+<body>
+	<div id="tb5" ></div>
+
+	<script type="text/javascript" th:inline="none">
+		$('#tb5').datagrid({
+			border:false,
+			fit:true,
+			singleSelect:true,
+			autoRowHeight:false,
+			url:'/getOfficeRoleUser',
+			method:'post',
+			toolbar: [{
+				text:'刷新',
+				iconCls:'icon-reload',
+				handler:function(){
+					$('#tb5').datagrid('reload');
+				}
+			},{
+				text:'帮助',
+				iconCls:'icon-help',
+				handler:function(){
+					$.messager.alert('帮助','目前只会列出身份是全局管理，用户管理，特权角色管理，特权认证管理的用户，如果要加入更多监控的特权账户你可以在<a href=javascript:addPanel("系统配置")>系统配置</a>中添加','');
+				}
+			}],
+			columns : [[
+				{field : 'accountEnabled',title : '用户状态',align : 'center',
+					formatter: function(value,row,index){
+						if(value=='true'){
+							return "<font color='green'>可用</font>";
+						}
+						else{
+							return "<font color='red'>禁用</font>";
+						}
+					}
+				}, 
+				{field : 'roleName',title : '角色',align : 'center'}, 
+				{field : 'id',title : 'UID',align : 'center'}, 
+				{field : 'userPrincipalName',title : '邮箱',align : 'center'}, 
+				{field : 'displayName',title : '名字',align : 'center'}, 
+				{field : 'usageLocation',title : '国家/地区',align : 'center'}
+			]],
+            onLoadError: function (data){
+            	console.log(data);
+            	$.messager.alert('错误', data.responseText ,'error');
+				$('#tb5').datagrid('loadData',{'total':0,'rows':[]});
+            }
+		});
+	</script>
+</body>
+</html>

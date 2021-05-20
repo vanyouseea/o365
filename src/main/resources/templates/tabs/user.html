@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="UTF-8">
 	<title>Client Side Pagination in DataGrid - jQuery EasyUI Demo</title>
@@ -7,8 +7,21 @@
 </head>
 <body>
 	<div id="tb3"></div>
+	<div id="dlg3"></div>
+	
 	<script type="text/javascript" th:inline="none">
 		var row3;
+		//create user dialog
+		$('#dlg3').dialog({
+		    title: '新建用户',
+			iconCls: 'icon-add',
+			modal : true,
+			closed : true,
+			width: 430,
+			height: 240,
+		    cache: false,
+		    href: 'tabs/dialogs/createUser.html'
+		});
 		
 		$('#tb3').datagrid({
 			border:false,
@@ -26,19 +39,102 @@
 				text:'添加',
 				iconCls:'icon-add',
 				handler:function(){
-					$.messager.alert('错误', '添加' ,'info');
+					$('#dlg3').dialog('open');
 				}
 			},{
 				text:'删除',
 				iconCls:'icon-remove',
 				handler:function(){
-					$.messager.alert('错误', 'delete' ,'info');
+					row3 = $('#tb3').datagrid('getSelected');
+					var uid = row3.id;
+					var name = row3.userPrincipalName;
+					if(row3!=null){
+						$.messager.confirm('删除用户', '将删除'+name+"，数据无法被恢复，你确定吗", function(r){
+							if (r){
+								$.ajax({
+								    type : "POST", 
+								    url : "/deleteOfficeUser",
+								    data : { "uid": uid },
+								    success : function(result) {
+								    	if(result){
+									       	$.messager.show({
+												title:'删除用户',
+												msg:'用户已被删除',
+												timeout:2000,
+												showType:'slide'
+											}); 
+									       	$('#tb3').datagrid('reload');
+								    	}
+								    	else{
+									       	$.messager.show({
+												title:'删除用户',
+												msg:'无法删除用户',
+												timeout:2000,
+												showType:'slide'
+											}); 
+								    	}
+								    },
+									error : function(e){
+								       	$.messager.show({
+											title:'删除用户',
+											msg:'删除用户失败，这可能是由于服务器出现问题引起的 '+e,
+											timeout:2000,
+											showType:'slide'
+										}); 
+									}
+								});
+							}
+						});
+						row3 = null;
+					}
+					else{
+						$.messager.show({
+							title:'错误',
+							msg:'请先选择一行',
+							timeout:2000,
+							showType:'slide'
+						});
+					}
 				}
 			},{
 				text:'详情',
 				iconCls:'icon-more',
 				handler:function(){
-					$.messager.alert('错误', 'detail' ,'info');
+					row3 = $('#tb3').datagrid('getSelected');
+					if(row3!=null){
+						var id = row3.id;
+						var userPrincipalName = row3.userPrincipalName;
+						var displayName = row3.displayName;
+						var usageLocation = row3.usageLocation;
+						var licenses = row3.assignedLicenses;
+						
+						$.ajax({
+						    type : "POST", 
+						    url : "/getOfficeUserDtls",
+						    data : { "uid": id },
+						    success : function(result) {
+								$.messager.alert('详情', 'UID:'+id+'<br>邮件:'+ userPrincipalName + '<br>名字:'
+										+displayName+'<br>国家:'+usageLocation+'<br>订阅:'+licenses+'<br>身份:'+result,'');
+							},
+							error : function(){
+						       	$.messager.show({
+									title:'失败',
+									msg:'获取详情失败，请重试',
+									timeout:2000,
+									showType:'slide'
+								}); 
+							}							
+						});
+						row3 = null;
+					}
+					else{
+						$.messager.show({
+							title:'错误',
+							msg:'请先选择一行',
+							timeout:2000,
+							showType:'slide'
+						});
+					}
 				}
 			},{
 				text:'刷新',
@@ -50,31 +146,215 @@
 				text:'启用',
 				iconCls:'icon-enable',
 				handler:function(){
-					$.messager.alert('错误', 'disable' ,'info');
+					row3 = $('#tb3').datagrid('getSelected');
+					if(row3!=null){
+						var id = row3.id;
+						var accountEnabled = "true";
+						
+						$.ajax({
+						    type : "POST", 
+						    url : "/updateOfficeUser",
+						    data : { "uid": id , "accountEnabled" : accountEnabled},
+						    success : function(result) {
+								if(result){
+							       	$.messager.show({
+										title:'提示',
+										msg:'成功启用此用户',
+										timeout:2000,
+										showType:'slide'
+									}); 
+							       	$('#tb3').datagrid('reload');
+								}
+								else{
+							       	$.messager.show({
+										title:'提示',
+										msg:'启用此用户失败',
+										timeout:2000,
+										showType:'slide'
+									}); 
+								}
+							},
+							error : function(){
+						       	$.messager.show({
+									title:'失败',
+									msg:'启用此用户失败，请重试',
+									timeout:2000,
+									showType:'slide'
+								}); 
+							}							
+						});
+						row3 = null;
+					}
+					else{
+						$.messager.show({
+							title:'错误',
+							msg:'请先选择一行',
+							timeout:2000,
+							showType:'slide'
+						});
+					}
 				}
 			},{
 				text:'禁用',
 				iconCls:'icon-disable',
 				handler:function(){
-					$.messager.alert('错误', 'disable' ,'info');
+					row3 = $('#tb3').datagrid('getSelected');
+					if(row3!=null){
+						var id = row3.id;
+						var accountEnabled = "false";
+						
+						$.ajax({
+						    type : "POST", 
+						    url : "/updateOfficeUser",
+						    data : { "uid": id , "accountEnabled" : accountEnabled},
+						    success : function(result) {
+								if(result){
+							       	$.messager.show({
+										title:'提示',
+										msg:'成功禁用此用户',
+										timeout:2000,
+										showType:'slide'
+									}); 
+							       	$('#tb3').datagrid('reload');
+								}
+								else{
+							       	$.messager.show({
+										title:'提示',
+										msg:'禁用此用户失败',
+										timeout:2000,
+										showType:'slide'
+									}); 
+								}
+							},
+							error : function(){
+						       	$.messager.show({
+									title:'失败',
+									msg:'禁用此用户失败，请重试',
+									timeout:2000,
+									showType:'slide'
+								}); 
+							}							
+						});
+						row3 = null;
+					}
+					else{
+						$.messager.show({
+							title:'错误',
+							msg:'请先选择一行',
+							timeout:2000,
+							showType:'slide'
+						});
+					}
 				}
 			},{
 				text:'提权',
 				iconCls:'icon-medal',
 				handler:function(){
-					$.messager.alert('错误', 'grant' ,'info');
+					row3 = $('#tb3').datagrid('getSelected');
+					if(row3!=null){
+						var id = row3.id;
+						var action = "P";
+						
+						$.ajax({
+						    type : "POST", 
+						    url : "/updateOfficeUserRole",
+						    data : { "uid": id , "action" : action},
+						    success : function(result) {
+								if(result){
+							       	$.messager.show({
+										title:'提示',
+										msg:'成功将此用户设为管理员',
+										timeout:2000,
+										showType:'slide'
+									}); 
+							       	$('#tb3').datagrid('reload');
+								}
+								else{
+							       	$.messager.show({
+										title:'提示',
+										msg:'提权失败',
+										timeout:2000,
+										showType:'slide'
+									}); 
+								}
+							},
+							error : function(){
+						       	$.messager.show({
+									title:'失败',
+									msg:'提权失败，请重试',
+									timeout:2000,
+									showType:'slide'
+								}); 
+							}							
+						});
+						row3 = null;
+					}
+					else{
+						$.messager.show({
+							title:'错误',
+							msg:'请先选择一行',
+							timeout:2000,
+							showType:'slide'
+						});
+					}
 				}
 			},{
 				text:'收回',
 				iconCls:'icon-warning',
 				handler:function(){
-					$.messager.alert('错误', 'revoke' ,'info');
+					row3 = $('#tb3').datagrid('getSelected');
+					if(row3!=null){
+						var id = row3.id;
+						var action = "C";
+						
+						$.ajax({
+						    type : "POST", 
+						    url : "/updateOfficeUseRole",
+						    data : { "uid": id , "action" : action},
+						    success : function(result) {
+								if(result){
+							       	$.messager.show({
+										title:'提示',
+										msg:'成功收回管理员权限',
+										timeout:2000,
+										showType:'slide'
+									}); 
+							       	$('#tb3').datagrid('reload');
+								}
+								else{
+							       	$.messager.show({
+										title:'提示',
+										msg:'收回管理员权限失败',
+										timeout:2000,
+										showType:'slide'
+									}); 
+								}
+							},
+							error : function(){
+						       	$.messager.show({
+									title:'失败',
+									msg:'收回管理员权限失败，请重试',
+									timeout:2000,
+									showType:'slide'
+								}); 
+							}							
+						});
+						row3 = null;
+					}
+					else{
+						$.messager.show({
+							title:'错误',
+							msg:'请先选择一行',
+							timeout:2000,
+							showType:'slide'
+						});
+					}
 				}
 			},'-',{
 				text:'搜索',
 				iconCls:'icon-search',
 				handler:function(){
-					$.messager.prompt('请输入关键字', '可以搜索名字和邮件前缀', function(r){
+					$.messager.prompt('请输入关键字', '可以搜索名字和邮箱前缀', function(r){
 						if (r){
 							alert(r);
 						}
@@ -84,7 +364,10 @@
 				text:'帮助',
 				iconCls:'icon-help',
 				handler:function(){
-					$.messager.alert('帮助','Tip is missing','info');
+					$.messager.alert('帮助','<b>1.</b>请确保配置的可用性可以在这里<a href=javascript:addPanel("Office配置")>Office配置</a><br>'+
+							'<b>2.</b>详情可以看到用户的订阅skuid和身份,skuid对应的产品名称可以在<a href=javascript:addPanel("查看许可证")>查看许可证</a>找到<br>' +
+							'<b>3.</b>启用和禁用用户只会对普通用户有效<br>'+
+							'<b>4.</b>提权和收回分别是提升一个用户为全局管理员和收回一个用户的全局管理员权限 ','');
 				}
 			}],
 			columns : [[
@@ -98,10 +381,10 @@
 						}
 					}
 				}, 
-				{field : 'uid',title : 'UID',align : 'center'}, 
-				{field : 'userPrincipalName',title : '邮件地址',align : 'center'}, 
+				{field : 'id',title : 'UID',align : 'center'}, 
+				{field : 'userPrincipalName',title : '邮箱',align : 'center'}, 
 				{field : 'displayName',title : '名字',align : 'center'},
-				{field : 'usageLocation',title : '国家',align : 'center'}
+				{field : 'usageLocation',title : '国家/地区',align : 'center'}
 			]],
             onLoadError: function (data){
             	console.log(data);
@@ -109,8 +392,8 @@
 				$('#tb3').datagrid('loadData',{'total':0,'rows':[]});
             }
 		});
-
 		
 	</script>
+	
 </body>
 </html>

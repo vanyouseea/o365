@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -16,10 +17,8 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
-import cn.hutool.core.text.UnicodeUtil;
 import cn.hutool.core.util.URLUtil;
 import hqr.o365.dao.TaOfficeInfoRepo;
-import hqr.o365.domain.LicenseInfo;
 import hqr.o365.domain.OfficeUser;
 import hqr.o365.domain.TaOfficeInfo;
 
@@ -34,6 +33,9 @@ public class GetOfficeUser {
 	@Autowired
 	private ValidateAppInfo vai;
 	
+	@Value("${UA}")
+    private String ua;
+
 	public HashMap<String, String> getUsers(int page, int rows){
 		HashMap<String, String> map = new HashMap<String, String>();
 		List<OfficeUser> ll = new ArrayList<OfficeUser>();
@@ -50,6 +52,7 @@ public class GetOfficeUser {
 			if(!"".equals(accessToken)) {
 				String endpoint = "https://graph.microsoft.com/v1.0/users/$count";
 				HttpHeaders headers = new HttpHeaders();
+				headers.set(HttpHeaders.USER_AGENT, ua);
 				headers.add("Authorization", "Bearer "+accessToken);
 				headers.add("ConsistencyLevel", "eventual");
 				String body="";
@@ -95,8 +98,9 @@ public class GetOfficeUser {
 	}
 	
 	private void saveOfficeUserInList(HashMap<String, String> map, List<OfficeUser> ll, HashMap jsonTmp, String accessToken, int page, int rows) {
-		String endpoint2 = "https://graph.microsoft.com/v1.0/users?$select=accountEnabled,usageLocation,id,userPrincipalName,displayName&$top="+rows;
+		String endpoint2 = "https://graph.microsoft.com/v1.0/users?$select=accountEnabled,usageLocation,id,userPrincipalName,displayName,assignedLicenses&$top="+rows;
 		HttpHeaders headers2 = new HttpHeaders();
+		headers2.set(HttpHeaders.USER_AGENT, ua);
 		headers2.add("Authorization", "Bearer "+accessToken);
 		String body2="";
 		
@@ -109,17 +113,25 @@ public class GetOfficeUser {
 				//1st page
 				if(page==1) {
 					for (Object object : ja) {
+						OfficeUser ou = new OfficeUser();
+						
 						JSONObject jb = (JSONObject)object;
 						String accountEnabled = jb.getString("accountEnabled");
 						String usageLocation = jb.getString("usageLocation");
 						String uid = jb.getString("id");
 						String userPrincipalName = jb.getString("userPrincipalName");
 						String displayName = jb.getString("displayName");
-						
-						OfficeUser ou = new OfficeUser();
+						JSONArray licen = jb.getJSONArray("assignedLicenses");
+						if(licen!=null) {
+							for (Object object2 : licen) {
+								JSONObject newJb = (JSONObject)object2;
+								String skuId = newJb.getString("skuId");
+								ou.getAssignedLicenses().add(skuId);
+							}
+						}
 						ou.setAccountEnabled(accountEnabled);
 						ou.setUsageLocation(usageLocation);
-						ou.setUid(uid);
+						ou.setId(uid);
 						ou.setUserPrincipalName(userPrincipalName);
 						ou.setDisplayName(displayName);
 						ll.add(ou);
@@ -148,6 +160,7 @@ public class GetOfficeUser {
 	
 	private void getNextUrl(String url, String accessToken, int times, List<OfficeUser> ll) {
 		HttpHeaders headers = new HttpHeaders();
+		headers.set(HttpHeaders.USER_AGENT, ua);
 		headers.add("Authorization", "Bearer "+accessToken);
 		String body="";
 		
@@ -162,17 +175,24 @@ public class GetOfficeUser {
 		
 		if(times<=0) {
 			for (Object object : ja) {
+				OfficeUser ou = new OfficeUser();
 				JSONObject jb = (JSONObject)object;
 				String accountEnabled = jb.getString("accountEnabled");
 				String usageLocation = jb.getString("usageLocation");
 				String uid = jb.getString("id");
 				String userPrincipalName = jb.getString("userPrincipalName");
 				String displayName = jb.getString("displayName");
-				
-				OfficeUser ou = new OfficeUser();
+				JSONArray licen = jb.getJSONArray("assignedLicenses");
+				if(licen!=null) {
+					for (Object object2 : licen) {
+						JSONObject newJb = (JSONObject)object2;
+						String skuId = newJb.getString("skuId");
+						ou.getAssignedLicenses().add(skuId);
+					}
+				}
 				ou.setAccountEnabled(accountEnabled);
 				ou.setUsageLocation(usageLocation);
-				ou.setUid(uid);
+				ou.setId(uid);
 				ou.setUserPrincipalName(userPrincipalName);
 				ou.setDisplayName(displayName);
 				ll.add(ou);

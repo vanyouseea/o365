@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Client Side Pagination in DataGrid - jQuery EasyUI Demo</title>
+
+</head>
+<body>
+	<table style="padding:10px;margin-bottom: 10px">
+		<tr>
+			<td>名字：</td>
+			<td colSpan="2"><input id="displayName" class="easyui-validatebox tb" data-options="required:true" style="width: 330px" ></td>
+		</tr>
+		<tr>
+			<td>邮箱：</td>
+			<td><input id="prefix" class="easyui-validatebox tb" data-options="required:true" style="width: 90px" ></td>
+			<td>
+				<input id="cc1" name="dept" value="Loading..." style="width: 236px">
+			</td>
+		</tr>
+		<tr>
+			<td>订阅：</td>
+			<td colSpan="2" id="licenseTd">
+				<div th:each="list : ${session.licenseVo}" style="font-size: 12px">
+					<input class="easyui-checkbox" name="checkbox1" th:value="${list.skuId}" th:label="${list.skuPartNumber}" labelWidth="310px" ><br>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="3" align="right">
+				<a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()" style="width:80px">确认</a>
+				<a href="javascript:void(0)" class="easyui-linkbutton" onclick="clearForm()" style="width:80px">取消</a>
+			</td>
+		</tr>
+	</table>
+	<script type="text/javascript" th:inline="none">
+		$('#cc1').combobox({
+		    url:'/getDomains',
+		    valueField:'id',
+		    textField:'text'
+		});
+	
+		function submitForm(){
+			var mailNickname = $('#prefix').val();
+			var userPrincipalName = $('#prefix').val() +  $('#cc1').combobox('getText');
+			var displayName = $('#displayName').val();
+			
+			console.log("mailNickname:"+mailNickname);
+			console.log("userPrincipalName:"+userPrincipalName);
+			console.log("displayName:"+displayName);
+			
+			var licenses = "";
+			$('input:checkbox[name=checkbox1]:checked').each(function(i){
+				if(0==i){
+					licenses = $(this).val();
+				}else{
+					licenses += (","+$(this).val());
+				}
+			});
+			if(licenses==null){
+				console.log('未分配订阅');
+			}
+			else{
+				console.log('分配订阅为 '+licenses);
+			}
+			
+			$.ajax({
+			    type : "POST", 
+			    url : "/createOfficeUser",
+			    data : { "mailNickname": mailNickname, "userPrincipalName":userPrincipalName , "displayName": displayName, "licenses": licenses },
+			    success : function(result) {
+			      	$.messager.show({
+						title:'结果',
+						msg: result,
+						timeout:2000,
+						showType:'slide'
+					});
+			      	$('#tb3').datagrid('reload');
+				},
+				error : function(){
+			       	$.messager.show({
+						title:'失败',
+						msg:'创建用户失败',
+						timeout:2000,
+						showType:'slide'
+					}); 
+				}
+			});
+			
+			$('#dlg3').dialog('close');
+		}
+		function clearForm(){
+			$('#dlg3').dialog('close');
+		}
+	</script>
+	
+</body>
+</html>
