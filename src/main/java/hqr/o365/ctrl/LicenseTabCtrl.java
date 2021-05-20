@@ -17,6 +17,11 @@ public class LicenseTabCtrl {
 	@Autowired
 	private GetLicenseInfo gli;
 	
+	@RequestMapping(value = {"/tabs/license.html"})
+	public String dummy() {
+		return "tabs/license";
+	}
+	
 	@ResponseBody
 	@RequestMapping(value = {"/getLicense"}, method = RequestMethod.POST)
 	public String getLicense() {

@@ -10,7 +10,6 @@ import javax.persistence.Id;
 @Entity
 public class TaMasterCd {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private String keyTy;
 	private String cd;
 	private String decode;

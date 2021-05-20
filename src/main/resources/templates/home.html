@@ -17,6 +17,7 @@
 		    <div title="用户管理"  style="overflow:auto">
 		    	<ul class="easyui-tree">
 					<li><div onclick="addPanel('管理用户')">管理用户</div></li>
+					<li><div onclick="addPanel('查看特权用户')">查看特权用户</div></li>
 				</ul>
 		    </div>
 		    <div title="许可证"  style="overflow:auto">
@@ -26,7 +27,8 @@
 		    </div>
 		    <div title="配置" style="overflow:auto">
 		    	<ul class="easyui-tree">
-					<li><div onclick="addPanel('管理配置')">管理配置</div></li>
+					<li><div onclick="addPanel('Office配置')">Office配置</div></li>
+					<li><div onclick="addPanel('系统配置')">系统配置</div></li>
 				</ul>
 		    </div>
 		</div>
@@ -66,10 +68,26 @@
 						closable: true
 					});
 				}
-				else if(name=='管理配置'){
+				else if(name=='Office配置'){
 					$('#acc').tabs('add',{
 						title: name,
 						href: 'tabs/config.html',
+						//content: '<div style="padding:10px">Content</div>',
+						closable: true
+					});
+				}				
+				else if(name=='系统配置'){
+					$('#acc').tabs('add',{
+						title: name,
+						href: 'tabs/system.html',
+						//content: '<div style="padding:10px">Content</div>',
+						closable: true
+					});
+				}
+				else if(name=='查看特权用户'){
+					$('#acc').tabs('add',{
+						title: name,
+						href: 'tabs/privilegedUser.html',
 						//content: '<div style="padding:10px">Content</div>',
 						closable: true
 					});
