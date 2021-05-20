@@ -45,9 +45,16 @@
 			var userPrincipalName = $('#prefix').val() +  $('#cc1').combobox('getText');
 			var displayName = $('#displayName').val();
 			
-			console.log("mailNickname:"+mailNickname);
-			console.log("userPrincipalName:"+userPrincipalName);
-			console.log("displayName:"+displayName);
+			if(mailNickname==''||displayName==''){
+		      	$.messager.show({
+					title:'错误',
+					msg: '参数不足',
+					timeout:2000,
+					showType:'slide'
+				});
+		      	$('#dlg3').dialog('close');
+				return;
+			}
 			
 			var licenses = "";
 			$('input:checkbox[name=checkbox1]:checked').each(function(i){
