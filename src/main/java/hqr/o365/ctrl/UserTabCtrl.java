@@ -143,7 +143,7 @@ public class UserTabCtrl {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = {"/updateOfficeUseRole"}, method = RequestMethod.POST)
+	@RequestMapping(value = {"/updateOfficeUserRole"}, method = RequestMethod.POST)
 	public boolean patchUserRole(@RequestParam(name="uid") String uid, @RequestParam(name="action") String action) {
 		return uour.update(uid, action);
 	}
