@@ -309,7 +309,7 @@
 						
 						$.ajax({
 						    type : "POST", 
-						    url : "/updateOfficeUseRole",
+						    url : "/updateOfficeUserRole",
 						    data : { "uid": id , "action" : action},
 						    success : function(result) {
 								if(result){
@@ -355,9 +355,24 @@
 				iconCls:'icon-search',
 				handler:function(){
 					$.messager.prompt('请输入关键字', '可以搜索名字和邮箱前缀', function(r){
-						if (r){
-							alert(r);
-						}
+						console.log("keyword is "+r);
+						$.ajax({
+						    type : "POST", 
+						    url : "/saveKeyWord",
+						    data : { "keyword": r},
+						    success : function(result) {
+						    	console.log("keyword saved");
+							},
+							error : function(){
+						       	$.messager.show({
+									title:'失败',
+									msg:'搜索失败，请重试',
+									timeout:2000,
+									showType:'slide'
+								}); 
+							}							
+						});
+						$('#tb3').datagrid('reload');
 					});
 				}
 			},{

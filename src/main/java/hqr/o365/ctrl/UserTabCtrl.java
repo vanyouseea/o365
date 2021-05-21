@@ -19,6 +19,7 @@ import hqr.o365.service.DeleteOfficeUser;
 import hqr.o365.service.GetDomainInfo;
 import hqr.o365.service.GetLicenseInfo;
 import hqr.o365.service.GetOfficeUser;
+import hqr.o365.service.GetOfficeUserByKeyWord;
 import hqr.o365.service.GetOfficeUserRole;
 import hqr.o365.service.UpdateOfficeUser;
 import hqr.o365.service.UpdateOfficeUserRole;
@@ -28,6 +29,9 @@ public class UserTabCtrl {
 	
 	@Autowired
 	private GetOfficeUser gou;
+	
+	@Autowired
+	private GetOfficeUserByKeyWord goubk;
 	
 	@Autowired
 	private GetLicenseInfo gli;
@@ -91,7 +95,7 @@ public class UserTabCtrl {
 	
 	@ResponseBody
 	@RequestMapping(value = {"/getOfficeUser"})
-	public String getOfficeUser(String page, String rows) {
+	public String getOfficeUser(String page, String rows, HttpServletRequest req) {
 		int intPage = 1;
 		int intRows = 100;
 		try {
@@ -106,9 +110,23 @@ public class UserTabCtrl {
 		catch (Exception e) {
 			System.out.println("Invalid row, force it to 100");
 		}
+		HashMap<String,String> map = new HashMap<String,String>();
 		
-		HashMap<String,String> map = gou.getUsers(intPage, intRows);
+		Object obj = req.getSession().getAttribute("keyword");
 		
+		if(obj==null) {
+			map = gou.getUsers(intPage, intRows);
+		}
+		else {
+			String keyword = (String)obj;
+			System.out.println("keyword is "+keyword);
+			if(!"".equals(keyword)) {
+				map = goubk.getUsers(intPage, intRows, keyword);
+			}
+			else {
+				map = gou.getUsers(intPage, intRows);
+			}
+		}
 		return map.get("message");
 	}
 	
@@ -146,5 +164,11 @@ public class UserTabCtrl {
 	@RequestMapping(value = {"/updateOfficeUserRole"}, method = RequestMethod.POST)
 	public boolean patchUserRole(@RequestParam(name="uid") String uid, @RequestParam(name="action") String action) {
 		return uour.update(uid, action);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = {"/saveKeyWord"}, method = RequestMethod.POST)
+	public void saveKeywordInSession(HttpServletRequest req, String keyword) {
+		req.getSession().setAttribute("keyword", keyword);
 	}
 }

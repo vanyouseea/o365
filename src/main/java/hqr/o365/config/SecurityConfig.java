@@ -41,7 +41,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
-    	System.out.println("Got here");
         auth
                 //用户认证处理
                 .authenticationProvider(provider);

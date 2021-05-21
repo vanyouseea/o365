@@ -39,10 +39,11 @@ public class UpdateOfficeUserRole {
 		boolean flag = false;
 		
 		//init the role
-		String roleId = "7d6ae5b8-219a-432f-ac24-4c3054921c50";
+		String roleId = "	62e90394-69f5-4237-9190-012177145e10";
 		Optional<TaMasterCd> top1 = tmc.findById("DEFAULT_ADMIN_ROLE_ID");
 		if(top1.isPresent()) {
 			roleId = top1.get().getCd();
+			System.out.println("get system role "+roleId);
 		}
 		
 		List<TaOfficeInfo> list = repo.getSelectedApp();
