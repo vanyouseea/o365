@@ -121,39 +121,49 @@
 			iconCls:'icon-remove',
 			handler:function(){
 				row = $('#tb1').datagrid('getSelected');
-				var appId = row.appId;
-				$.ajax({
-				    type : "POST", 
-				    url : "/delConfig",
-				    data : { "seqNo": row.seqNo },
-				    success : function(result) {
-					      if ( result ) {
-						      	$.messager.show({
-									title:'成功',
-									msg:'配置 '+appId+' 已成功被删除',
-									timeout:2000,
-									showType:'slide'
-								});
-						      	$('#tb1').datagrid('reload');
-						  } else { 
-						       	$.messager.show({
-									title:'失败',
-									msg:'删除配置失败，请重试',
-									timeout:2000,
-									showType:'slide'
-								}); 
-						  }
-					},
-					error : function(){
-				       	$.messager.show({
-							title:'失败',
-							msg:'删除配置失败，请重试',
-							timeout:2000,
-							showType:'slide'
-						}); 
-					}
-			    });
-				row = null;
+				if(row!=null){
+					var appId = row.appId;
+					$.ajax({
+					    type : "POST", 
+					    url : "/delConfig",
+					    data : { "seqNo": row.seqNo },
+					    success : function(result) {
+						      if ( result ) {
+							      	$.messager.show({
+										title:'成功',
+										msg:'配置 '+appId+' 已成功被删除',
+										timeout:2000,
+										showType:'slide'
+									});
+							      	$('#tb1').datagrid('reload');
+							  } else { 
+							       	$.messager.show({
+										title:'失败',
+										msg:'删除配置失败，请重试',
+										timeout:2000,
+										showType:'slide'
+									}); 
+							  }
+						},
+						error : function(){
+					       	$.messager.show({
+								title:'失败',
+								msg:'删除配置失败，请重试',
+								timeout:2000,
+								showType:'slide'
+							}); 
+						}
+				    });
+					row = null;
+				}
+				else{
+					$.messager.show({
+						title:'错误',
+						msg:'请先选择一行',
+						timeout:2000,
+						showType:'slide'
+					});
+				}
 			}
 		},{
 			text:'修改',
