@@ -1,7 +1,7 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>404 MH</title>
+	<title>O365管理员登录</title>
 	<link rel="stylesheet" href="jquery-easyui-1.9.14/themes/default/easyui.css" />
 	<link rel="stylesheet" href="jquery-easyui-1.9.14/themes/icon.css" />
 	<script type="text/javascript" src="jquery-easyui-1.9.14/jquery.min.js"></script>
@@ -20,10 +20,10 @@
 	<div id="dlg" class="easyui-dialog" title="登录O365管理系统" style="width: 320px; height: 270px; padding: 10px">
 		<form id="ff" method="post" action="/login" >
 			<div style="margin-bottom:18px">
-				<b>用户:</b><input id="userid" name="userid" style="width:100%" onblur="checkUserId()" /><div id="useridtip" style="font-size: 10px"><font color="gray">请输入用户名</font></div>
+				<b>用户:</b><input id="username" name="username" style="width:100%" onblur="checkUserId()" /><div id="useridtip" style="font-size: 10px"><font color="gray">请输入用户名</font></div>
 			</div>
 			<div style="margin-bottom:18px">
-				<b>密码:</b><input id="pwd" name="pwd" type="password" style="width:100%" /><div id="useridtip" style="font-size: 10px"><font color="gray">请输入密码</font></div>
+				<b>密码:</b><input id="password" name="password" type="password" style="width:100%" /><div id="useridtip" style="font-size: 10px"><font color="gray">请输入密码</font></div>
 			</div>
 		</form>
 		<a href="reg"><font style="font-size: 10px">没有账号？点此注册</font></a>
@@ -60,7 +60,7 @@
 		}
 		function checkUserId(){
 			var flag = false;
-			var userid = $('#userid').val();
+			var userid = $('#username').val();
 			if(userid!=''){
 				flag = true;
 			}
@@ -68,7 +68,7 @@
 		}
 		function checkPwd(){
 			var flag = false;
-			var pwd1 = $('#pwd').val();
+			var pwd1 = $('#password').val();
 			if(pwd1!=''){
 				flag = true;
 			}

@@ -171,7 +171,6 @@ public class ConfigTabCtrl {
 			
 		}
 		else {
-			List<LicenseInfo> vo = new ArrayList<LicenseInfo>();
 			req.getSession().setAttribute("licenseVo", null);
 			req.getSession().setAttribute("domainVo", "[]");
 			System.out.println("invalid info, update the licenseVo & domain Vo to null");
