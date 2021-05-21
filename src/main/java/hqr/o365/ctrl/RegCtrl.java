@@ -37,7 +37,13 @@ public class RegCtrl {
 	
 	@RequestMapping(value = "/reg", method = RequestMethod.GET)
 	public String regUser() {
-		return "reg";
+		String ind = ggl.getIndicator();
+		if(!"Y".equals(ind)){
+			return "login";
+		}
+		else {
+			return "reg";
+		}
 	}
 	
 }
