@@ -11,6 +11,8 @@ import org.springframework.web.client.RestTemplate;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
+import cn.hutool.core.util.URLUtil;
+
 /**
  POST https://login.microsoftonline.com/48350e78-b3d8-4148-a266-34b602b1d51a/oauth2/v2.0/token
  Media Type: application/x-www-form-urlencoded
@@ -45,7 +47,7 @@ public class ValidateAppInfo {
 		HttpHeaders headers = new HttpHeaders();
 		headers.set(HttpHeaders.USER_AGENT, ua);
 		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-		String json = "client_id="+appId+"&client_secret="+secretId+"&grant_type=client_credentials&scope=https://graph.microsoft.com/.default";
+		String json = "client_id="+URLUtil.encodeQuery(appId)+"&client_secret="+URLUtil.encodeQuery(secretId)+"&grant_type=client_credentials&scope=https://graph.microsoft.com/.default";
 		HttpEntity<String> requestEntity = new HttpEntity<String>(json, headers);
 
 		try{
