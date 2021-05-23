@@ -45,6 +45,9 @@ public class CreateOfficeUser {
 	@Autowired
 	private TaMasterCdRepo tmr;
 	
+	@Autowired
+	private GetOrganizationInfo goi;
+	
 	@Value("${UA}")
     private String ua;
 	
@@ -63,8 +66,6 @@ public class CreateOfficeUser {
 		ou.setDisplayName(displayName);
 		ou.getPasswordProfile().setPassword(password);
 		
-		String createUserJson = JSON.toJSONString(ou);
-		
 		String message = "";
 		
 		//get info
@@ -77,6 +78,10 @@ public class CreateOfficeUser {
 			}
 			
 			if(!"".equals(accessToken)) {
+				//set usage location
+				ou.setUsageLocation(goi.getUsageLocation(accessToken));
+				String createUserJson = JSON.toJSONString(ou);
+				
 				String endpoint = "https://graph.microsoft.com/v1.0/users";
 				HttpHeaders headers = new HttpHeaders();
 				headers.set(HttpHeaders.USER_AGENT, ua);
