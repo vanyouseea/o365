@@ -1,4 +1,0 @@
-[hqr.o365.cron]
-ScanAppStatus.scan = */1 * * ? *
-# * * *  *      *
-# M H D  Week   Month Day
