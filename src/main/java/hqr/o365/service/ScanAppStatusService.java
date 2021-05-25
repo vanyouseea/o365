@@ -52,7 +52,7 @@ public class ScanAppStatusService {
 		this.force = force;
 	}
 
-	@Scheduled(cron = "*/30 * * * * ?")
+	@Scheduled(cron = "0 0 6 * * ?")
 	public void scan() {
 		Optional<TaMasterCd> cdd = tmc.findById("GEN_APP_RPT");
 		if(cdd.isPresent()) {
