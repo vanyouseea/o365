@@ -11,9 +11,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
 import cn.hutool.core.util.URLUtil;
 import hqr.o365.dao.TaAppRptRepo;
 import hqr.o365.dao.TaMasterCdRepo;
@@ -23,7 +22,7 @@ import hqr.o365.domain.TaMasterCd;
 import hqr.o365.domain.TaOfficeInfo;
 import hqr.o365.service.ValidateAppInfo;
 
-@Component
+@Service
 public class ScanAppStatusService {
 	
 	private RestTemplate restTemplate = new RestTemplate();
@@ -43,8 +42,31 @@ public class ScanAppStatusService {
 	@Value("${UA}")
     private String ua;
 	
+	private String force = "N";
+	
+	public String getForce() {
+		return force;
+	}
+	
+	public void setForce(String force) {
+		this.force = force;
+	}
+
 	@Scheduled(cron = "*/30 * * * * ?")
 	public void scan() {
+		Optional<TaMasterCd> cdd = tmc.findById("GEN_APP_RPT");
+		if(cdd.isPresent()) {
+			TaMasterCd cdl = cdd.get();
+			if("Y".equals(cdl.getCd())) {
+				execute();
+			}
+			else {
+				System.out.println("Overall report is disabled");
+			}
+		}
+	}
+	
+	public void execute() {
 		//clean up the report table
 		tar.deleteAll();
 		tar.flush();
@@ -160,7 +182,7 @@ public class ScanAppStatusService {
 				}
 			}
 		}
-		
 	}
+	
 	
 }

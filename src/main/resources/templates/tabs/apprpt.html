@@ -16,7 +16,6 @@
 			singleSelect:true,
 			pagination:true,
 			pageSize : 10,
-			pageList : [10,20,100],
 			autoRowHeight:false,
 			url:'/getAppRpt',
 			method:'post',
@@ -24,7 +23,32 @@
 				text:'手动执行',
 				iconCls:'icon-sum',
 				handler:function(){
-					$('#tb6').datagrid('reload');
+					$.messager.show({
+						title:'提示',
+						msg:'手动请求生成总览报告的请求已提交，完成的速度会根据全局的多少决定，完成时右下角会出现弹窗，现在请稍等一下',
+						timeout:2000,
+						showType:'slide'
+					}); 
+					$.ajax({
+						type : 'GET', 
+						url : '/getAppRptManaully',
+						success : function() {
+							$.messager.show({
+								title:'成功',
+								msg:'Office总览报告已生成，请刷新该页查看',
+								timeout:3000,
+								showType:'slide'
+							}); 
+						},
+						error : function(){
+					       	$.messager.show({
+								title:'失败',
+								msg:'提交失败，请重试',
+								timeout:2000,
+								showType:'slide'
+							}); 
+						}
+					});
 				}
 			},{
 				text:'刷新',
@@ -36,7 +60,7 @@
 				text:'帮助',
 				iconCls:'icon-help',
 				handler:function(){
-					$.messager.alert('帮助','系统会每天扫描所有APP的管理员状态，并生成此报告，默认关闭，你可以在系统配置中打开它，你也可以手动执行，不过会等上一段时间。<br>'+
+					$.messager.alert('帮助','系统会每天06:00扫描所有APP的管理员状态，并生成此报告，此功能默认关闭，你可以在系统配置通过配置GEN_APP_RPT=Y来打开它，你也可以手动执行。<br>'+
 							'1.无颜色代表至少一个管理员存活<br>'+
 							'2.<font color=red>红色</font>代表全局无管理员或者无管理员存活<br>'+
 							'3.<font color=gray>灰色</font>代表无效全局','');
@@ -58,9 +82,9 @@
 				},
 				{field : 'tenantId',title : '租户ID',align : 'center'},
 				{field : 'totalUser',title : '用户总数',align : 'center'},
-				{field : 'totalGlobalAdmin',title : '全局管理员总数',align : 'center'},
-				{field : 'enableGlobalAdmin',title : '存活的全局管理员总数',align : 'center'},
-				{field : 'disableGloablAdmin',title : '禁止的全局管理员总数',align : 'center'}
+				{field : 'totalGlobalAdmin',title : '总管理员数',align : 'center'},
+				{field : 'enableGlobalAdmin',title : '可用管理员数',align : 'center'},
+				{field : 'disableGloablAdmin',title : '不可用管理员数',align : 'center'}
 			]],
             onLoadError: function (data){
             	console.log(data);

@@ -6,12 +6,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import hqr.o365.service.GetAppRptService;
+import hqr.o365.service.ScanAppStatusService;
 
 @Controller
 public class AppRptTabCtrl {
 
 	@Autowired
 	private GetAppRptService gars;
+	
+	@Autowired
+	private ScanAppStatusService sass;
+	
 	
 	@RequestMapping(value = {"/tabs/apprpt.html"})
 	public String dummy() {
@@ -20,7 +25,7 @@ public class AppRptTabCtrl {
 	
 	@ResponseBody
 	@RequestMapping(value = {"/getAppRpt"})
-	public String getOfficeUser(String page, String rows) {
+	public String getOverallRpt(String page, String rows) {
 		int intPage = 1;
 		int intRows = 10;
 		try {
@@ -38,4 +43,12 @@ public class AppRptTabCtrl {
 		
 		return gars.getSysRpt(intRows, intPage);
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = {"/getAppRptManaully"})
+	public boolean getOverallRptManaully(String page, String rows) {
+		sass.execute();
+		return true;
+	}
+	
 }
