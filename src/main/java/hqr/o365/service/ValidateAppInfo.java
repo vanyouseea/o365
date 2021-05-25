@@ -63,7 +63,7 @@ public class ValidateAppInfo {
 				flag = false;
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 			accessToken = "";
 			flag = false;
 		}
