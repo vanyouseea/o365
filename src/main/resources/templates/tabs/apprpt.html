@@ -25,7 +25,7 @@
 				handler:function(){
 					$.messager.show({
 						title:'提示',
-						msg:'手动请求生成总览报告的请求已提交，完成的速度会根据全局的多少决定，完成时右下角会出现弹窗，现在请稍等一下',
+						msg:'手动请求生成总览报告的请求已提交，完成的速度会根据全局的多少决定，完成时右下角会出现弹窗提醒',
 						timeout:2000,
 						showType:'slide'
 					}); 
@@ -35,10 +35,11 @@
 						success : function() {
 							$.messager.show({
 								title:'成功',
-								msg:'Office总览报告已生成，请刷新该页查看',
+								msg:'Office总览报告已生成',
 								timeout:3000,
 								showType:'slide'
-							}); 
+							});
+							$('#tb6').datagrid('reload');
 						},
 						error : function(){
 					       	$.messager.show({
