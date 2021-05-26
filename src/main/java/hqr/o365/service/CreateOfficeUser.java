@@ -51,21 +51,23 @@ public class CreateOfficeUser {
 	@Value("${UA}")
     private String ua;
 	
-	public HashMap<String, String> createCommonUser(String mailNickname, String userPrincipalName, String displayName, String licenses){
+	public HashMap<String, String> createCommonUser(String mailNickname, String userPrincipalName, String displayName, String licenses, String userPwd){
 		HashMap<String, String> map = new HashMap<String, String>();
-		String password = "Mjj@1234";
-		Optional<TaMasterCd> opt = tmr.findById("DEFAULT_PASSWORD");
+		String forceInd = "Y";
+		Optional<TaMasterCd> opt = tmr.findById("FORCE_CHANGE_PASSWORD");
 		if(opt.isPresent()) {
 			TaMasterCd cd = opt.get();
-			password = cd.getCd();
+			forceInd = cd.getCd();
 		}
 
 		OfficeUser ou = new OfficeUser();
 		ou.setMailNickname(mailNickname);
 		ou.setUserPrincipalName(userPrincipalName);
 		ou.setDisplayName(displayName);
-		ou.getPasswordProfile().setPassword(password);
-		
+		ou.getPasswordProfile().setPassword(userPwd);
+		if(!"Y".equals(forceInd)) {
+			ou.getPasswordProfile().setForceChangePasswordNextSignIn(false);
+		}
 		String message = "";
 		
 		//get info

@@ -135,9 +135,10 @@ public class UserTabCtrl {
 	public String createUser(@RequestParam(name="mailNickname") String mailNickname,
 			@RequestParam(name="userPrincipalName") String userPrincipalName,
 			@RequestParam(name="displayName") String displayName,
-			@RequestParam(name="licenses") String licenses) {
+			@RequestParam(name="licenses") String licenses,
+			@RequestParam(name="userPwd") String userPwd) {
 		
-		HashMap<String, String> map = cou.createCommonUser(mailNickname, userPrincipalName, displayName, licenses);
+		HashMap<String, String> map = cou.createCommonUser(mailNickname, userPrincipalName, displayName, licenses, userPwd);
 		
 		return map.get("message");
 	}

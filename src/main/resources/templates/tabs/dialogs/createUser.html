@@ -6,23 +6,32 @@
 
 </head>
 <body>
-	<table style="padding:10px;margin-bottom: 10px">
+	<table style="padding:10px">
 		<tr>
 			<td>名字：</td>
-			<td colSpan="2"><input id="displayName" class="easyui-validatebox tb" data-options="required:true" style="width: 330px" ></td>
+			<td colSpan="2"><input id="displayName" class="easyui-textbox" data-options="required:true" style="width: 310px" ></td>
 		</tr>
 		<tr>
 			<td>邮箱：</td>
-			<td><input id="prefix" class="easyui-validatebox tb" data-options="required:true" style="width: 90px" ></td>
+			<td><input id="prefix" class="easyui-textbox" data-options="required:true" style="width: 90px" ></td>
 			<td>
-				<input id="cc1" name="dept" value="Loading..." style="width: 236px">
+				<input id="cc1" name="dept" value="Loading..." style="width: 216px">
+			</td>
+		</tr>
+		<tr>
+			<td>密码：</td>
+			<td colSpan="2">
+				<div id="userPwd" name="userPwd"></div>
+				<!-- 
+				<input id="userPwd" name="userPwd" class="easyui-textbox" data-options="required:true,value:'Mjj@1234',iconCls:'icon-reload'" style="width: 310px"> 
+				 -->
 			</td>
 		</tr>
 		<tr>
 			<td>订阅：</td>
 			<td colSpan="2" id="licenseTd">
 				<div th:each="list : ${session.licenseVo}" style="font-size: 12px">
-					<input class="easyui-checkbox" name="checkbox1" th:value="${list.skuId}" th:label="${list.skuPartNumber}" labelWidth="310px" ><br>
+					<input class="easyui-checkbox" name="checkbox1" th:value="${list.skuId}" th:label="${list.skuPartNumber}" labelWidth="290px" ><br>
 				</div>
 			</td>
 		</tr>
@@ -40,11 +49,23 @@
 		    textField:'text'
 		});
 	
+		$('#userPwd').textbox({
+			required: true,
+			width: 310,
+			value:'Mjj@1234',
+			icons:[{
+				iconCls:'icon-reload',
+				handler: function(e){
+					passwordGen();
+				}
+			}]
+		});
+		
 		function submitForm(){
 			var mailNickname = $('#prefix').val();
 			var userPrincipalName = $('#prefix').val() +  $('#cc1').combobox('getText');
 			var displayName = $('#displayName').val();
-			
+			var userPwd = $('#userPwd').textbox('getText');
 			if(mailNickname==''||displayName==''){
 		      	$.messager.show({
 					title:'错误',
@@ -74,7 +95,7 @@
 			$.ajax({
 			    type : "POST", 
 			    url : "/createOfficeUser",
-			    data : { "mailNickname": mailNickname, "userPrincipalName":userPrincipalName , "displayName": displayName, "licenses": licenses },
+			    data : { "mailNickname": mailNickname, "userPrincipalName":userPrincipalName , "displayName": displayName, "licenses": licenses, 'userPwd': userPwd },
 			    success : function(result) {
 			      	$.messager.show({
 						title:'结果',
@@ -98,6 +119,29 @@
 		}
 		function clearForm(){
 			$('#dlg3').dialog('close');
+		}
+		
+		function passwordGen() {
+		    var chars = "ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
+		    var string_length = 8;
+		    var randomstring = '';
+		    var charCount = 0;
+		    var numCount = 0;
+
+		    for (var i = 0; i < string_length; i++) {
+		        // If random bit is 0, there are less than 3 digits already saved, and there are not already 5 characters saved, generate a numeric value. 
+		        if ((Math.floor(Math.random() * 2) == 0) && numCount < 3 || charCount >= 5) {
+		            var rnum = Math.floor(Math.random() * 10);
+		            randomstring += rnum;
+		            numCount += 1;
+		        } else {
+		            // If any of the above criteria fail, go ahead and generate an alpha character from the chars string
+		            var rnum = Math.floor(Math.random() * chars.length);
+		            randomstring += chars.substring(rnum, rnum + 1);
+		            charCount += 1;
+		        }
+		    }
+		    $('#userPwd').textbox('setText', randomstring);
 		}
 	</script>
 	
