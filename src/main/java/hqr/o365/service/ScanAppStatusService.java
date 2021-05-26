@@ -1,5 +1,6 @@
 package hqr.o365.service;
 
+import java.security.SecureRandom;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -52,12 +53,34 @@ public class ScanAppStatusService {
 		this.force = force;
 	}
 
-	@Scheduled(cron = "0 0 6 * * ?")
+	@Scheduled(cron = "0 0 0 * * ?")
 	public void scan() {
 		Optional<TaMasterCd> cdd = tmc.findById("GEN_APP_RPT");
 		if(cdd.isPresent()) {
 			TaMasterCd cdl = cdd.get();
 			if("Y".equals(cdl.getCd())) {
+				Optional<TaMasterCd> opt2 = tmc.findById("GEN_APP_RPT_RANDOM_SEED");
+				//default is 1000
+				int seedRange = 1000;
+				int sleepMins = 0;
+				if(opt2.isPresent()) {
+					String seedStr = opt2.get().getCd();
+					try {
+						seedRange = Integer.valueOf(seedStr);
+					}
+					catch (Exception e) {
+						System.out.println("Exception on convert, force to 1000");
+					}
+				}
+				SecureRandom rand = new SecureRandom();
+				sleepMins = rand.nextInt(seedRange);
+				//sleep sleepMins mins
+				try {
+					System.out.println("Sleep "+sleepMins+ " to generate the overall report");
+					Thread.sleep(sleepMins * 60 * 1000);
+				}
+				catch (Exception e) {}
+				
 				execute();
 			}
 			else {
