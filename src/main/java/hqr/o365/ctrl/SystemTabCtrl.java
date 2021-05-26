@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import hqr.o365.service.GetSystemInfo;
+import hqr.o365.service.ResetSystemInfo;
 import hqr.o365.service.UpdateSystemInfo;
 
 @Controller
@@ -19,6 +20,9 @@ public class SystemTabCtrl {
 	@Autowired
 	private UpdateSystemInfo usi;
 	
+	@Autowired
+	private ResetSystemInfo rsi;
+	
 	@RequestMapping(value = {"/tabs/system.html"})
 	public String dummy() {
 		return "tabs/system";
@@ -28,6 +32,12 @@ public class SystemTabCtrl {
 	@RequestMapping(value = {"/getSystemInfo"}, method = RequestMethod.POST)
 	public String getSystemInfo() {
 		return gsi.getAllSystemInfo();
+	}	
+	
+	@ResponseBody
+	@RequestMapping(value = {"/resetSystemInfo"}, method = RequestMethod.POST)
+	public boolean resetSystemInfo() {
+		return rsi.executeSql();
 	}
 	
 	@ResponseBody

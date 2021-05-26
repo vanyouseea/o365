@@ -126,6 +126,46 @@
 					$('#tb4').datagrid('reload');
 				}
 			},{
+				text:'恢复默认值',
+				iconCls:'icon-reload',
+				handler:function(){
+					$.messager.confirm('重置', '将重置除GLOBAL_REG之外所有的系统变量为默认值，确认吗', function(r){
+						if (r){
+							$.ajax({
+							    type : "POST", 
+							    url : "/resetSystemInfo",
+							    success : function(result) {
+							    	if(result){
+								      	$.messager.show({
+											title:'结果',
+											msg: '重置成功',
+											timeout:2000,
+											showType:'slide'
+										});
+								      	$('#tb4').datagrid('reload');
+							    	}
+							    	else{
+								      	$.messager.show({
+											title:'结果',
+											msg: '重置失败',
+											timeout:2000,
+											showType:'slide'
+										});
+							    	}
+							    },
+							    error : function(e){
+							       	$.messager.show({
+										title:'失败',
+										msg:'重置失败，请假查服务器',
+										timeout:2000,
+										showType:'slide'
+									}); 
+							    }
+							});
+						}
+					});
+				}
+			},{
 				text:'帮助',
 				iconCls:'icon-help',
 				handler:function(){
