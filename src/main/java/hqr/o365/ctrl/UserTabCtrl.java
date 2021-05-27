@@ -20,6 +20,7 @@ import hqr.o365.service.GetDomainInfo;
 import hqr.o365.service.GetLicenseInfo;
 import hqr.o365.service.GetOfficeUser;
 import hqr.o365.service.GetOfficeUserByKeyWord;
+import hqr.o365.service.GetOfficeUserDefaultPwd;
 import hqr.o365.service.GetOfficeUserRole;
 import hqr.o365.service.UpdateOfficeUser;
 import hqr.o365.service.UpdateOfficeUserRole;
@@ -53,6 +54,9 @@ public class UserTabCtrl {
 	
 	@Autowired
 	private UpdateOfficeUserRole uour;
+	
+	@Autowired
+	private GetOfficeUserDefaultPwd goud;
 	
 	@RequestMapping(value = {"/tabs/user.html"})
 	public String dummy() {
@@ -172,4 +176,11 @@ public class UserTabCtrl {
 	public void saveKeywordInSession(HttpServletRequest req, String keyword) {
 		req.getSession().setAttribute("keyword", keyword);
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = {"/getDefaultPwd"}, method = RequestMethod.GET)
+	public String getDefaultPassword() {
+		return goud.getDefaultPwd();
+	}
+	
 }

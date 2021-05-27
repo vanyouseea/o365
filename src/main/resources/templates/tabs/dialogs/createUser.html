@@ -43,6 +43,16 @@
 		</tr>
 	</table>
 	<script type="text/javascript" th:inline="none">
+		var defaultPwd = "Mjj@1234";
+		$.ajax({
+		    type : "GET", 
+		    url : "/getDefaultPwd",
+		    async : false ,
+		    success : function(result) {
+		    	defaultPwd = result;
+			}
+		});
+	
 		$('#cc1').combobox({
 		    url:'/getDomains',
 		    valueField:'id',
@@ -52,7 +62,7 @@
 		$('#userPwd').textbox({
 			required: true,
 			width: 310,
-			value:'Mjj@1234',
+			value: defaultPwd,
 			icons:[{
 				iconCls:'icon-reload',
 				handler: function(e){
