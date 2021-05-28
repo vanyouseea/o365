@@ -22,6 +22,9 @@ public class ResetSystemInfo {
 	@Autowired
 	private TaMasterCdRepo tmc;
 	
+	@Autowired
+	private ScanAppStatusService sass;
+	
 	public boolean executeSql() {
 		boolean flag = false;
 		
@@ -38,6 +41,10 @@ public class ResetSystemInfo {
 			else {
 				loadFullSql(conn);
 			}
+			
+			//reset the cron job
+			sass.setCron(tmc.findById("GEN_APP_RPT_CRON").get().getCd());
+			
 			flag = true;
 		} catch (SQLException e) {
 			System.out.println("Got error:"+e.toString());
