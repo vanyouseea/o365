@@ -3,3 +3,11 @@ O365管理系统是一个以java语言开发的基于Microsoft Graph Restful API
 
 使用说明请参考
 https://hostloc.com/thread-846732-1-1.html
+
+
+# Docker 
+基于v1.1.1版的docker
+```bash
+docker push 448261751/java-hqr-o365
+docker run -d -p 9527:9527 448261751/java-hqr-o365
+```
