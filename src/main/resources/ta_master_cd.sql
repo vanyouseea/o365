@@ -14,9 +14,9 @@ insert into ta_master_cd(key_ty,cd,decode,start_dt,end_dt,create_dt,last_update_
 insert into ta_master_cd(key_ty,cd,decode,start_dt,end_dt,create_dt,last_update_id,last_update_dt) values ('GEN_APP_RPT','N','Y to turn on the app overall report',sysdate,null,sysdate,'o365',sysdate);
 
 insert into ta_master_cd(key_ty,cd,decode,start_dt,end_dt,create_dt,last_update_id,last_update_dt) values ('GEN_APP_RPT_CRON','0 0 4 * * ?','The overall report cron schedule',sysdate,null,sysdate,'o365',sysdate);
-insert into ta_master_cd(key_ty,cd,decode,start_dt,end_dt,create_dt,last_update_id,last_update_dt) values ('GEN_APP_RPT_SEED','1','The random delay mins for the cron GEN_APP_RPT_CRON(Range:1~1000)',sysdate,null,sysdate,'o365',sysdate);
-insert into ta_master_cd(key_ty,cd,decode,start_dt,end_dt,create_dt,last_update_id,last_update_dt) values ('GEN_APP_RPT_DELAY_MINS_AUTO','2','the delay mins when process next APP automatically',sysdate,null,sysdate,'o365',sysdate);
-insert into ta_master_cd(key_ty,cd,decode,start_dt,end_dt,create_dt,last_update_id,last_update_dt) values ('GEN_APP_RPT_DELAY_MINS_MANUAL','1','the delay mins when process next APP manually',sysdate,null,sysdate,'o365',sysdate);
+insert into ta_master_cd(key_ty,cd,decode,start_dt,end_dt,create_dt,last_update_id,last_update_dt) values ('GEN_APP_RPT_SEED','1000','The random delay mins for the cron GEN_APP_RPT_CRON(Range:1~1000)',sysdate,null,sysdate,'o365',sysdate);
+insert into ta_master_cd(key_ty,cd,decode,start_dt,end_dt,create_dt,last_update_id,last_update_dt) values ('GEN_APP_RPT_DELAY_MINS_AUTO','10','the delay mins when process next APP automatically',sysdate,null,sysdate,'o365',sysdate);
+insert into ta_master_cd(key_ty,cd,decode,start_dt,end_dt,create_dt,last_update_id,last_update_dt) values ('GEN_APP_RPT_DELAY_MINS_MANUAL','0','the delay mins when process next APP manually',sysdate,null,sysdate,'o365',sysdate);
 
 insert into ta_master_cd(key_ty,cd,decode,start_dt,end_dt,create_dt,last_update_id,last_update_dt) values ('FORCE_CHANGE_PASSWORD','Y','Y to force user change the password when they login',sysdate,null,sysdate,'o365',sysdate);
 
