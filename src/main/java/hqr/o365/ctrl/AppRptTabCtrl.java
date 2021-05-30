@@ -47,7 +47,7 @@ public class AppRptTabCtrl {
 	@ResponseBody
 	@RequestMapping(value = {"/getAppRptManaully"})
 	public boolean getOverallRptManaully(String page, String rows) {
-		sass.execute();
+		sass.execute("M");
 		return true;
 	}
 	

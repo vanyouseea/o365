@@ -11,7 +11,9 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.scheduling.annotation.SchedulingConfigurer;
+import org.springframework.scheduling.config.ScheduledTaskRegistrar;
+import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import cn.hutool.core.util.URLUtil;
@@ -24,9 +26,11 @@ import hqr.o365.domain.TaOfficeInfo;
 import hqr.o365.service.ValidateAppInfo;
 
 @Service
-public class ScanAppStatusService {
+public class ScanAppStatusService implements SchedulingConfigurer{
 	
 	private RestTemplate restTemplate = new RestTemplate();
+	
+	private String cron = "0 0 4 * * ?";
 
 	@Autowired
 	private TaOfficeInfoRepo toi;
@@ -53,13 +57,12 @@ public class ScanAppStatusService {
 		this.force = force;
 	}
 
-	@Scheduled(cron = "0 0 0 * * ?")
 	public void scan() {
 		Optional<TaMasterCd> cdd = tmc.findById("GEN_APP_RPT");
 		if(cdd.isPresent()) {
 			TaMasterCd cdl = cdd.get();
 			if("Y".equals(cdl.getCd())) {
-				Optional<TaMasterCd> opt2 = tmc.findById("GEN_APP_RPT_RANDOM_SEED");
+				Optional<TaMasterCd> opt2 = tmc.findById("GEN_APP_RPT_SEED");
 				//default is 1000
 				int seedRange = 1000;
 				int sleepMins = 0;
@@ -72,16 +75,18 @@ public class ScanAppStatusService {
 						System.out.println("Exception on convert, force to 1000");
 					}
 				}
-				SecureRandom rand = new SecureRandom();
-				sleepMins = rand.nextInt(seedRange);
+				if(seedRange>0) {
+					SecureRandom rand = new SecureRandom();
+					sleepMins = rand.nextInt(seedRange);
+				}
 				//sleep sleepMins mins
 				try {
-					System.out.println("Sleep "+sleepMins+ " to generate the overall report");
+					System.out.println("Sleep "+sleepMins+ " mins to generate the overall report");
 					Thread.sleep(sleepMins * 60 * 1000);
 				}
 				catch (Exception e) {}
 				
-				execute();
+				execute("A");
 			}
 			else {
 				System.out.println("Overall report is disabled");
@@ -89,7 +94,7 @@ public class ScanAppStatusService {
 		}
 	}
 	
-	public void execute() {
+	public void execute(String type) {
 		//clean up the report table
 		tar.deleteAll();
 		tar.flush();
@@ -118,6 +123,9 @@ public class ScanAppStatusService {
 			}
 			for (TaAppRpt taAppRpt : appList) {
 				String accessToken = "";
+				//before process sleep it
+				sleepMins(type);
+				
 				if(vai.checkAndGet(taAppRpt.getTenantId(), taAppRpt.getAppId(), taAppRpt.getSecretId())) {
 					accessToken = vai.getAccessToken();
 				}
@@ -206,6 +214,66 @@ public class ScanAppStatusService {
 			}
 		}
 	}
+ 
+	/*
+	 *  Type is A or M
+	 *  A is auto
+	 *  M is manual
+	 */
+	private void sleepMins(String type) {
+		if("A".equals(type)) {
+			int stime = 15;
+			Optional<TaMasterCd> opt1 = tmc.findById("GEN_APP_RPT_DELAY_MINS_AUTO");
+			String stimeStr = opt1.get().getCd();
+			try {
+				stime = Integer.parseInt(stimeStr);
+				if(stime>0) {
+					SecureRandom ran = new SecureRandom();
+					stime = ran.nextInt(stime);
+				}
+			}
+			catch (Exception e) {}
+			
+			try {
+				System.out.println("Sleep "+stime+ " mins ");
+				Thread.sleep(stime * 1000 * 60);
+			} catch (InterruptedException e) {}
+		}
+		else {
+			int stime = 0;
+			Optional<TaMasterCd> opt1 = tmc.findById("GEN_APP_RPT_DELAY_MINS_MANUAL");
+			String stimeStr = opt1.get().getCd();
+			try {
+				stime = Integer.parseInt(stimeStr);
+				if(stime>0) {
+					SecureRandom ran = new SecureRandom();
+					stime = ran.nextInt(stime);
+				}
+			}
+			catch (Exception e) {}
+			
+			try {
+				System.out.println("Sleep "+stime+ " mins ");
+				Thread.sleep(stime * 1000 * 60);
+			} catch (InterruptedException e) {}
+		}
+	}
 	
+    @Override
+    public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
+        taskRegistrar.addTriggerTask(() -> {
+        	scan();
+        }, triggerContext -> {
+            CronTrigger trigger = new CronTrigger(cron);
+            return trigger.nextExecutionTime(triggerContext);
+        });
+    }
+    public void setCron(String cron) {
+        System.out.println("old cron："+this.cron+" new cron："+cron);
+        this.cron = cron;
+    }
+    public String getCron() {
+        return this.cron;
+    }
 	
 }

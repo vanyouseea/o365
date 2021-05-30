@@ -14,6 +14,9 @@ public class UpdateSystemInfo {
 	@Autowired
 	private TaMasterCdRepo tmc;
 	
+	@Autowired
+	private ScanAppStatusService genRpt;
+	
 	public boolean updateInfo(String keyTy, String cd, String decode) {
 		boolean flag = false;
 		Optional<TaMasterCd> opt = tmc.findById(keyTy);
@@ -22,6 +25,10 @@ public class UpdateSystemInfo {
 			enti.setCd(cd);
 			enti.setDecode(decode);
 			tmc.saveAndFlush(enti);
+			if("GEN_APP_RPT_CRON".equals(enti.getKeyTy())) {
+				genRpt.setCron(enti.getCd());
+			}
+			
 			flag = true;
 		}
 		return flag;
