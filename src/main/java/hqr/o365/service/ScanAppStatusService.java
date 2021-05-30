@@ -75,8 +75,10 @@ public class ScanAppStatusService implements SchedulingConfigurer{
 						System.out.println("Exception on convert, force to 1000");
 					}
 				}
-				SecureRandom rand = new SecureRandom();
-				sleepMins = rand.nextInt(seedRange);
+				if(seedRange>0) {
+					SecureRandom rand = new SecureRandom();
+					sleepMins = rand.nextInt(seedRange);
+				}
 				//sleep sleepMins mins
 				try {
 					System.out.println("Sleep "+sleepMins+ " mins to generate the overall report");
@@ -121,6 +123,9 @@ public class ScanAppStatusService implements SchedulingConfigurer{
 			}
 			for (TaAppRpt taAppRpt : appList) {
 				String accessToken = "";
+				//before process sleep it
+				sleepMins(type);
+				
 				if(vai.checkAndGet(taAppRpt.getTenantId(), taAppRpt.getAppId(), taAppRpt.getSecretId())) {
 					accessToken = vai.getAccessToken();
 				}
@@ -144,8 +149,6 @@ public class ScanAppStatusService implements SchedulingConfigurer{
 					catch (Exception e) {
 					}
 					
-					sleepMins(type);
-					
 					//get active admin
 					String endpoint2 = "https://graph.microsoft.com/v1.0/directoryRoles/roleTemplateId="+roleId+"/members/$count?"+"$filter=accountEnabled eq true";
 					HttpHeaders headers2 = new HttpHeaders();
@@ -167,8 +170,6 @@ public class ScanAppStatusService implements SchedulingConfigurer{
 					catch (Exception e) {
 					}
 					
-					sleepMins(type);
-					
 					//get inactive admin
 					String endpoint3 = "https://graph.microsoft.com/v1.0/directoryRoles/roleTemplateId="+roleId+"/members/$count?"+"$filter=accountEnabled eq false";
 					HttpHeaders headers3 = new HttpHeaders();
@@ -187,8 +188,6 @@ public class ScanAppStatusService implements SchedulingConfigurer{
 					}
 					catch (Exception e) {
 					}
-					
-					sleepMins(type);
 					
 					//get total user
 					String endpoint4 = "https://graph.microsoft.com/v1.0/users/$count";
@@ -223,11 +222,15 @@ public class ScanAppStatusService implements SchedulingConfigurer{
 	 */
 	private void sleepMins(String type) {
 		if("A".equals(type)) {
-			long stime = 1000 * 60 * 15;
+			int stime = 15;
 			Optional<TaMasterCd> opt1 = tmc.findById("GEN_APP_RPT_DELAY_MINS_AUTO");
 			String stimeStr = opt1.get().getCd();
 			try {
-				stime = Long.parseLong(stimeStr);
+				stime = Integer.parseInt(stimeStr);
+				if(stime>0) {
+					SecureRandom ran = new SecureRandom();
+					stime = ran.nextInt(stime);
+				}
 			}
 			catch (Exception e) {}
 			
@@ -237,11 +240,15 @@ public class ScanAppStatusService implements SchedulingConfigurer{
 			} catch (InterruptedException e) {}
 		}
 		else {
-			long stime = 0;
+			int stime = 0;
 			Optional<TaMasterCd> opt1 = tmc.findById("GEN_APP_RPT_DELAY_MINS_MANUAL");
 			String stimeStr = opt1.get().getCd();
 			try {
-				stime = Long.parseLong(stimeStr);
+				stime = Integer.parseInt(stimeStr);
+				if(stime>0) {
+					SecureRandom ran = new SecureRandom();
+					stime = ran.nextInt(stime);
+				}
 			}
 			catch (Exception e) {}
 			
