@@ -15,6 +15,7 @@ public class TaAppRpt {
 	private String tenantId;
 	private String appId;
 	private String secretId;
+	private String remarks;
 	private Date rptDt;
 	private String totalUser;
 	private String totalGlobalAdmin ;
@@ -73,5 +74,11 @@ public class TaAppRpt {
 	}
 	public void setDisableGloablAdmin(String disableGloablAdmin) {
 		this.disableGloablAdmin = disableGloablAdmin;
+	}
+	public String getRemarks() {
+		return remarks;
+	}
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
 	}
 }

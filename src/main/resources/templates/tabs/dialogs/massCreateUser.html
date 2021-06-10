@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Client Side Pagination in DataGrid - jQuery EasyUI Demo</title>
+
+</head>
+<body>
+	<table style="padding:10px">
+		<tr>
+			<td >数量：</td>
+			<td colSpan="2"><input id="count" class="easyui-textbox" data-options="required:true" style="width: 310px" ></td>
+		</tr>
+		<tr>
+			<td >前缀：</td>
+			<td colSpan="2"><input id="prefix1" class="easyui-textbox" data-options="required:true" style="width: 310px" ></td>
+		</tr>
+		<tr>
+			<td >后缀：</td>
+			<td colSpan="2">
+				<input id="cc2" name="dept" value="Loading..." style="width: 310px">
+			</td>
+		</tr>
+		<tr>
+			<td>密码：</td>
+			<td colSpan="2">
+				<div id="userPwd2" name="userPwd2" ></div>
+				<!-- 
+				<input id="userPwd2" name="userPwd2" class="easyui-textbox" data-options="required:true,value:'Mjj@1234',iconCls:'icon-reload'" style="width: 310px"> 
+				 -->
+			</td>
+		</tr>
+		<tr>
+			<td >订阅：</td>
+			<td colSpan="2" id="licenseTd" >
+				<div th:each="list : ${session.licenseVo}" style="font-size: 12px">
+					<input class="easyui-checkbox" name="checkbox2" th:value="${list.skuId}" th:label="${list.skuPartNumber}" labelWidth="290px" ><br>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="3" align="right">
+				<a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()" style="width:80px">确认</a>
+				<a href="javascript:void(0)" class="easyui-linkbutton" onclick="clearForm()" style="width:80px">取消</a>
+			</td>
+		</tr>
+	</table>
+	<script type="text/javascript" th:inline="none">
+		var defaultPwd = "Mjj@1234";
+		$.ajax({
+		    type : "GET", 
+		    url : "/getDefaultPwd",
+		    async : false ,
+		    success : function(result) {
+		    	defaultPwd = result;
+			}
+		});
+	
+		$('#cc2').combobox({
+		    url:'/getDomains',
+		    valueField:'id',
+		    textField:'text'
+		});
+	
+		$('#userPwd2').textbox({
+			required: true,
+			width: 310,
+			value: defaultPwd,
+			icons:[{
+				iconCls:'icon-reload',
+				handler: function(e){
+					passwordGen();
+				}
+			}]
+		});
+		
+		function submitForm(){
+			var prefix1 = $('#prefix1').val();
+			var domain = $('#cc2').combobox('getText');
+			var count = $('#count').val();
+			var userPwd2 = $('#userPwd2').textbox('getText');
+			
+			console.log('info:'+prefix1+','+domain+','+count+','+userPwd2);
+			
+			if(prefix1==''||count==''){
+		      	$.messager.show({
+					title:'错误',
+					msg: '参数不足',
+					timeout:2000,
+					showType:'slide'
+				});
+		      	$('#dlg4').dialog('close');
+				return;
+			}
+			
+			var licenses2 = "";
+			$('input:checkbox[name=checkbox2]:checked').each(function(i){
+				if(0==i){
+					licenses2 = $(this).val();
+				}else{
+					licenses2 += (","+$(this).val());
+				}
+			});
+			if(licenses2==null){
+				console.log('未分配订阅');
+			}
+			else{
+				console.log('分配订阅为 '+licenses2);
+			}
+			$.messager.show({
+				title:'提示',
+				msg:'批量创建用户请求已提交，完成的速度会根据用户数量的多少决定，完成时右下角会出现弹窗提醒',
+				timeout:2000,
+				showType:'slide'
+			}); 
+			$.ajax({
+			    type : "POST", 
+			    url : "/massCreateOfficeUser",
+			    data : { "prefix": prefix1, "domain":domain , "count": count, "licenses": licenses2, 'userPwd': userPwd2 },
+			    success : function(result) {
+			      	$.messager.show({
+						title:'结果',
+						msg: result,
+						timeout:10000,
+						showType:'slide'
+					});
+			      	$('#tb3').datagrid('reload');
+				},
+				error : function(){
+			       	$.messager.show({
+						title:'失败',
+						msg:'创建用户失败',
+						timeout:2000,
+						showType:'slide'
+					}); 
+				}
+			});
+			
+			$('#dlg4').dialog('close');
+		}
+		function clearForm(){
+			$('#dlg4').dialog('close');
+		}
+		
+		function passwordGen() {
+		    var chars = "ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
+		    var string_length = 8;
+		    var randomstring = '';
+		    var charCount = 0;
+		    var numCount = 0;
+
+		    for (var i = 0; i < string_length; i++) {
+		        // If random bit is 0, there are less than 3 digits already saved, and there are not already 5 characters saved, generate a numeric value. 
+		        if ((Math.floor(Math.random() * 2) == 0) && numCount < 3 || charCount >= 5) {
+		            var rnum = Math.floor(Math.random() * 10);
+		            randomstring += rnum;
+		            numCount += 1;
+		        } else {
+		            // If any of the above criteria fail, go ahead and generate an alpha character from the chars string
+		            var rnum = Math.floor(Math.random() * chars.length);
+		            randomstring += chars.substring(rnum, rnum + 1);
+		            charCount += 1;
+		        }
+		    }
+		    $('#userPwd2').textbox('setText', randomstring);
+		}
+	</script>
+	
+</body>
+</html>
