@@ -25,7 +25,7 @@
 		});
 		$('#dlg4').dialog({
 		    title: '批量新建用户',
-			iconCls: 'icon-add',
+			iconCls: 'icon-massadd',
 			modal : true,
 			closed : true,
 			width: 420,
@@ -52,8 +52,8 @@
 					$('#dlg3').dialog('open');
 				}
 			},{
-				text:'批量添加',
-				iconCls:'icon-add',
+				text:'批量创建',
+				iconCls:'icon-massadd',
 				handler:function(){
 					$('#dlg4').dialog('open');
 				}
@@ -399,7 +399,8 @@
 							'<b>2.</b>详情可以看到用户的订阅skuid和身份,skuid对应的产品名称可以在<a href=javascript:addPanel("查看许可证")>查看许可证</a>找到<br>' +
 							'<b>3.</b>启用和禁用用户只会对普通用户有效<br>'+
 							'<b>4.</b>提权和撤权分别是提升一个用户为全局管理员和撤销一个用户的全局管理员权限<br> '+
-							'<b>5.</b>默认新用户密码是Mjj@1234，你也可以自己定义密码或者生成随机密码，同时在<a href=javascript:addPanel("系统配置")>系统配置</a>中，你可以通过修改FORCE_CHANGE_PASSWORD=N来避免用户登录时修改密码','');
+							'<b>5.</b>默认新用户密码是Mjj@1234，你也可以自己定义密码或者生成随机密码，同时在<a href=javascript:addPanel("系统配置")>系统配置</a>中，你可以通过修改FORCE_CHANGE_PASSWORD=N来避免用户登录时修改密码<br> '+
+							'<b>6.</b>批量创建用户可以批量创建用户和分配订阅，前缀可以自定义，系统会在前缀后面随机加上5个字符','');
 				}
 			}],
 			columns : [[
