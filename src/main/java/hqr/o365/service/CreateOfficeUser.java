@@ -100,6 +100,7 @@ public class CreateOfficeUser {
 						System.out.println( "成功创建用户："+ou.getUserPrincipalName());
 						
 						if(licenses!=null&&!"".equals(licenses)) {
+							Thread.sleep(200);
 							System.out.println("开始分配订阅："+licenses);
 							String acs [] = licenses.split(",");
 							for (String license : acs) {

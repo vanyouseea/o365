@@ -108,6 +108,7 @@ public class ScanAppStatusService implements SchedulingConfigurer{
 				rptEnti.setTenantId(tt.getTenantId());
 				rptEnti.setAppId(tt.getAppId());
 				rptEnti.setSecretId(tt.getSecretId());
+				rptEnti.setRemarks(tt.getRemarks());
 				tar.saveAndFlush(rptEnti);
 			}
 		}

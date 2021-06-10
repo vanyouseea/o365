@@ -1,5 +1,6 @@
 package hqr.o365.service;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Optional;
 
@@ -66,7 +67,7 @@ public class AddPassword {
 					
 					endpoint = "https://graph.microsoft.com/v1.0/applications/"+objId+"/addPassword";
 					headers.setContentType(MediaType.APPLICATION_JSON);
-					String json = "{\"passwordCredential\": {\"displayName\": \"mjj\",\"endDateTime\": \"2099-12-31T06:30:23.9074306Z\" }}";
+					String json = "{\"passwordCredential\": {\"displayName\": \""+new Date().getTime()+"\",\"endDateTime\": \"2099-12-31T06:30:23.9074306Z\" }}";
 					HttpEntity<String> requestEntity2 = new HttpEntity<String>(json, headers);
 					ResponseEntity<String> response2= restTemplate.postForEntity(endpoint, requestEntity2, String.class);
 					

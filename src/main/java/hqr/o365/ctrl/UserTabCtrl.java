@@ -22,6 +22,7 @@ import hqr.o365.service.GetOfficeUser;
 import hqr.o365.service.GetOfficeUserByKeyWord;
 import hqr.o365.service.GetOfficeUserDefaultPwd;
 import hqr.o365.service.GetOfficeUserRole;
+import hqr.o365.service.MassCreateOfficeUser;
 import hqr.o365.service.UpdateOfficeUser;
 import hqr.o365.service.UpdateOfficeUserRole;
 
@@ -58,6 +59,9 @@ public class UserTabCtrl {
 	@Autowired
 	private GetOfficeUserDefaultPwd goud;
 	
+	@Autowired
+	private MassCreateOfficeUser mcou;
+	
 	@RequestMapping(value = {"/tabs/user.html"})
 	public String dummy() {
 		return "tabs/user";
@@ -79,6 +83,24 @@ public class UserTabCtrl {
 			System.out.println("licenseVo already exist,skip to get");
 		}
 		return "tabs/dialogs/createUser";
+	}
+	
+	@RequestMapping(value = {"tabs/dialogs/massCreateUser.html"})
+	public String dummyCreateUser2(HttpServletRequest req) {
+		Object tmp2 = req.getSession().getAttribute("licenseVo");
+		if(tmp2==null) {
+			HashMap<String, Object> map2 = gli.getLicenses();
+			List<LicenseInfo> vo = new ArrayList<LicenseInfo>();
+			Object obj = map2.get("licenseVo");
+			if(obj!=null) {
+				vo = (List<LicenseInfo>)obj;
+			}
+			req.getSession().setAttribute("licenseVo", vo);
+		}
+		else {
+			System.out.println("licenseVo already exist,skip to get");
+		}
+		return "tabs/dialogs/massCreateUser";
 	}
 	
 	@ResponseBody
@@ -145,6 +167,33 @@ public class UserTabCtrl {
 		HashMap<String, String> map = cou.createCommonUser(mailNickname, userPrincipalName, displayName, licenses, userPwd);
 		
 		return map.get("message");
+	}	
+	
+	@ResponseBody
+	@RequestMapping(value = {"/massCreateOfficeUser"}, method = RequestMethod.POST)
+	public String massCreateUser(@RequestParam(name="prefix") String prefix,
+			@RequestParam(name="domain") String domain,
+			@RequestParam(name="count") String countStr,
+			@RequestParam(name="licenses") String licenses,
+			@RequestParam(name="userPwd") String userPwd) {
+		
+		int count = 10;
+		try {
+			count = Integer.parseInt(countStr);
+		}
+		catch (Exception e) {}
+		
+		HashMap<String, int[]> map = mcou.createCommonUser(prefix, domain, licenses, userPwd, count);
+		int [] overall1 = map.get("user_res");
+		int [] overall2 = map.get("license_res");
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append("用户创建成功:"+overall1[1]+"<br>");
+		sb.append("用户创建失败:"+overall1[2]+"<br>");
+		sb.append("订阅分配成功:"+overall2[1]+"<br>");
+		sb.append("订阅分配失败:"+overall2[2]+"<br>");
+		
+		return sb.toString();
 	}
 	
 	@ResponseBody
