@@ -198,8 +198,15 @@ public class UserTabCtrl {
 	
 	@ResponseBody
 	@RequestMapping(value = {"/deleteOfficeUser"}, method = RequestMethod.POST)
-	public boolean deleteUser(@RequestParam(name="uid") String uid) {
-		return dou.deleteUser(uid);
+	public String deleteUser(@RequestParam(name="uids") String uids) {
+		HashMap<String, int[]> map = dou.deleteUser(uids);
+		int [] overall = map.get("delete_res");
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append("用户删除成功:"+overall[0]+"<br>");
+		sb.append("用户删除失败:"+overall[1]+"<br>");
+		
+		return sb.toString();
 	}
 	
 	@ResponseBody
@@ -210,8 +217,22 @@ public class UserTabCtrl {
 	
 	@ResponseBody
 	@RequestMapping(value = {"/updateOfficeUser"}, method = RequestMethod.POST)
-	public boolean patchUser(@RequestParam(name="uid") String uid, @RequestParam(name="accountEnabled") String accountEnabled) {
-		return uou.patchOfficeUser(uid, accountEnabled);
+	public String patchUser(@RequestParam(name="uids") String uids, @RequestParam(name="accountEnabled") String accountEnabled) {
+		HashMap<String, int[]> map = uou.patchOfficeUser(uids, accountEnabled);
+		
+		int [] overall = map.get("status_res");
+		
+		StringBuilder sb = new StringBuilder();
+		if("true".equals(accountEnabled)) {
+			sb.append("用户启用成功:"+overall[0]+"<br>");
+			sb.append("用户启用失败:"+overall[1]+"<br>");
+		}
+		else {
+			sb.append("用户禁用成功:"+overall[0]+"<br>");
+			sb.append("用户禁用失败:"+overall[1]+"<br>");
+		}
+		
+		return sb.toString();
 	}
 	
 	@ResponseBody

@@ -8,7 +8,7 @@
 <body>
 	<div id="tb3"></div>
 	<div id="dlg3"></div>
-	<div id="dlg4"></div>
+	<div id="dlg5"></div>
 	
 	<script type="text/javascript" th:inline="none">
 		var row3;
@@ -23,7 +23,7 @@
 		    cache: false,
 		    href: 'tabs/dialogs/createUser.html'
 		});
-		$('#dlg4').dialog({
+		$('#dlg5').dialog({
 		    title: '批量新建用户',
 			iconCls: 'icon-massadd',
 			modal : true,
@@ -38,7 +38,7 @@
 			fit:true,
 			striped:true,
 			rownumbers : true,
-			singleSelect:true,
+			//singleSelect:true,
 			autoRowHeight:false,
 			pagination:true,
 			pageSize : 100,
@@ -55,40 +55,38 @@
 				text:'批量创建',
 				iconCls:'icon-massadd',
 				handler:function(){
-					$('#dlg4').dialog('open');
+					$('#dlg5').dialog('open');
 				}
 			},{
 				text:'删除',
 				iconCls:'icon-remove',
 				handler:function(){
-					row3 = $('#tb3').datagrid('getSelected');
-					var uid = row3.id;
-					var name = row3.userPrincipalName;
-					if(row3!=null){
-						$.messager.confirm('删除用户', '将删除'+name+"，数据无法被恢复，你确定吗", function(r){
+					row3 = $('#tb3').datagrid('getSelections');
+					if(row3!=null&&row3.length>0){
+						var uids = '';
+						for(var rr of row3){
+							uids = uids + rr.id + ',';
+						}
+						$.messager.confirm('删除用户', '将删除'+row3.length+'位用户，它(们)的数据无法被恢复，你确定吗', function(r){
 							if (r){
+						       	$.messager.show({
+									title:'提示',
+									msg: '删除用户请求已提交，完成的速度会根据用户数量的多少决定，完成时右下角会出现弹窗提醒',
+									timeout:3000,
+									showType:'slide'
+								}); 
 								$.ajax({
 								    type : "POST", 
 								    url : "/deleteOfficeUser",
-								    data : { "uid": uid },
+								    data : { "uids": uids },
 								    success : function(result) {
-								    	if(result){
-									       	$.messager.show({
-												title:'删除用户',
-												msg:'用户已被删除',
-												timeout:2000,
-												showType:'slide'
-											}); 
-									       	$('#tb3').datagrid('reload');
-								    	}
-								    	else{
-									       	$.messager.show({
-												title:'删除用户',
-												msg:'无法删除用户',
-												timeout:2000,
-												showType:'slide'
-											}); 
-								    	}
+								       	$.messager.show({
+											title:'删除用户',
+											msg: result,
+											timeout:3000,
+											showType:'slide'
+										}); 
+								       	$('#tb3').datagrid('reload');
 								    },
 									error : function(e){
 								       	$.messager.show({
@@ -106,7 +104,7 @@
 					else{
 						$.messager.show({
 							title:'错误',
-							msg:'请先选择一行',
+							msg:'请至少选择一行',
 							timeout:2000,
 							showType:'slide'
 						});
@@ -116,8 +114,8 @@
 				text:'详情',
 				iconCls:'icon-more',
 				handler:function(){
-					row3 = $('#tb3').datagrid('getSelected');
-					if(row3!=null){
+					row3 = $('#tb3').datagrid('getSelections');
+					if(row3!=null&&row3.length==1){
 						var id = row3.id;
 						var userPrincipalName = row3.userPrincipalName;
 						var displayName = row3.displayName;
@@ -135,7 +133,7 @@
 							error : function(){
 						       	$.messager.show({
 									title:'失败',
-									msg:'获取详情失败，请重试',
+									msg:'获取详情失败，这可能是由于服务器出现问题引起的',
 									timeout:2000,
 									showType:'slide'
 								}); 
@@ -146,7 +144,7 @@
 					else{
 						$.messager.show({
 							title:'错误',
-							msg:'请先选择一行',
+							msg:'请选择一行',
 							timeout:2000,
 							showType:'slide'
 						});
@@ -162,38 +160,31 @@
 				text:'启用',
 				iconCls:'icon-enable',
 				handler:function(){
-					row3 = $('#tb3').datagrid('getSelected');
-					if(row3!=null){
-						var id = row3.id;
+					row3 = $('#tb3').datagrid('getSelections');
+					if(row3!=null&&row3.length>0){
+						var uids = '';
+						for(var rr of row3){
+							uids = uids + rr.id + ',';
+						}
 						var accountEnabled = "true";
 						
 						$.ajax({
 						    type : "POST", 
 						    url : "/updateOfficeUser",
-						    data : { "uid": id , "accountEnabled" : accountEnabled},
+						    data : { "uids": uids , "accountEnabled" : accountEnabled},
 						    success : function(result) {
-								if(result){
-							       	$.messager.show({
-										title:'提示',
-										msg:'成功启用此用户',
-										timeout:2000,
-										showType:'slide'
-									}); 
-							       	$('#tb3').datagrid('reload');
-								}
-								else{
-							       	$.messager.show({
-										title:'提示',
-										msg:'启用此用户失败',
-										timeout:2000,
-										showType:'slide'
-									}); 
-								}
+						       	$.messager.show({
+									title:'提示',
+									msg: result,
+									timeout:3000,
+									showType:'slide'
+								}); 
+						       	$('#tb3').datagrid('reload');
 							},
 							error : function(){
 						       	$.messager.show({
 									title:'失败',
-									msg:'启用此用户失败，请重试',
+									msg:'启用用户失败，这可能是由于服务器出现问题引起的',
 									timeout:2000,
 									showType:'slide'
 								}); 
@@ -204,7 +195,7 @@
 					else{
 						$.messager.show({
 							title:'错误',
-							msg:'请先选择一行',
+							msg:'请至少选择一行',
 							timeout:2000,
 							showType:'slide'
 						});
@@ -214,38 +205,31 @@
 				text:'禁用',
 				iconCls:'icon-disable',
 				handler:function(){
-					row3 = $('#tb3').datagrid('getSelected');
-					if(row3!=null){
-						var id = row3.id;
+					row3 = $('#tb3').datagrid('getSelections');
+					if(row3!=null&&row3.length>0){
+						var uids = '';
+						for(var rr of row3){
+							uids = uids + rr.id + ',';
+						}
 						var accountEnabled = "false";
 						
 						$.ajax({
 						    type : "POST", 
 						    url : "/updateOfficeUser",
-						    data : { "uid": id , "accountEnabled" : accountEnabled},
+						    data : { "uids": uids , "accountEnabled" : accountEnabled},
 						    success : function(result) {
-								if(result){
-							       	$.messager.show({
-										title:'提示',
-										msg:'成功禁用此用户',
-										timeout:2000,
-										showType:'slide'
-									}); 
-							       	$('#tb3').datagrid('reload');
-								}
-								else{
-							       	$.messager.show({
-										title:'提示',
-										msg:'禁用此用户失败',
-										timeout:2000,
-										showType:'slide'
-									}); 
-								}
+						       	$.messager.show({
+									title:'提示',
+									msg: result,
+									timeout:3000,
+									showType:'slide'
+								}); 
+						       	$('#tb3').datagrid('reload');
 							},
 							error : function(){
 						       	$.messager.show({
 									title:'失败',
-									msg:'禁用此用户失败，请重试',
+									msg:'禁用用户失败，这可能是由于服务器出现问题引起的',
 									timeout:2000,
 									showType:'slide'
 								}); 
@@ -256,7 +240,7 @@
 					else{
 						$.messager.show({
 							title:'错误',
-							msg:'请先选择一行',
+							msg:'请至少选择一行',
 							timeout:2000,
 							showType:'slide'
 						});
@@ -266,8 +250,8 @@
 				text:'提权',
 				iconCls:'icon-medal',
 				handler:function(){
-					row3 = $('#tb3').datagrid('getSelected');
-					if(row3!=null){
+					row3 = $('#tb3').datagrid('getSelections');
+					if(row3!=null&&row3.length==1){
 						var id = row3.id;
 						var action = "P";
 						
@@ -297,7 +281,7 @@
 							error : function(){
 						       	$.messager.show({
 									title:'失败',
-									msg:'提权失败，请重试',
+									msg:'提权失败，这可能是由于服务器出现问题引起的',
 									timeout:2000,
 									showType:'slide'
 								}); 
@@ -308,7 +292,7 @@
 					else{
 						$.messager.show({
 							title:'错误',
-							msg:'请先选择一行',
+							msg:'请选择一行',
 							timeout:2000,
 							showType:'slide'
 						});
@@ -318,8 +302,8 @@
 				text:'撤权',
 				iconCls:'icon-warning',
 				handler:function(){
-					row3 = $('#tb3').datagrid('getSelected');
-					if(row3!=null){
+					row3 = $('#tb3').datagrid('getSelections');
+					if(row3!=null&&row3.length==1){
 						var id = row3.id;
 						var action = "C";
 						
@@ -349,7 +333,7 @@
 							error : function(){
 						       	$.messager.show({
 									title:'失败',
-									msg:'收回管理员权限失败，请重试',
+									msg:'收回管理员权限失败，这可能是由于服务器出现问题引起的',
 									timeout:2000,
 									showType:'slide'
 								}); 
@@ -360,7 +344,7 @@
 					else{
 						$.messager.show({
 							title:'错误',
-							msg:'请先选择一行',
+							msg:'请选择一行',
 							timeout:2000,
 							showType:'slide'
 						});
@@ -382,7 +366,7 @@
 							error : function(){
 						       	$.messager.show({
 									title:'失败',
-									msg:'搜索失败，请重试',
+									msg:'搜索失败，这可能是由于服务器出现问题引起的',
 									timeout:2000,
 									showType:'slide'
 								}); 
