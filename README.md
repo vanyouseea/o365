@@ -6,7 +6,7 @@ https://hostloc.com/thread-846732-1-1.html
 
 
 # Docker 
-基于v1.3.0版的docker
+基于v1.3.1版的docker
 ```bash
 docker pull vanyouseea/o365
 docker run -d -p 9527:9527 vanyouseea/o365
