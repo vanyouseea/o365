@@ -116,11 +116,11 @@
 				handler:function(){
 					row3 = $('#tb3').datagrid('getSelections');
 					if(row3!=null&&row3.length==1){
-						var id = row3.id;
-						var userPrincipalName = row3.userPrincipalName;
-						var displayName = row3.displayName;
-						var usageLocation = row3.usageLocation;
-						var licenses = row3.assignedLicenses;
+						var id = row3[0].id;
+						var userPrincipalName = row3[0].userPrincipalName;
+						var displayName = row3[0].displayName;
+						var usageLocation = row3[0].usageLocation;
+						var licenses = row3[0].assignedLicenses;
 						
 						$.ajax({
 						    type : "POST", 
@@ -167,7 +167,12 @@
 							uids = uids + rr.id + ',';
 						}
 						var accountEnabled = "true";
-						
+				       	$.messager.show({
+							title:'提示',
+							msg: '启用用户请求已提交，完成的速度会根据用户数量的多少决定，完成时右下角会出现弹窗提醒',
+							timeout:3000,
+							showType:'slide'
+						}); 
 						$.ajax({
 						    type : "POST", 
 						    url : "/updateOfficeUser",
@@ -212,7 +217,12 @@
 							uids = uids + rr.id + ',';
 						}
 						var accountEnabled = "false";
-						
+				       	$.messager.show({
+							title:'提示',
+							msg: '禁用用户请求已提交，完成的速度会根据用户数量的多少决定，完成时右下角会出现弹窗提醒',
+							timeout:3000,
+							showType:'slide'
+						}); 
 						$.ajax({
 						    type : "POST", 
 						    url : "/updateOfficeUser",
@@ -252,7 +262,7 @@
 				handler:function(){
 					row3 = $('#tb3').datagrid('getSelections');
 					if(row3!=null&&row3.length==1){
-						var id = row3.id;
+						var id = row3[0].id;
 						var action = "P";
 						
 						$.ajax({
@@ -304,7 +314,7 @@
 				handler:function(){
 					row3 = $('#tb3').datagrid('getSelections');
 					if(row3!=null&&row3.length==1){
-						var id = row3.id;
+						var id = row3[0].id;
 						var action = "C";
 						
 						$.ajax({
