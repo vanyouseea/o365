@@ -175,7 +175,8 @@ public class UserTabCtrl {
 			@RequestParam(name="domain") String domain,
 			@RequestParam(name="count") String countStr,
 			@RequestParam(name="licenses") String licenses,
-			@RequestParam(name="userPwd") String userPwd) {
+			@RequestParam(name="userPwd") String userPwd,
+			@RequestParam(name="strategy") String strategy) {
 		
 		int count = 10;
 		try {
@@ -183,7 +184,7 @@ public class UserTabCtrl {
 		}
 		catch (Exception e) {}
 		
-		HashMap<String, int[]> map = mcou.createCommonUser(prefix, domain, licenses, userPwd, count);
+		HashMap<String, int[]> map = mcou.createCommonUser(prefix, domain, licenses, userPwd, count, strategy);
 		int [] overall1 = map.get("user_res");
 		int [] overall2 = map.get("license_res");
 		

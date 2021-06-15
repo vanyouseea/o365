@@ -16,6 +16,15 @@
 			<td colSpan="2"><input id="prefix1" class="easyui-textbox" data-options="required:true" style="width: 310px" ></td>
 		</tr>
 		<tr>
+			<td>策略：</td>
+			<td colSpan="2">
+				<select id="cc3" class="easyui-combobox" name="cc3" style="width:310px;" data-options="required:true,editable:false" >
+				    <option value="st1">前缀后附加5随机字符(0-9,a-z)</option>
+				    <option value="st2">前缀后附加自增长数字(补0且从1开始)</option>
+				</select>
+			</td>
+		</tr>
+		<tr>
 			<td >后缀：</td>
 			<td colSpan="2">
 				<input id="cc2" name="dept" value="Loading..." style="width: 310px">
@@ -59,7 +68,8 @@
 		$('#cc2').combobox({
 		    url:'/getDomains',
 		    valueField:'id',
-		    textField:'text'
+		    textField:'text',
+		    editable: false
 		});
 	
 		$('#userPwd2').textbox({
@@ -79,8 +89,9 @@
 			var domain = $('#cc2').combobox('getText');
 			var count = $('#count').val();
 			var userPwd2 = $('#userPwd2').textbox('getText');
+			var strategy = $('#cc3').combobox('getValue');
 			
-			console.log('info:'+prefix1+','+domain+','+count+','+userPwd2);
+			console.log('info:'+prefix1+','+domain+','+count+','+userPwd2+','+strategy);
 			
 			if(prefix1==''||count==''){
 		      	$.messager.show({
@@ -116,7 +127,7 @@
 			$.ajax({
 			    type : "POST", 
 			    url : "/massCreateOfficeUser",
-			    data : { "prefix": prefix1, "domain":domain , "count": count, "licenses": licenses2, 'userPwd': userPwd2 },
+			    data : { "prefix": prefix1, "domain":domain , "count": count, "licenses": licenses2, "userPwd": userPwd2, "strategy": strategy },
 			    success : function(result) {
 			      	$.messager.show({
 						title:'结果',

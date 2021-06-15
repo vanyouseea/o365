@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Client Side Pagination in DataGrid - jQuery EasyUI Demo</title>
+
+</head>
+<body>
+	<form id="upFile" method="POST" enctype="multipart/form-data" action="/importApps">
+		<table style="padding:15px;margin:5px">
+			<tr >
+				<td>文件：</td>
+				<td><input id="fileNm" name="fileNm" class="easyui-filebox" style="width:290px"></td>
+			</tr>
+			<tr >
+				<td align="right" colspan="2"><a href="/apps.csv" style="font-size: 10px">下载模板</a></td>
+			</tr>
+			<tr >
+				<td colspan="2" align="right">
+					<a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()" style="width:80px">确认</a>
+					<a href="javascript:void(0)" class="easyui-linkbutton" onclick="clearForm()" style="width:80px">取消</a>
+				</td>
+			</tr>
+		</table>
+	</form>
+	<script type="text/javascript" th:inline="none">
+		
+		function submitForm(){
+			$('#upFile').form('submit',{
+				onSubmit: function(){
+					var str1 = $('#fileNm').filebox('getText');
+				
+					if(str1==''){
+						$.messager.alert('参数不足','请先选择一个文件');
+						return false;	
+					}
+					else{
+						return true;	
+					}
+				},
+				success: function(result){
+			       	$.messager.show({
+						title:'提示',
+						msg: result,
+						timeout:2000,
+						showType:'slide'
+					}); 
+			       	$('#tb1').datagrid('reload');
+			       	$('#dlg6').dialog('close');
+				},
+				error : function(){
+			       	$.messager.show({
+						title:'失败',
+						msg:'处理失败，这可能是由于服务器出现问题引起的',
+						timeout:2000,
+						showType:'slide'
+					}); 
+			       	$('#dlg6').dialog('close');
+				}
+			});
+		}
+		function clearForm(){
+			$('#dlg6').dialog('close');
+		}
+
+	</script>
+	
+</body>
+</html>

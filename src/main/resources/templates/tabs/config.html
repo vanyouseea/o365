@@ -7,6 +7,7 @@
 </head>
 <body>
 	<div id="tb1" ></div>
+	<div id="dlg6"></div>
 	<div id="dlg1" class="easyui-dialog" title="配置信息" style="padding:10px"
 			data-options="
 				iconCls: 'icon-add',
@@ -103,6 +104,18 @@
 	<script type="text/javascript" th:inline="none">
 		var row;
 
+		//create dialog
+		$('#dlg6').dialog({
+			title: '导入配置',
+			iconCls: 'icon-import',
+			modal : true,
+			closed : true,
+			width: 410,
+			height: 180,
+			cache: false,
+			href: 'tabs/dialogs/import.html'
+		});
+		
 		var toolbar = [{
 			text:'新增',
 			iconCls:'icon-add',
@@ -195,6 +208,18 @@
 			iconCls:'icon-reload',
 			handler:function(){
 				$('#tb1').datagrid('reload');
+			}
+		},'-',{
+			text:'导入',
+			iconCls:'icon-import',
+			handler:function(){
+				$('#dlg6').dialog('open');
+			}
+		},{
+			text:'导出',
+			iconCls:'icon-export',
+			handler:function(){
+				window.location.href="/exportApps";
 			}
 		},'-',{
 			text:'切换全局',
