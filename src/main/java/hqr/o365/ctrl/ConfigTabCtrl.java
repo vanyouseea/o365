@@ -1,5 +1,8 @@
 package hqr.o365.ctrl;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import hqr.o365.domain.LicenseInfo;
 import hqr.o365.domain.TaOfficeInfo;
@@ -21,6 +25,7 @@ import hqr.o365.service.DeleteOfficeInfo;
 import hqr.o365.service.GetDomainInfo;
 import hqr.o365.service.GetLicenseInfo;
 import hqr.o365.service.GetOfficeInfo;
+import hqr.o365.service.ImportAppInfo;
 import hqr.o365.service.SaveOfficeInfo;
 import hqr.o365.service.SwitchConfig;
 import hqr.o365.service.ValidateAppInfo;
@@ -52,9 +57,17 @@ public class ConfigTabCtrl {
 	@Autowired
 	private GetDomainInfo gdi;
 	
+	@Autowired
+	private ImportAppInfo iai;
+	
 	@RequestMapping(value = {"/tabs/config.html"})
 	public String dummy() {
 		return "tabs/config";
+	}
+	
+	@RequestMapping(value = {"/tabs/dialogs/import.html"})
+	public String dummy2() {
+		return "tabs/dialogs/import";
 	}
 	
 	@ResponseBody
@@ -194,6 +207,13 @@ public class ConfigTabCtrl {
 		else {
 			return map.get("message");
 		}
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = {"/uploadApps"}, method = RequestMethod.POST)
+	public String uploadApps(@RequestParam("fileNm") MultipartFile file) {
+		iai.importData(file);
+		return "succ";
 	}
 	
 }
