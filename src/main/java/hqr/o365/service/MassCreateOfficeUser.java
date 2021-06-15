@@ -56,7 +56,7 @@ public class MassCreateOfficeUser {
 	
 	private SecureRandom ran = new SecureRandom();
 	
-	public HashMap<String, int[]> createCommonUser(String prefix, String domain, String licenses, String userPwd, int count){
+	public HashMap<String, int[]> createCommonUser(String prefix, String domain, String licenses, String userPwd, int count, String strategy){
 		String forceInd = "Y";
 		Optional<TaMasterCd> opt = tmr.findById("FORCE_CHANGE_PASSWORD");
 		if(opt.isPresent()) {
@@ -64,11 +64,9 @@ public class MassCreateOfficeUser {
 			forceInd = cd.getCd();
 		}
 		
-		int userTotal = 0;
 		int userSucc = 0;
 		int userFail = 0; 
 		
-		int licenseTotal = 0;
 		int licenseSucc = 0;
 		int licenseFail = 0;
 		
@@ -96,15 +94,25 @@ public class MassCreateOfficeUser {
 				
 				//create users
 				for(int massCount=0; massCount<count; massCount++) {
-					userTotal++;
-					//get random name for the user
-					char c1 = SEED.charAt(ran.nextInt(SEED.length()-1));
-					char c2 = SEED.charAt(ran.nextInt(SEED.length()-1));
-					char c3 = SEED.charAt(ran.nextInt(SEED.length()-1));
-					char c4 = SEED.charAt(ran.nextInt(SEED.length()-1));
-					char c5 = SEED.charAt(ran.nextInt(SEED.length()-1));
+					//st1 = gen 5 random character
+					//st2 = gen by sequence
 					StringBuilder sb = new StringBuilder();
-					sb.append(prefix).append(c1).append(c2).append(c3).append(c4).append(c5);
+					if("st1".equals(strategy)) {
+						char c1 = SEED.charAt(ran.nextInt(SEED.length()-1));
+						char c2 = SEED.charAt(ran.nextInt(SEED.length()-1));
+						char c3 = SEED.charAt(ran.nextInt(SEED.length()-1));
+						char c4 = SEED.charAt(ran.nextInt(SEED.length()-1));
+						char c5 = SEED.charAt(ran.nextInt(SEED.length()-1));
+						sb.append(prefix).append(c1).append(c2).append(c3).append(c4).append(c5);
+					}
+					else if("st2".equals(strategy)) {
+						String addon = padLeft(String.valueOf(massCount), '0', String.valueOf(count).length());
+						sb.append(prefix).append(addon);
+					}
+					else {
+						String addon = padLeft(String.valueOf(massCount), '0', String.valueOf(count).length());
+						sb.append(prefix).append(addon);
+					}
 					String mailNickname = sb.toString();
 					String userPrincipalName = mailNickname + domain;
 					String displayName = sb.toString();
@@ -135,7 +143,6 @@ public class MassCreateOfficeUser {
 								System.out.println("开始分配订阅："+licenses);
 								String acs [] = licenses.split(",");
 								for (String license : acs) {
-									licenseTotal ++;
 									String licenseJson = "{\"addLicenses\": [{\"disabledPlans\": [],\"skuId\": \""+license+"\",}],\"removeLicenses\": [ ]}";
 									
 									endpoint = "https://graph.microsoft.com/v1.0/users/"+ou.getUserPrincipalName()+"/assignLicense";
@@ -168,7 +175,6 @@ public class MassCreateOfficeUser {
 							if(licenses!=null&&!"".equals(licenses)) {
 								String acs [] = licenses.split(",");
 								for (String license : acs) {
-									licenseTotal++;
 									licenseFail++;
 								}
 							}
@@ -180,7 +186,6 @@ public class MassCreateOfficeUser {
 						if(licenses!=null&&!"".equals(licenses)) {
 							String acs [] = licenses.split(",");
 							for (String license : acs) {
-								licenseTotal++;
 								licenseFail++;
 							}
 						}
@@ -196,12 +201,22 @@ public class MassCreateOfficeUser {
 		}
 		
 		HashMap<String, int[]> map = new HashMap<String, int[]>();
-		int [] overall1 = new int[] {userTotal, userSucc, userFail};
-		int [] overall2 = new int[] {licenseTotal, licenseSucc, licenseFail};
+		int [] overall1 = new int[] {userSucc+userFail, userSucc, userFail};
+		int [] overall2 = new int[] {licenseSucc+licenseFail, licenseSucc, licenseFail};
 		map.put("user_res", overall1);
 		map.put("license_res", overall2);
 		
 		return map;
 	}
+
 	
+	private String padLeft(String in, char pad, int size) {
+        StringBuffer str = in==null?new StringBuffer(""):new StringBuffer(in.trim());
+        int a = str.length();
+        str.ensureCapacity(size);
+        a = size - a;
+        while((a--) > 0)
+            str.insert(0,pad);
+        return str.toString();
+    }
 }
