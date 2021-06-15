@@ -107,7 +107,7 @@
 		//create dialog
 		$('#dlg6').dialog({
 			title: '导入配置',
-			iconCls: 'icon-add',
+			iconCls: 'icon-import',
 			modal : true,
 			closed : true,
 			width: 410,
@@ -211,15 +211,15 @@
 			}
 		},'-',{
 			text:'导入',
-			iconCls:'icon-reload',
+			iconCls:'icon-import',
 			handler:function(){
 				$('#dlg6').dialog('open');
 			}
 		},{
 			text:'导出',
-			iconCls:'icon-reload',
+			iconCls:'icon-export',
 			handler:function(){
-				$.messager.alert('导出');
+				window.location.href="/exportApps";
 			}
 		},'-',{
 			text:'切换全局',
