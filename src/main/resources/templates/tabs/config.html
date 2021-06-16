@@ -26,9 +26,9 @@
 						var selected = '否';
 						var seqNo = -1;
 					
-						if(row!=null){
-							seqNo = row.seqNo;
-							selected = row.selected;
+						if(row!=null&&row.length==1){
+							seqNo = row[0].seqNo;
+							selected = row[0].selected;
 							row = null;
 						}
 						
@@ -178,12 +178,13 @@
 			handler:function(){
 			    row = $('#tb1').datagrid('getSelections');
 				if(row!=null&&row.length==1){
-					$('#userid').val(row.userId);
-					$('#passwd').val(row.passwd);
-					$('#tenantId').val(row.tenantId);
-					$('#appId').val(row.appId);
-					$('#secretId').val(row.secretId);
-					$('#remarks').val(row.remarks);
+					console.log(row[0]);
+					$('#userid').val(row[0].userId);
+					$('#passwd').val(row[0].passwd);
+					$('#tenantId').val(row[0].tenantId);
+					$('#appId').val(row[0].appId);
+					$('#secretId').val(row[0].secretId);
+					$('#remarks').val(row[0].remarks);
 					
 					$('#dlg1').dialog('open');
 				}
