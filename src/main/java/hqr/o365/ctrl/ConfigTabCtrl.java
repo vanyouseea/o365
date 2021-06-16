@@ -237,19 +237,19 @@ public class ConfigTabCtrl {
 	public ResponseEntity<FileSystemResource> exportApps(){
 		eai.exportApp();
 		
-		return export(new File("apps.csv"));
+		return export(new File("export.csv"));
 	}
 	
 	public ResponseEntity<FileSystemResource> export(File file) { 
 		HttpHeaders headers = new HttpHeaders();
 	    headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
-	    headers.add("Content-Disposition", "attachment; filename=apps.csv");
+	    headers.add("Content-Disposition", "attachment; filename=export.csv");
 	    headers.add("Pragma", "no-cache");
 	    headers.add("Expires", "0");
 	    headers.add("Last-Modified", new Date().toString());
 	    headers.add("ETag", String.valueOf(System.currentTimeMillis()));
 	 
-	    return ResponseEntity.ok().headers(headers) .contentLength(file.length()) .contentType(MediaType.parseMediaType("text/html;charset=gb2312")) .body(new FileSystemResource(file));
+	    return ResponseEntity.ok().headers(headers) .contentLength(file.length()) .contentType(MediaType.parseMediaType("text/csv")) .body(new FileSystemResource(file));
 	}
 	
 }
