@@ -132,9 +132,15 @@ public class ConfigTabCtrl {
 	
 	@ResponseBody
 	@RequestMapping(value = {"/delConfig"}, method = RequestMethod.POST)
-	public boolean delete(@RequestParam(name="seqNo") int seqNo) {
-		System.out.println("SeqNo:"+seqNo);
-		return di.delete(seqNo);
+	public String delete(@RequestParam(name="seqNos") String seqNos) {
+		HashMap<String, int[]> map = di.delete(seqNos);
+		int [] overall = map.get("delete_res");
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append("配置删除成功:"+overall[0]+"<br>");
+		sb.append("配置删除失败:"+overall[1]+"<br>");
+		
+		return sb.toString();
 	}
 	
 	@ResponseBody
@@ -231,13 +237,13 @@ public class ConfigTabCtrl {
 	public ResponseEntity<FileSystemResource> exportApps(){
 		eai.exportApp();
 		
-		return export(new File("apps.csv"));
+		return export(new File("export.csv"));
 	}
 	
 	public ResponseEntity<FileSystemResource> export(File file) { 
 		HttpHeaders headers = new HttpHeaders();
 	    headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
-	    headers.add("Content-Disposition", "attachment; filename=apps.csv");
+	    headers.add("Content-Disposition", "attachment; filename=export.csv");
 	    headers.add("Pragma", "no-cache");
 	    headers.add("Expires", "0");
 	    headers.add("Last-Modified", new Date().toString());

@@ -1,7 +1,8 @@
 package hqr.o365.service;
 
 import java.io.BufferedWriter;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,7 @@ public class ExportAppInfo {
 	
 	public boolean exportApp(){
 		boolean flag = false;
-		try(BufferedWriter bw = new BufferedWriter(new FileWriter("apps.csv"))){
+		try(BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("export.csv"), "GB2312"))){
 			bw.write("userid,password,tenantid,appid,secretid,remarks"+System.getProperty("line.separator"));
 			
 			List<TaOfficeInfo> list = toi.findAll();
