@@ -132,9 +132,15 @@ public class ConfigTabCtrl {
 	
 	@ResponseBody
 	@RequestMapping(value = {"/delConfig"}, method = RequestMethod.POST)
-	public boolean delete(@RequestParam(name="seqNo") int seqNo) {
-		System.out.println("SeqNo:"+seqNo);
-		return di.delete(seqNo);
+	public String delete(@RequestParam(name="seqNos") String seqNos) {
+		HashMap<String, int[]> map = di.delete(seqNos);
+		int [] overall = map.get("delete_res");
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append("配置删除成功:"+overall[0]+"<br>");
+		sb.append("配置删除失败:"+overall[1]+"<br>");
+		
+		return sb.toString();
 	}
 	
 	@ResponseBody
@@ -243,7 +249,7 @@ public class ConfigTabCtrl {
 	    headers.add("Last-Modified", new Date().toString());
 	    headers.add("ETag", String.valueOf(System.currentTimeMillis()));
 	 
-	    return ResponseEntity.ok().headers(headers) .contentLength(file.length()) .contentType(MediaType.parseMediaType("text/csv")) .body(new FileSystemResource(file));
+	    return ResponseEntity.ok().headers(headers) .contentLength(file.length()) .contentType(MediaType.parseMediaType("text/html;charset=gb2312")) .body(new FileSystemResource(file));
 	}
 	
 }
