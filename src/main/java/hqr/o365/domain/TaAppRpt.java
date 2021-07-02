@@ -21,6 +21,7 @@ public class TaAppRpt {
 	private String totalGlobalAdmin ;
 	private String enableGlobalAdmin ;
 	private String disableGloablAdmin ;
+	private String spo;
 	public int getSeqNo() {
 		return seqNo;
 	}
@@ -80,5 +81,11 @@ public class TaAppRpt {
 	}
 	public void setRemarks(String remarks) {
 		this.remarks = remarks;
+	}
+	public String getSpo() {
+		return spo;
+	}
+	public void setSpo(String spo) {
+		this.spo = spo;
 	}
 }

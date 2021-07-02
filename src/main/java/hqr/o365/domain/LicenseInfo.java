@@ -4,6 +4,7 @@ public class LicenseInfo {
 	private String capabilityStatus ="";
 	private String skuId = "";
 	private String skuPartNumber = "";
+	private String skuIdDesc = "";
 	private String consumedUnits = "0";
 	//enable only
 	private String prepaidUnits = "0";
@@ -36,5 +37,11 @@ public class LicenseInfo {
 	}
 	public void setSkuPartNumber(String skuPartNumber) {
 		this.skuPartNumber = skuPartNumber;
+	}
+	public String getSkuIdDesc() {
+		return skuIdDesc;
+	}
+	public void setSkuIdDesc(String skuIdDesc) {
+		this.skuIdDesc = skuIdDesc;
 	}
 }

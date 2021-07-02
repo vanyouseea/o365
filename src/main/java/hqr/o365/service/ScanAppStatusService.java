@@ -15,6 +15,7 @@ import org.springframework.scheduling.annotation.SchedulingConfigurer;
 import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import cn.hutool.core.util.URLUtil;
 import hqr.o365.dao.TaAppRptRepo;
@@ -30,7 +31,7 @@ public class ScanAppStatusService implements SchedulingConfigurer{
 	
 	private RestTemplate restTemplate = new RestTemplate();
 	
-	private String cron = "0 0 4 * * ?";
+	private String cron = "0 0 4 */2 * ?";
 
 	@Autowired
 	private TaOfficeInfoRepo toi;
@@ -208,6 +209,37 @@ public class ScanAppStatusService implements SchedulingConfigurer{
 					}
 					catch (Exception e) {
 					}
+					
+					//check spo
+					String endpoint5 = "https://graph.microsoft.com/v1.0/sites/root";
+					HttpHeaders headers5 = new HttpHeaders();
+					headers5.set(HttpHeaders.USER_AGENT, ua);
+					headers5.add("Authorization", "Bearer "+accessToken);
+					headers5.add("ConsistencyLevel", "eventual");
+					String body5="";
+					HttpEntity<String> requestEntity5 = new HttpEntity<String>(body5, headers5);
+					try {
+						ResponseEntity<String> response5 = restTemplate.exchange(URLUtil.decode(endpoint5), HttpMethod.GET, requestEntity5, String.class);
+						//200 -> OD is normal
+						//429 -> SPO=0
+						//400 -> No OD
+						if(response5.getStatusCodeValue()==200) {
+							taAppRpt.setSpo("可用");
+						}
+					}
+					catch (Exception e) {
+						if(e instanceof HttpClientErrorException.BadRequest) {
+							taAppRpt.setSpo("无SPO订阅");
+						}
+						else if(e instanceof HttpClientErrorException.TooManyRequests) {
+							taAppRpt.setSpo("不可用");
+						}
+						else {
+							taAppRpt.setSpo("未知的:"+e);
+						}
+					}
+					
+					System.out.println("SPO for "+taAppRpt.getTenantId()+ " is "+taAppRpt.getSpo());
 					
 					taAppRpt.setRptDt(new Date());
 					tar.saveAndFlush(taAppRpt);

@@ -42,7 +42,7 @@ public class GetDomainInfo {
 				accessToken = vai.getAccessToken();
 			}
 			if(!"".equals(accessToken)) {
-				String endpoint = "https://graph.microsoft.com/v1.0/domains?$select=id";
+				String endpoint = "https://graph.microsoft.com/v1.0/domains?$select=id,isVerified";
 				HttpHeaders headers = new HttpHeaders();
 				headers.set(HttpHeaders.USER_AGENT, ua);
 				headers.add("Authorization", "Bearer "+accessToken);
@@ -53,12 +53,20 @@ public class GetDomainInfo {
 					if(response.getStatusCodeValue()==200) {
 						JSONObject jo = JSON.parseObject(response.getBody());
 						JSONArray ja = jo.getJSONArray("value");
+						int j = 0;
 						for (int i=0;i<ja.size();i++) {
 							JSONObject jb = (JSONObject)ja.get(i);
 							String domain = jb.getString("id");
+							String status = jb.getString("isVerified");
+							if("false".equals(status)) {
+								continue;
+							}
+							else {
+								j++;
+							}
 							ComboboxDo cbm = new ComboboxDo();
-							cbm.setId(i+1);
-							if(i==0) {
+							cbm.setId(j);
+							if(j==1) {
 								cbm.setSelected(true);
 							}
 							cbm.setText("@"+domain);

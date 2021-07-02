@@ -10,7 +10,7 @@ import hqr.o365.domain.TaAppRpt;
 @Repository
 public interface TaAppRptRepo extends JpaRepository<TaAppRpt, Integer>{
 	
-	@Query(value="select seq_no,tenant_id,app_id,secret_id,remarks,rpt_dt,total_user,total_global_admin,enable_global_admin,disable_gloabl_admin "
+	@Query(value="select seq_no,tenant_id,app_id,secret_id,remarks,rpt_dt,total_user,total_global_admin,enable_global_admin,disable_gloabl_admin,spo "
 			+ "from (select A.*, rownum ro from (select * from ta_app_rpt) A  where rownum<= :endRow ) where ro>:startRow ", nativeQuery = true)
 	List<TaAppRpt> getSysRpt(int startRow, int endRow);
 }
