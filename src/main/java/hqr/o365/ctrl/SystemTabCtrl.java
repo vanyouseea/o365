@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import hqr.o365.service.DeleteSystemInfo;
 import hqr.o365.service.GetSystemInfo;
 import hqr.o365.service.ResetSystemInfo;
 import hqr.o365.service.UpdateSystemInfo;
@@ -16,6 +17,9 @@ public class SystemTabCtrl {
 	
 	@Autowired
 	private GetSystemInfo gsi;
+	
+	@Autowired
+	private DeleteSystemInfo dsi;
 	
 	@Autowired
 	private UpdateSystemInfo usi;
@@ -33,6 +37,12 @@ public class SystemTabCtrl {
 	public String getSystemInfo() {
 		return gsi.getAllSystemInfo();
 	}	
+	
+	@ResponseBody
+	@RequestMapping(value = {"/deleteSystemInfo"}, method = RequestMethod.POST)
+	public boolean deleteSystemInfo(@RequestParam(name="keyTy") String keyTy) {
+		return dsi.deletePk(keyTy);
+	}
 	
 	@ResponseBody
 	@RequestMapping(value = {"/resetSystemInfo"}, method = RequestMethod.POST)

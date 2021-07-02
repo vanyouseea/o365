@@ -90,6 +90,18 @@
 			url:'/getSystemInfo',
 			method:'post',
 			toolbar: [{
+				text:'添加',
+				iconCls:'icon-add',
+				handler:function(){
+					$('#keyTy').val('');
+					$("#keyTy").removeAttr("disabled");
+					$('#cd').val('');
+					$('#decode').val('');
+					$('#lastUpdateId').val('o365');
+					row4 = null;
+					$('#dlg4').dialog('open');
+				}
+			},{
 				text:'编辑',
 				iconCls:'icon-edit',
 				handler:function(){
@@ -101,6 +113,7 @@
 						var lastUpdateId = row4.lastUpdateId;
 						
 						$("#keyTy").val(keyTy);
+						$('#keyTy').attr('disabled','disabled');
 						$("#cd").val(cd);
 						$("#decode").val(decode);
 						$("#lastUpdateId").val(lastUpdateId);
@@ -117,7 +130,60 @@
 							showType:'slide'
 						});
 					}
-					
+				}
+			},{
+				text:'删除',
+				iconCls:'icon-remove',
+				handler:function(){
+					row4 = $('#tb4').datagrid('getSelected');
+					if(row4!=null){
+						var keyTy = row4.keyTy;
+						$.messager.confirm('请确认', '将删除配置'+keyTy+'，确认吗？', function(r){
+							if (r){
+								$.ajax({
+								    type : "POST", 
+								    url : "/deleteSystemInfo",
+								    data : { "keyTy": keyTy },
+								    success : function(result) {
+								    	if(result){
+									       	$.messager.show({
+												title:'结果',
+												msg: '删除配置'+keyTy+'成功',
+												timeout:3000,
+												showType:'slide'
+											});
+									       	$('#tb4').datagrid('reload');
+								    	}
+								    	else{
+									       	$.messager.show({
+												title:'结果',
+												msg: '删除配置'+keyTy+'失败',
+												timeout:3000,
+												showType:'slide'
+											});
+								    	}
+								    },
+									error : function(e){
+								       	$.messager.show({
+											title:'结果',
+											msg:'删除配置'+keyTy+'失败，这可能是由于服务器出现问题引起的 '+e,
+											timeout:2000,
+											showType:'slide'
+										}); 
+									}
+								});
+							}
+						});
+						row4 = null;
+					}
+					else{
+						$.messager.show({
+							title:'错误',
+							msg:'请选择一行',
+							timeout:2000,
+							showType:'slide'
+						});
+					}
 				}
 			},{
 				text:'刷新',
@@ -169,7 +235,7 @@
 				text:'帮助',
 				iconCls:'icon-help',
 				handler:function(){
-					$.messager.alert('帮助','除非你知道自己在做什么否则请勿修改任何系统参数','info');
+					$.messager.alert('帮助','你可以通过添加新的skuid和翻译名来进行订阅的翻译。<br>PS:除非你知道自己在做什么否则请勿修改任何系统参数','');
 				}
 			}],
 			columns : [[

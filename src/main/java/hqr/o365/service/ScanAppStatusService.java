@@ -31,7 +31,7 @@ public class ScanAppStatusService implements SchedulingConfigurer{
 	
 	private RestTemplate restTemplate = new RestTemplate();
 	
-	private String cron = "0 0 4 * * ?";
+	private String cron = "0 0 4 */2 * ?";
 
 	@Autowired
 	private TaOfficeInfoRepo toi;

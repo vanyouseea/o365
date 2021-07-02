@@ -111,46 +111,6 @@
 					}
 				}
 			},{
-				text:'详情',
-				iconCls:'icon-more',
-				handler:function(){
-					row3 = $('#tb3').datagrid('getSelections');
-					if(row3!=null&&row3.length==1){
-						var id = row3[0].id;
-						var userPrincipalName = row3[0].userPrincipalName;
-						var displayName = row3[0].displayName;
-						var usageLocation = row3[0].usageLocation;
-						var licenses = row3[0].assignedLicenses;
-						
-						$.ajax({
-						    type : "POST", 
-						    url : "/getOfficeUserDtls",
-						    data : { "uid": id },
-						    success : function(result) {
-								$.messager.alert('详情', 'UID:'+id+'<br>邮件:'+ userPrincipalName + '<br>名字:'
-										+displayName+'<br>国家:'+usageLocation+'<br>订阅:'+licenses+'<br>身份:'+result,'');
-							},
-							error : function(){
-						       	$.messager.show({
-									title:'失败',
-									msg:'获取详情失败，这可能是由于服务器出现问题引起的',
-									timeout:2000,
-									showType:'slide'
-								}); 
-							}							
-						});
-						row3 = null;
-					}
-					else{
-						$.messager.show({
-							title:'错误',
-							msg:'请选择一行',
-							timeout:2000,
-							showType:'slide'
-						});
-					}
-				}
-			},{
 				text:'刷新',
 				iconCls:'icon-reload',
 				handler:function(){
@@ -412,7 +372,7 @@
 				//{field : 'id',title : 'UID',align : 'center'}, 
 				{field : 'userPrincipalName',title : '邮箱',align : 'center'}, 
 				{field : 'displayName',title : '名字',align : 'center'},
-				{field : 'assignedLicenses',title : '订阅',align : 'center'},
+				{field : 'assignedLicenses',title : '已分配订阅',align : 'center'},
 				{field : 'usageLocation',title : '国家/地区',align : 'center'}
 			]],
             onLoadError: function (data){

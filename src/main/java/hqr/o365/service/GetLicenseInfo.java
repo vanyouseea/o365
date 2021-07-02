@@ -3,6 +3,7 @@ package hqr.o365.service;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,8 +18,10 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
+import hqr.o365.dao.TaMasterCdRepo;
 import hqr.o365.dao.TaOfficeInfoRepo;
 import hqr.o365.domain.LicenseInfo;
+import hqr.o365.domain.TaMasterCd;
 import hqr.o365.domain.TaOfficeInfo;
 
 @Service
@@ -30,6 +33,9 @@ public class GetLicenseInfo {
 	
 	@Autowired
 	private ValidateAppInfo vai;
+	
+	@Autowired
+	private TaMasterCdRepo tmc;
 	
 	@Value("${UA}")
     private String ua;
@@ -64,12 +70,18 @@ public class GetLicenseInfo {
 							String capabilityStatus = jb.getString("capabilityStatus");
 							String skuId = jb.getString("skuId");
 							String skuPartNumber = jb.getString("skuPartNumber");
+							String skuIdDesc = skuPartNumber;
+							Optional<TaMasterCd> slfp = tmc.findById(skuId);
+							if(slfp.isPresent()) {
+								skuIdDesc = slfp.get().getDecode();
+							}
 							String consumedUnits = jb.getString("consumedUnits");
 							String prepaidUnits = jb.getJSONObject("prepaidUnits").getString("enabled");
 							LicenseInfo li = new LicenseInfo();
 							li.setCapabilityStatus(capabilityStatus);
 							li.setSkuId(skuId);
 							li.setSkuPartNumber(skuPartNumber);
+							li.setSkuIdDesc(skuIdDesc);
 							li.setConsumedUnits(consumedUnits);
 							li.setPrepaidUnits(prepaidUnits);
 							ll.add(li);
