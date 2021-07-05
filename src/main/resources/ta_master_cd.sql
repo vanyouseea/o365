@@ -59,4 +59,7 @@ insert into ta_master_cd(key_ty,cd,decode,start_dt,end_dt,create_dt,last_update_
 insert into ta_master_cd(key_ty,cd,decode,start_dt,end_dt,create_dt,last_update_id,last_update_dt) values ('e82ae690-a2d5-4d76-8d30-7c6e01e6022e','STANDARDWOFFPACK_IW_STUDENT','A1P 学生',sysdate,null,sysdate,'o365',sysdate);
 insert into ta_master_cd(key_ty,cd,decode,start_dt,end_dt,create_dt,last_update_id,last_update_dt) values ('160d609e-ab08-4fce-bc1c-ea13321942ac','STANDARDWOFFPACK_STUDENT_DEVICE','A1 学生 设备',sysdate,null,sysdate,'o365',sysdate);
 
+--update mask info
+update ta_office_info set mask_app_id='*****',mask_secret_id='*****';
+
 commit;
