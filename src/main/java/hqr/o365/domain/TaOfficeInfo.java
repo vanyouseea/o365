@@ -16,7 +16,9 @@ public class TaOfficeInfo {
 	private String passwd;
 	private String tenantId;
 	private String appId;
+	private String maskAppId="*****";
 	private String secretId;
+	private String maskSecretId="*****";
 	private String remarks;
 	private Date createDt;
 	private String lastUpdateId;
@@ -88,5 +90,17 @@ public class TaOfficeInfo {
 	}
 	public void setSelected(String selected) {
 		this.selected = selected;
+	}
+	public String getMaskAppId() {
+		return maskAppId;
+	}
+	public void setMaskAppId(String maskAppId) {
+		this.maskAppId = maskAppId;
+	}
+	public String getMaskSecretId() {
+		return maskSecretId;
+	}
+	public void setMaskSecretId(String maskSecretId) {
+		this.maskSecretId = maskSecretId;
 	}
 }

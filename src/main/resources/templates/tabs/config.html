@@ -103,6 +103,7 @@
 	</div>
 	<script type="text/javascript" th:inline="none">
 		var row;
+		var showInfo = true;
 
 		//create dialog
 		$('#dlg6').dialog({
@@ -367,6 +368,24 @@
 				}
 			}
 		},{
+			text:'On/Off',
+			iconCls:'icon-help',
+			handler:function(){
+				if(!showInfo){
+					$('#tb1').datagrid('showColumn','appId');
+					$('#tb1').datagrid('showColumn','secretId');
+					$('#tb1').datagrid('hideColumn','maskAppId');
+					$('#tb1').datagrid('hideColumn','maskSecretId');
+				}
+				else{
+					$('#tb1').datagrid('hideColumn','appId');
+					$('#tb1').datagrid('hideColumn','secretId');
+					$('#tb1').datagrid('showColumn','maskAppId');
+					$('#tb1').datagrid('showColumn','maskSecretId');
+				}
+				showInfo = !showInfo;
+			}
+		},{
 			text:'帮助',
 			iconCls:'icon-help',
 			handler:function(){
@@ -415,7 +434,17 @@
 						return "<font size='2'>"+value+"</font>";
 					}
 				}, 
+				{field : 'maskAppId',title : '应用ID',hidden:'true',align : 'center',
+					formatter: function(value,row,index){
+						return "<font size='2'>"+value+"</font>";
+					}
+				}, 
 				{field : 'secretId',title : '应用密码',align : 'center',
+					formatter: function(value,row,index){
+						return "<font size='2'>"+value+"</font>";
+					}
+				}, 
+				{field : 'maskSecretId',title : '应用密码',hidden:'true',align : 'center',
 					formatter: function(value,row,index){
 						return "<font size='2'>"+value+"</font>";
 					}
