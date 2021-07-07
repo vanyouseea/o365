@@ -30,6 +30,7 @@ import hqr.o365.service.GetLicenseInfo;
 import hqr.o365.service.GetOfficeInfo;
 import hqr.o365.service.ImportAppInfo;
 import hqr.o365.service.SaveOfficeInfo;
+import hqr.o365.service.ScanAppStatusServiceForOne;
 import hqr.o365.service.SwitchConfig;
 import hqr.o365.service.ValidateAppInfo;
 
@@ -65,6 +66,9 @@ public class ConfigTabCtrl {
 	
 	@Autowired
 	private ExportAppInfo eai;
+	
+	@Autowired
+	private ScanAppStatusServiceForOne s41;
 	
 	@RequestMapping(value = {"/tabs/config.html"})
 	public String dummy() {
@@ -219,6 +223,13 @@ public class ConfigTabCtrl {
 		else {
 			return map.get("message");
 		}
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = {"/getAppRptForOne"}, method = RequestMethod.POST)
+	public String getOverallRptForOne(@RequestParam(name="seqNo") int seqNo) {
+		s41.execute(seqNo);
+		return "报告已生成，请前往[Office总览报告]中查看结果";
 	}
 	
 	@ResponseBody

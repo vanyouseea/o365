@@ -379,6 +379,30 @@
 						timeout:2000,
 						showType:'slide'
 					});
+					
+					$.ajax({
+					    type : "POST", 
+					    url : "/getAppRptForOne",
+					    data : { "seqNo": row[0].seqNo },
+					    success : function(result) {
+					       	$.messager.show({
+								title:'结果',
+								msg: result,
+								timeout:2000,
+								showType:'slide'
+							});
+					       	$('#tb6').datagrid('reload');
+					    },
+						error : function(e){
+					       	$.messager.show({
+								title:'失败',
+								msg:'检验失败，这可能是由于服务器出现问题引起的 '+e,
+								timeout:2000,
+								showType:'slide'
+							}); 
+						}
+					});
+					
 					row = null;
 				}
 				else{
@@ -415,7 +439,8 @@
 				$.messager.alert('帮助','<b>1.</b>请设置一个当前全局为是的全局<br>'+
 						'<b>2.</b>更新后的密钥结束日期为2099-12-31<br>' +
 						'<b>3.</b>更新密钥后，请等待1分钟之后再校验，否则可能会失败<br>'+
-						'<b>4.</b>校验只是对于租户ID，APPID和密钥ID正确性的校验，并<font color=red>不包含</font>权限的校验','');
+						'<b>4.</b>校验只是对于租户ID，APPID和密钥ID正确性的校验，并<font color=red>不包含</font>权限的校验'+
+						'<b>5.</b>生成报告是对选中全局的总览报告，此报告包含管理员和SPO可用性','');
 			}
 		}];
 		
