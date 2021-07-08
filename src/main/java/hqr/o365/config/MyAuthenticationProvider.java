@@ -11,9 +11,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import hqr.o365.dao.TaMasterCdRepo;
+import hqr.o365.domain.TaMasterCd;
+import hqr.o365.service.SendLoginMsgToWx;
 import hqr.o365.service.TaUserDetailsService;
 
 import java.util.Collection;
+import java.util.Optional;
 
 @Component
 public class MyAuthenticationProvider implements AuthenticationProvider {
@@ -26,6 +30,12 @@ public class MyAuthenticationProvider implements AuthenticationProvider {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private TaMasterCdRepo tmc;
+    
+    @Autowired
+    private SendLoginMsgToWx send;
+    
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         // TODO Auto-generated method stub
@@ -43,7 +53,49 @@ public class MyAuthenticationProvider implements AuthenticationProvider {
         }
         else {
         	System.out.println("密码正确");
+        	
+        	Optional<TaMasterCd> opt1 = tmc.findById("WX_CALLBACK_IND");
+        	if(opt1.isPresent()) {
+        		String indicator = opt1.get().getCd();
+        		if("Y".equals(indicator)) {
+        			try {
+        				tmc.deleteById("USER_RESPONSE");
+        			}
+        			catch (Exception e) {}
+        			send.sendMsg();
+        			
+        			boolean isAllow = false;
+        			for(int i=0;i<60;i++) {
+        				try {
+							Thread.sleep(1000);
+						} catch (InterruptedException e) {}
+        				Optional<TaMasterCd> opt2 = tmc.findById("USER_RESPONSE");
+        				if(opt2.isPresent()) {
+        					String reply = opt2.get().getCd();
+        					if(reply!=null&&!"".equals(reply)) {
+        						if("Y".equals(reply)) {
+        							isAllow = true;
+        						}
+        						break;
+        					}
+        				}
+        				else {
+        					break;
+        				}
+        			}
+        			//what ever the reply, delete key ty
+        			try {
+        				tmc.deleteById("USER_RESPONSE");
+        			}
+        			catch (Exception e) {}
+        			
+        			if(!isAllow) {
+        				throw new BadCredentialsException("登录未获得批准");
+        			}
+        		}
+        	}
         }
+        
         Collection<? extends GrantedAuthority> authorities = userInfo.getAuthorities();
         // 构建返回的用户登录成功的token
         return new UsernamePasswordAuthenticationToken(userInfo, password, authorities);
