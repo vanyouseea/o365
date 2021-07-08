@@ -35,7 +35,7 @@ public class IndexCtrl {
 	
 	@ResponseBody
 	@RequestMapping(value = {"/callback"})
-	public String callback(HttpServletRequest request, @RequestBody String body ){
+	public String callback(HttpServletRequest request, @RequestBody(required=false) String body ){
 		return cbs.handleCallBack(request, body);
 	}
 	
