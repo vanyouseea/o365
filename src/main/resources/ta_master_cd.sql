@@ -62,4 +62,13 @@ insert into ta_master_cd(key_ty,cd,decode,start_dt,end_dt,create_dt,last_update_
 --update mask info
 update ta_office_info set mask_app_id='*****',mask_secret_id='*****';
 
+--update wx info
+insert into ta_master_cd(key_ty,cd,decode,start_dt,end_dt,create_dt,last_update_id,last_update_dt) values ('WX_CALLBACK_IND','N','Y to enable the login verify on wx',sysdate,null,sysdate,'o365',sysdate);
+insert into ta_master_cd(key_ty,cd,decode,start_dt,end_dt,create_dt,last_update_id,last_update_dt) values ('WX_CALLBACK_TOKEN','','callback token',sysdate,null,sysdate,'o365',sysdate);
+insert into ta_master_cd(key_ty,cd,decode,start_dt,end_dt,create_dt,last_update_id,last_update_dt) values ('WX_CORPID','','corp id',sysdate,null,sysdate,'o365',sysdate);
+insert into ta_master_cd(key_ty,cd,decode,start_dt,end_dt,create_dt,last_update_id,last_update_dt) values ('WX_CORPSECRET','','corp secret',sysdate,null,sysdate,'o365',sysdate);
+insert into ta_master_cd(key_ty,cd,decode,start_dt,end_dt,create_dt,last_update_id,last_update_dt) values ('WX_AGENTID','','corp agent id',sysdate,null,sysdate,'o365',sysdate);
+insert into ta_master_cd(key_ty,cd,decode,start_dt,end_dt,create_dt,last_update_id,last_update_dt) values ('WX_CALLBACK_AESKEY','','callback aeskey',sysdate,null,sysdate,'o365',sysdate);
+
+
 commit;
