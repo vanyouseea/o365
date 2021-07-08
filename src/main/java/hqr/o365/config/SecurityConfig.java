@@ -29,7 +29,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.failureUrl("/loginError").permitAll().and();
 		http.authorizeRequests() // 授权配置
 				// 无需权限访问
-				.antMatchers("/h2/**", "/*.svg", "/jquery-easyui-1.9.14/**", "/", "/index.html", "/loginPage","/reg","/reg.html","/chkUserId").permitAll()
+				.antMatchers("/h2/**", "/*.svg", "/jquery-easyui-1.9.14/**", "/", "/index.html", "/loginPage","/reg","/reg.html","/chkUserId","/callback").permitAll()
 				// 其他接口需要登录后才能访问
 				.anyRequest().authenticated().and();
 	}
