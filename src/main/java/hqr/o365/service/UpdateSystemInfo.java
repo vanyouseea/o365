@@ -1,5 +1,6 @@
 package hqr.o365.service;
 
+import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,8 @@ public class UpdateSystemInfo {
 			enti.setKeyTy(keyTy);
 			enti.setCd(cd);
 			enti.setDecode(decode);
+			enti.setLastUpdateId("o365");
+			enti.setLastUpdateDt(new Date());
 			tmc.saveAndFlush(enti);
 			flag = true;
 		}
