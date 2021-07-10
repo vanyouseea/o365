@@ -10,12 +10,68 @@ O365管理系统是一个以java语言开发的基于Microsoft Graph Restful API
 
 
 ### 功能介绍
-* 首页  
-  阿达达  
-  阿达达
-* 阿达达
-* 阿达达
+* 首页预览  
+  ![alt 首页](https://github.com/vanyouseea/o365/blob/master/pic/001.PNG)
+  登录后请根据首页介绍，先创建APP，然后赋予以下6个权限，需要注意的是，API权限请务必选择**应用程序**
+  | API名 | 大致作用 |
+  | ---- | ----|
+  | Application.ReadWrite.All | 用于新增密钥的功能 |
+  | Application.ReadWrite.OwnedBy | 用于新增密钥的功能 |
+  | Directory.ReadWrite.All | 用于订阅，域名，用户管理的功能 |
+  | RoleManagement.ReadWrite.Directory | 用于特权角色的管理 |
+  | User.ManageIdentities.All | 用于用户的管理 |
+  | User.ReadWrite.All | 用于用户的管理 |
 
+* [配置和报告] -> Office配置  
+  - **新增**  
+    将刚才得到的3个要素填入
+    ![alt 填入APP信息](https://github.com/vanyouseea/o365/blob/master/pic/002.PNG)  
+    PS 配置根据备注排序，如果你想要有序，可以设置备注  
+  - **删除**，**修改**，**刷新**不多做介绍  
+  - **导入**  
+    如果不想麻烦，也可以使用导入功能，先下载模板，填写好信息后，可以批量导入  
+    ![alt 导入](https://github.com/vanyouseea/o365/blob/master/pic/003.PNG)  
+  - **导出**  
+    将所有APP信息导出为csv文件  
+  - **切换全局**  
+    选中一行后，点解切换全局，O365很多的TAB工作的前提是需要有一个当前全局为是的APP，被选中的行将会以浅蓝色标记  
+    ![alt 切换全局](https://github.com/vanyouseea/o365/blob/master/pic/004.PNG)  
+  - **更新密钥**  
+    将创建一个过期时间为2099-12-31的新密钥，成功后会替换现有密钥，若不想更改现有密钥，请取消  
+    ![alt 更新密钥](https://github.com/vanyouseea/o365/blob/master/pic/005.PNG)  
+  - **校验**  
+    校验只验证APP 3要素的正确性(**不包含权限的校验**)
+  - **生成报告**  
+    选一行后，点击此按钮，会生成总览报告，此报告可以在Office总览报告中找到  
+    ![alt 更新密钥](https://github.com/vanyouseea/o365/blob/master/pic/006.PNG)  
+  - **On/Off**  
+    用户显示/隐藏APPID和密钥  
+  - **帮助**  
+    有什么问题，你可以尝试点击帮助了解更多  
+  
+* [用户] -> 管理用户  
+  ![alt 用户首页](https://github.com/vanyouseea/o365/blob/master/pic/007.PNG)  
+  - **添加**  
+    ![alt 添加](https://github.com/vanyouseea/o365/blob/master/pic/008.PNG)  
+  - **批量添加**  
+    批量添加有2中策略，一种是随机5字符，另外一种是自增长数字
+    ![alt 批量添加](https://github.com/vanyouseea/o365/blob/master/pic/008.PNG)  
+  - **删除**，**刷新**不做介绍  
+  - **启用**，**禁用**  
+    分别为启用和禁用选中的用户  
+  - **提权**，**撤权**
+    分别为提升或撤销一个用户为全局管理员  
+    同时他们支持更多角色的权限赋予与收回， 你可以在[配置和报告] -> 系统配置中修改关键字DEFAULT_ADMIN_ROLE_ID的值为其他的admin的role，比如通过这种方式，你可以提升一个用户为用户管理员  
+    ![alt 批量添加](https://github.com/vanyouseea/o365/blob/master/pic/009.PNG)  
+  - **搜索**  
+    可以搜索名字和邮箱前缀  
+  - **帮助**  
+    有什么问题，你可以尝试点击帮助了解更多  
+  
+* [用户] -> 查看特权用户  
+  
+* [许可证] -> 查看许可证  
+  
 
 
 # Docker 
