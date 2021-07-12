@@ -26,7 +26,7 @@ public class SendLoginMsgToWx {
 	@Autowired
 	private TaMasterCdRepo tmc;
 	
-	public boolean sendMsg() {
+	public boolean sendMsg(String remoteIP) {
 		boolean status = false;
 		
 		String corpId = "";
@@ -57,7 +57,7 @@ public class SendLoginMsgToWx {
 					String endpoint2 = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token="+token+"&debug=1";
 					HttpHeaders headers2 = new HttpHeaders();
 					headers2.setContentType(MediaType.APPLICATION_JSON);
-					String content = "用户请求登录O365管理系统，如果批准请在60秒内回复Y，如果这不是你已知的登录请求那么可能你的密码已泄露，请忽略或回复N";
+					String content = "用户(IP:"+remoteIP+")请求登录O365管理系统，如果批准请在60秒内回复Y，如果这不是你已知的登录请求那么可能你的密码已泄露，请忽略或回复N";
 					//agentId=1000002
 					String body2 = "{\"touser\": \"@all\",\"msgtype\" : \"text\",\"agentid\" : "+agentId+",\"text\" : {\"content\" : \""+content+"\"},\"enable_duplicate_check\" : 1, \"duplicate_check_interval\" : 3}";
 
