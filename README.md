@@ -1,7 +1,7 @@
 # o365
 O365管理系统是一个以java语言开发的基于Microsoft Graph Restful API的多全局管理系统，理论上支持任何Office全局的管理(A1,A3,A1P,E3,E5等)，你可以很方便的使用它来批量添加，批量删除，批量启用，批量禁用，搜索和查看用户，提升和收回管理员权限，更新密钥，查看订阅，分配订阅(创新用户时)，查看单全局或多全局报告，登录同时需要微信许可（此功能默认关闭）
 
-### 最低环境需求
+## 最低环境需求
 | 类型 | - |
 | ---- | ----|
 | CPU | 1C |
@@ -9,8 +9,8 @@ O365管理系统是一个以java语言开发的基于Microsoft Graph Restful API
 | 硬盘 | 5GB |
 
 
-### 功能介绍
-* 首页预览  
+## 功能介绍
+### 首页预览  
   ![alt 首页](https://github.com/vanyouseea/o365/blob/master/pic/001.PNG)
   登录后请根据首页介绍，先创建APP，然后赋予以下6个权限，需要注意的是，API权限请务必选择**应用程序**
   | API名 | 大致作用 |
@@ -22,7 +22,7 @@ O365管理系统是一个以java语言开发的基于Microsoft Graph Restful API
   | User.ManageIdentities.All | 用于用户的管理 |
   | User.ReadWrite.All | 用于用户的管理 |
 
-* [配置和报告] -> Office配置  
+### [配置和报告] -> Office配置  
   - **新增**  
     将刚才得到的3个要素填入
     ![alt 填入APP信息](https://github.com/vanyouseea/o365/blob/master/pic/002.PNG)  
@@ -49,7 +49,7 @@ O365管理系统是一个以java语言开发的基于Microsoft Graph Restful API
   - **帮助**  
     有什么问题，你可以尝试点击帮助了解更多  
   
-* [用户] -> 管理用户  
+### [用户] -> 管理用户  
   ![alt 用户首页](https://github.com/vanyouseea/o365/blob/master/pic/007.PNG)  
   - **添加**  
     ![alt 添加](https://github.com/vanyouseea/o365/blob/master/pic/007.5.PNG)  
@@ -59,7 +59,7 @@ O365管理系统是一个以java语言开发的基于Microsoft Graph Restful API
   - **删除**，**刷新**不做介绍  
   - **启用**，**禁用**  
     分别为启用和禁用选中的用户  
-  - **提权**，**撤权**
+  - **提权**，**撤权**  
     分别为提升或撤销一个用户为全局管理员  
     同时他们支持更多角色的权限赋予与收回， 你可以在[配置和报告] -> 系统配置中修改关键字DEFAULT_ADMIN_ROLE_ID的值为其他的admin的role，比如通过这种方式，你可以提升一个用户为用户管理员  
     ![alt 批量添加](https://github.com/vanyouseea/o365/blob/master/pic/009.PNG)  
@@ -68,11 +68,11 @@ O365管理系统是一个以java语言开发的基于Microsoft Graph Restful API
   - **帮助**  
     有什么问题，你可以尝试点击帮助了解更多  
   
-* [用户] -> 查看特权用户  
+### [用户] -> 查看特权用户  
   ![alt 查看特权用户](https://github.com/vanyouseea/o365/blob/master/pic/010.PNG)  
-* [许可证] -> 查看许可证  
+### [许可证] -> 查看许可证  
   ![alt 查看许可证](https://github.com/vanyouseea/o365/blob/master/pic/011.PNG)  
-* [配置和报告] -> Office总览报告  
+### [配置和报告] -> Office总览报告  
   - **手动执行**  
     生成所有全局的总览报告，此报告包含总用户数，管理员数和SPO可用性  
     ![alt 查看许可证](https://github.com/vanyouseea/o365/blob/master/pic/012.PNG)  
@@ -80,7 +80,7 @@ O365管理系统是一个以java语言开发的基于Microsoft Graph Restful API
     + 红色代表代表全局无管理员或者无管理员存活的全局  
     + 橙色代表SPO为0的全局  
     
-* [配置和报告] -> 系统配置  
+### [配置和报告] -> 系统配置  
    
   
 
