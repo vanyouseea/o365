@@ -202,7 +202,16 @@ public class GetOfficeUser {
 					for (Object object2 : licen) {
 						JSONObject newJb = (JSONObject)object2;
 						String skuId = newJb.getString("skuId");
-						ou.getAssignedLicenses().add(skuId);
+						
+						//get decode value,else use skuid to display
+						Optional<TaMasterCd> rlc = tmc.findById(skuId);
+						if(rlc.isPresent()) {
+							TaMasterCd skuenti = rlc.get();
+							ou.getAssignedLicenses().add(skuenti.getDecode());
+						}
+						else {
+							ou.getAssignedLicenses().add(skuId);
+						}
 					}
 				}
 				ou.setAccountEnabled(accountEnabled);
