@@ -103,7 +103,7 @@
 	</div>
 	<script type="text/javascript" th:inline="none">
 		var row;
-		var showInfo = true;
+		var showInfo = false;
 
 		//create dialog
 		$('#dlg6').dialog({
@@ -372,10 +372,15 @@
 			iconCls:'icon-large-smartart',
 			handler:function(){
 			    row = $('#tb1').datagrid('getSelections');
-				if(row!=null&&row.length==1){
+			    if(row!=null&&row.length>0){
+					var seqNos = '';
+					for(var rr of row){
+						seqNos = seqNos + rr.seqNo + ',';
+					}
+			    	console.log("seqNos:"+seqNos);
 					$.messager.show({
 						title:'提示',
-						msg:'生成租户'+row[0].tenantId+'总览报告的请求已提交，稍后你可以在[Office总览报告]中查看结果',
+						msg:'生成这(些)租户的总览报告的请求已提交，稍后你可以在[Office总览报告]中查看结果',
 						timeout:2000,
 						showType:'slide'
 					});
@@ -383,7 +388,7 @@
 					$.ajax({
 					    type : "POST", 
 					    url : "/getAppRptForOne",
-					    data : { "seqNo": row[0].seqNo },
+					    data : { "seqNos": seqNos },
 					    success : function(result) {
 					       	$.messager.show({
 								title:'结果',
@@ -402,9 +407,8 @@
 							}); 
 						}
 					});
-					
 					row = null;
-				}
+			    }
 				else{
 					$.messager.show({
 						title:'错误',
@@ -477,22 +481,22 @@
 						return "<font size='2'>"+value+"</font>";
 					}
 				}, 
-				{field : 'appId',title : '应用ID',align : 'center',
+				{field : 'appId',title : '应用ID',hidden:'true',align : 'center',
 					formatter: function(value,row,index){
 						return "<font size='2'>"+value+"</font>";
 					}
 				}, 
-				{field : 'maskAppId',title : '应用ID',hidden:'true',align : 'center',
+				{field : 'maskAppId',title : '应用ID',align : 'center',
 					formatter: function(value,row,index){
 						return "<font size='2'>"+value+"</font>";
 					}
 				}, 
-				{field : 'secretId',title : '应用密码',align : 'center',
+				{field : 'secretId',title : '应用密码',hidden:'true',align : 'center',
 					formatter: function(value,row,index){
 						return "<font size='2'>"+value+"</font>";
 					}
 				}, 
-				{field : 'maskSecretId',title : '应用密码',hidden:'true',align : 'center',
+				{field : 'maskSecretId',title : '应用密码',align : 'center',
 					formatter: function(value,row,index){
 						return "<font size='2'>"+value+"</font>";
 					}
