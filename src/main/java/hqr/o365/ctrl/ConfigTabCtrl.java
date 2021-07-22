@@ -227,8 +227,8 @@ public class ConfigTabCtrl {
 	
 	@ResponseBody
 	@RequestMapping(value = {"/getAppRptForOne"}, method = RequestMethod.POST)
-	public String getOverallRptForOne(@RequestParam(name="seqNo") int seqNo) {
-		s41.execute(seqNo);
+	public String getOverallRptForOne(@RequestParam(name="seqNos") String seqNos) {
+		s41.execute(seqNos);
 		return "报告已生成，请前往[Office总览报告]中查看结果";
 	}
 	
