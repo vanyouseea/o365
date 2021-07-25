@@ -7,6 +7,7 @@
 	<script type="text/javascript" src="jquery-easyui-1.9.14/jquery.min.js" th:inline="none"></script>
 	<script type="text/javascript" src="jquery-easyui-1.9.14/jquery.easyui.min.js" th:inline="none"></script>
 	<script type="text/javascript" src="jquery-easyui-1.9.14/locale/easyui-lang-zh_CN.js" th:inline="none"></script>
+	<script type='text/javascript' src='bug-min.js'></script>
 </head>
 <body class="easyui-layout" data-options="fit:true">
 <a href="https://github.com/vanyouseea/o365"><img width="128" height="128" src="/forkme2.png" alt="Fork me on GitHub" data-recalc-dims="1" style="position: absolute; top: 0;z-index: 999999;right: 0"></a>
@@ -81,6 +82,7 @@
 	</div>
 	
 	<script type="text/javascript"  >
+		new BugController({'minBugs':1, 'maxBugs':1, 'mouseOver':'fly'});
 		function addPanel(name){
 			tab = $('#acc').tabs('getTab',name);
 			if(tab==null){
