@@ -31,7 +31,9 @@
 			<td>订阅：</td>
 			<td colSpan="2" id="licenseTd">
 				<div th:each="list : ${session.licenseVo}" style="font-size: 12px">
-					<input class="easyui-checkbox" name="checkbox1" th:value="${list.skuId}" th:label="${list.skuIdDesc}" labelWidth="290px" ><br>
+					<span th:if="${list.capabilityStatus} eq 'Enabled'">
+						<input class="easyui-checkbox" name="checkbox1" th:value="${list.skuId}" th:label="${list.skuIdDesc}" labelWidth="290px" ><br>
+					</span>
 				</div>
 			</td>
 		</tr>
