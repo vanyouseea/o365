@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Client Side Pagination in DataGrid - jQuery EasyUI Demo</title>
+
+</head>
+<body>
+	<div id="tb7" ></div>
+	<div id="dlg7"></div>
+	
+	<script type="text/javascript" th:inline="none">
+		var row7;
+		
+		//create user dialog
+		$('#dlg7').dialog({
+		    title: '生成邀请码',
+			iconCls: 'icon-add',
+			modal : true,
+			closed : true,
+			width: 420,
+			height: 300,
+		    cache: false,
+		    href: 'tabs/dialogs/createInviteCd.html'
+		});
+		
+		var toolbar = [{
+			text:'新增',
+			iconCls:'icon-add',
+			handler:function(){
+				$('#dlg7').dialog('open');
+			}
+		},{
+			text:'删除',
+			iconCls:'icon-remove',
+			handler:function(){
+				row7 = $('#tb7').datagrid('getSelections');
+				if(row7!=null&&row7.length>0){
+					var uuids = '';
+					for(var rr of row7){
+						uuids = uuids + rr.inviteId + ',';
+					}
+					$.ajax({
+					    type : "POST", 
+					    url : "/delInviteCds",
+					    data : { "uuids": uuids },
+					    success : function(result) {
+					    	$.messager.show({
+								title:'结果',
+								msg: result,
+								timeout:2000,
+								showType:'slide'
+							});
+					      	$('#tb7').datagrid('reload');
+						},
+						error : function(){
+					       	$.messager.show({
+								title:'失败',
+								msg:'删除失败，请重试',
+								timeout:2000,
+								showType:'slide'
+							}); 
+						}
+				    });
+					row7 = null;
+				}
+				else{
+					$.messager.show({
+						title:'错误',
+						msg:'请选择至少一行',
+						timeout:2000,
+						showType:'slide'
+					});
+				}
+			}
+		},{
+			text:'刷新',
+			iconCls:'icon-reload',
+			handler:function(){
+				$('#tb7').datagrid('reload');
+			}
+		},{
+			text:'帮助',
+			iconCls:'icon-help',
+			handler:function(){
+				$.messager.alert('帮助','<b>1.</b>请设置一个当前全局为是的全局<br>'+
+						'<b>2.</b>在生成邀请码时可以选择此邀请码附带的订阅，用户使用此邀请码注册OFFICE时系统默认提供选择的订阅<br>' +
+						'<b>3.</b>一旦用户填入邀请码之后，他不能退出当前页面，否则邀请码失效（邀请码状态会变成使用中）<br>'+
+						'<b>4.</b>如果邀请码状态是出错，那么说明用户使用此邀请码注册OFFICE时出现了错误','');
+			}
+		}];
+		
+		$('#tb7').datagrid({
+			url : '/getInvite',
+			border : false,
+			fit : true,
+			autoRowHeight : false,
+			pagination:true,
+			pageSize:100,
+			pageList : [100,200,500],
+			method:'post',
+			toolbar:toolbar,
+			columns : [[
+				{field : 'ck',title : '选中',align : 'center',checkbox: true}, 
+				{field : 'inviteId',title : '邀请码',align : 'center' }, 
+				{field : 'licensesCn',title : '所选订阅',align : 'center' }, 
+				{field : 'startDt',title : '生效时间',align : 'center' ,
+					formatter: function(value,row,index){
+						if(value==null||value==''){
+							return '';
+						}
+						else{
+							var date = new Date(value);
+							// 格式化日期
+							dateTime = date.toLocaleString();
+							return dateFormat("YYYY-mm-dd", date);
+						}
+					}	
+				},
+				{field : 'endDt',title : '失效时间',align : 'center',
+					formatter: function(value,row,index){
+						if(value==null||value==''){
+							return '';
+						}
+						else{
+							var date = new Date(value);
+							// 格式化日期
+							dateTime = date.toLocaleString();
+							return dateFormat("YYYY-mm-dd", date);
+						}
+					}	
+				},
+				{field : 'inviteStatus',title : '状态',align : 'center',
+					formatter: function(value,row,index){
+						if(value=='1'){
+							return "<font color='green'>可用</font>";
+						}
+						else if(value=='2'){
+							return "<font color='lime'>使用中</font>";
+						}
+						else if(value=='3'){
+							return "<font color='silver'>已使用</font>";
+						}
+						else if(value=='4'){
+							return "<font color='red'>出错</font>";
+						}
+						else{
+							return value;
+						}
+					}
+				},
+				{field : 'suffix',title : '后缀',align : 'center' },
+				{field : 'result',title : '信息',align : 'center' }
+			]]
+		});
+		
+		function dateFormat(fmt, date) {
+		    let ret;
+		    const opt = {
+		        "Y+": date.getFullYear().toString(),        // 年
+		        "m+": (date.getMonth() + 1).toString(),     // 月
+		        "d+": date.getDate().toString()            // 日
+		        // 有其他格式化字符需求可以继续添加，必须转化成字符串
+		    };
+		    for (let k in opt) {
+		        ret = new RegExp("(" + k + ")").exec(fmt);
+		        if (ret) {
+		            fmt = fmt.replace(ret[1], (ret[1].length == 1) ? (opt[k]) : (opt[k].padStart(ret[1].length, "0")))
+		        };
+		    };
+		    return fmt;
+		}
+		
+	</script>
+</body>
+</html>
