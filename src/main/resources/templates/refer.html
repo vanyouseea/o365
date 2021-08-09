@@ -1,0 +1,125 @@
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>注册O365子账号</title>
+	<link rel="stylesheet" href="jquery-easyui-1.9.14/themes/default/easyui.css" />
+	<link rel="stylesheet" href="jquery-easyui-1.9.14/themes/icon.css" />
+	<script type="text/javascript" src="jquery-easyui-1.9.14/jquery.min.js"></script>
+	<script type="text/javascript" src="jquery-easyui-1.9.14/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="jquery-easyui-1.9.14/locale/easyui-lang-zh_CN.js"></script>
+	<script type='text/javascript' src='bug-min.js'></script>
+	<style type="text/css">
+		body{
+			background-image:url('bg.svg');
+		}
+		table{
+		    margin: auto;
+		}
+	</style>
+</head>
+<body>
+	<div id="dlg8" class="easyui-dialog" title="注册O365子账号" style="width: 360px; height: 285px; padding: 10px">
+		<div style="margin-bottom:15px">
+			<input id="displayName" class="easyui-textbox" style="width:100%" data-options="prompt:'请输入名字 ，可以是字母数字或中文',iconCls:'icon-man'">
+		</div>
+		<div style="margin-bottom:15px">
+			<input id="mailNickname"  class="easyui-textbox" style="width:100%" data-options="prompt:'请输入邮箱前缀，只能是字母或者数字',iconCls:'icon-lock'">
+		</div>
+		<div style="margin-bottom:10px">
+			<input id="inviteCd"  class="easyui-textbox" style="width:100%" data-options="prompt:'请输入邀请码',iconCls:'icon-lock'">
+		</div>
+		
+		<div style="width:100%;font-size: 12" id="refertips" >请输入名字，邮箱前缀和邀请码之后点击注册，请勿刷新或者重复点击注册，否则可能会导致邀请码失效</div>
+	</div>
+
+	<script>
+		new BugController({'minBugs':1, 'maxBugs':1, 'mouseOver':'fly'});
+		$('#dlg8').dialog({
+		    cache: false,
+			iconCls: 'icon-man',
+			resizable: false,
+			closable: false,
+		    modal: true,
+			buttons: [{
+				text:'注册',
+				iconCls:'icon-ok',
+				handler:function(){
+					submitForm();
+				}
+			},{
+				text:'重置',
+				handler: function(){
+					clearForm();
+				}
+			}]
+		});
+	
+		function submitForm(){
+			var displayName = $('#displayName').textbox('getText');
+			var mailNickname = $('#mailNickname').textbox('getText');
+			var inviteCd = $('#inviteCd').textbox('getText');
+			var password = passwordGen();
+			
+			if(displayName!=''&&mailNickname!=''&&inviteCd!=''){
+				$.ajax({
+					type : "POST",
+					url : "/createUserByInviteCd",
+					data : {
+						"displayName" : displayName,
+						"mailNickname" : mailNickname,
+						"inviteCd" : inviteCd,
+						"password": password
+					},
+					async : false,
+					success : function(result) {
+						var strs = result.split("|");
+						if(strs[0]=="0"){
+							var userPrincipalName = strs[1];
+							$('#refertips').html("<div><font color='green'>账号已创建，请登录<a href='https://www.office.com' target='_blank'>office.com</a>重置密码后进行使用<br>邮箱："+userPrincipalName+"<br>密码："+password+"</font></div>");
+							flag = true;
+						}
+						else{
+							$('#refertips').html("<div><font color='red'>"+result+"</font></div>");
+						}
+					},
+					error : function(){
+						$('#refertips').html("<div><font color='red'>服务器内部错误</font></div>");
+					}
+				});
+			}
+			else{
+				$('#refertips').html("<div><font color='red'>必填项不能为空</font></div>");
+			}
+		}
+		function clearForm(){
+			$('#displayName').textbox('setText','');
+			$('#mailNickname').textbox('setText','');
+			$('#inviteCd').textbox('setText','');
+			$('#refertips').text('请输入名字，邮箱前缀和邀请码之后点击注册，请勿刷新或者重复点击注册，否则可能会导致邀请码失效');
+		}
+		function passwordGen() {
+		    var chars = "ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
+		    var string_length = 8;
+		    var randomstring = '';
+		    var charCount = 0;
+		    var numCount = 0;
+
+		    for (var i = 0; i < string_length; i++) {
+		        // If random bit is 0, there are less than 3 digits already saved, and there are not already 5 characters saved, generate a numeric value. 
+		        if ((Math.floor(Math.random() * 2) == 0) && numCount < 3 || charCount >= 5) {
+		            var rnum = Math.floor(Math.random() * 10);
+		            randomstring += rnum;
+		            numCount += 1;
+		        } else {
+		            // If any of the above criteria fail, go ahead and generate an alpha character from the chars string
+		            var rnum = Math.floor(Math.random() * chars.length);
+		            randomstring += chars.substring(rnum, rnum + 1);
+		            charCount += 1;
+		        }
+		    }
+		    return randomstring;
+		}
+	</script>
+
+</body>
+</html>

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import hqr.o365.domain.LicenseInfo;
+import hqr.o365.service.CreateOfficeUserByInviteCd;
 import hqr.o365.service.DeleteInviteInfo;
 import hqr.o365.service.GetInviteInfo;
 import hqr.o365.service.GetLicenseInfo;
@@ -32,6 +33,9 @@ public class InviteTabCtrl {
 	
 	@Autowired
 	private DeleteInviteInfo dii;
+	
+	@Autowired
+	private CreateOfficeUserByInviteCd coubi;
 	
 	@RequestMapping(value = {"/tabs/invite.html"})
 	public String dummy() {
@@ -54,6 +58,11 @@ public class InviteTabCtrl {
 			System.out.println("licenseVo already exist,skip to get");
 		}
 		return "tabs/dialogs/createInviteCd";
+	}
+	
+	@RequestMapping(value = {"/refer.html"})
+	public String dummy3() {
+		return "refer";
 	}
 	
 	@ResponseBody
@@ -100,6 +109,16 @@ public class InviteTabCtrl {
 	public String deleteInviteInfo(@RequestParam(name="uuids") String uuids) {
 		dii.deleteInviteCd(uuids);
 		return "已删除";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = {"/createUserByInviteCd"})
+	public String createUserByInviteCd(@RequestParam(name="mailNickname") String mailNickname,
+			@RequestParam(name="displayName") String displayName,
+			@RequestParam(name="inviteCd") String inviteCd,
+			@RequestParam(name="password") String password) {
+
+		return coubi.createCommonUser(mailNickname, displayName, inviteCd, password);
 	}
 	
 }
