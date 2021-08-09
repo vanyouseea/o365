@@ -248,13 +248,13 @@ public class ConfigTabCtrl {
 	public ResponseEntity<FileSystemResource> exportApps(){
 		eai.exportApp();
 		
-		return export(new File("export.csv"));
+		return export(new File("export_app_info.csv"));
 	}
 	
 	public ResponseEntity<FileSystemResource> export(File file) { 
 		HttpHeaders headers = new HttpHeaders();
 	    headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
-	    headers.add("Content-Disposition", "attachment; filename=export.csv");
+	    headers.add("Content-Disposition", "attachment; filename=export_app_info.csv");
 	    headers.add("Pragma", "no-cache");
 	    headers.add("Expires", "0");
 	    headers.add("Last-Modified", new Date().toString());

@@ -1,20 +1,28 @@
 package hqr.o365.ctrl;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import hqr.o365.domain.LicenseInfo;
 import hqr.o365.service.CreateOfficeUserByInviteCd;
 import hqr.o365.service.DeleteInviteInfo;
+import hqr.o365.service.ExportInvites;
 import hqr.o365.service.GetInviteInfo;
 import hqr.o365.service.GetLicenseInfo;
 import hqr.o365.service.MassCreateInviteCd;
@@ -36,6 +44,9 @@ public class InviteTabCtrl {
 	
 	@Autowired
 	private CreateOfficeUserByInviteCd coubi;
+	
+	@Autowired
+	private ExportInvites ei;
 	
 	@RequestMapping(value = {"/tabs/invite.html"})
 	public String dummy() {
@@ -119,6 +130,25 @@ public class InviteTabCtrl {
 			@RequestParam(name="password") String password) {
 
 		return coubi.createCommonUser(mailNickname, displayName, inviteCd, password);
+	}
+	
+	@RequestMapping(value = {"/exportInvites"}, method = RequestMethod.GET)
+	public ResponseEntity<FileSystemResource> exportApps(){
+		ei.exportInvite();
+		
+		return export(new File("export_invite_info.csv"));
+	}
+	
+	public ResponseEntity<FileSystemResource> export(File file) { 
+		HttpHeaders headers = new HttpHeaders();
+	    headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
+	    headers.add("Content-Disposition", "attachment; filename=export_invite_info.csv");
+	    headers.add("Pragma", "no-cache");
+	    headers.add("Expires", "0");
+	    headers.add("Last-Modified", new Date().toString());
+	    headers.add("ETag", String.valueOf(System.currentTimeMillis()));
+	 
+	    return ResponseEntity.ok().headers(headers) .contentLength(file.length()) .contentType(MediaType.parseMediaType("text/csv")) .body(new FileSystemResource(file));
 	}
 	
 }

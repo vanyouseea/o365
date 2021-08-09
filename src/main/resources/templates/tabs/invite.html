@@ -80,6 +80,12 @@
 				$('#tb7').datagrid('reload');
 			}
 		},{
+			text:'导出',
+			iconCls:'icon-export',
+			handler:function(){
+				window.location.href="/exportInvites";
+			}
+		},{
 			text:'帮助',
 			iconCls:'icon-help',
 			handler:function(){
@@ -104,6 +110,7 @@
 				{field : 'ck',title : '选中',align : 'center',checkbox: true}, 
 				{field : 'inviteId',title : '邀请码',align : 'center' }, 
 				{field : 'licensesCn',title : '所选订阅',align : 'center' }, 
+				{field : 'seqNo',title : '全局编号',align : 'center' }, 
 				{field : 'startDt',title : '生效时间',align : 'center' ,
 					formatter: function(value,row,index){
 						if(value==null||value==''){
