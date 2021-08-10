@@ -1,6 +1,7 @@
 package hqr.o365.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import hqr.o365.dao.TaOfficeInfoRepo;
@@ -12,6 +13,7 @@ public class SwitchConfig {
 	@Autowired
 	private TaOfficeInfoRepo repo;
 	
+	@CacheEvict(value= {"cacheOfficeInfo","cacheOrg","cacheLicense","cacheRoleUser","cacheOfficeUser"}, allEntries = true)
 	public boolean updateConfig(TaOfficeInfo enti) {
 		boolean flag = false;
 		try {

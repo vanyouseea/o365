@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -41,6 +42,7 @@ public class GetOfficeRoleUser {
 	@Value("${UA}")
     private String ua;
 	
+	@Cacheable(value="cacheRoleUser")
 	public HashMap<String, String> getRoleUsers(){
 		HashMap<String, String> map = new HashMap<String, String>();
 		List<PrivilegedUser> ll = new ArrayList<PrivilegedUser>();
