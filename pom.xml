@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>hqr</groupId>
 	<artifactId>o365</artifactId>
-	<version>1.5.4</version>
+	<version>1.6.0</version>
 	<name>o365</name>
 	<description>Manage office 365</description>
 	<properties>
@@ -33,6 +33,10 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
+		<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cache</artifactId>
+        </dependency>
 		<dependency>
 		    <groupId>org.apache.httpcomponents</groupId>
 		    <artifactId>httpclient</artifactId>

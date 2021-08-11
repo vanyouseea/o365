@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -36,6 +37,7 @@ public class GetOfficeUserByKeyWord {
 	@Value("${UA}")
     private String ua;
 
+	@Cacheable(value="cacheOfficeUserSearch")
 	public HashMap<String, String> getUsers(int page, int rows, String keyword){
 		HashMap<String, String> map = new HashMap<String, String>();
 		List<OfficeUser> ll = new ArrayList<OfficeUser>();

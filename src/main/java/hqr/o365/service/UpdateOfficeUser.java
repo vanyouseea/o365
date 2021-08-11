@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -31,6 +32,7 @@ public class UpdateOfficeUser {
 	@Value("${UA}")
     private String ua;
 
+	@CacheEvict(value="cacheOfficeUser", allEntries = true)
 	public HashMap<String, int[]> patchOfficeUser(String uids, String accountEnabled) {
 		String uidArr[] = uids.split(",");
 		int succ = 0;

@@ -7,6 +7,7 @@
 	<script type="text/javascript" src="jquery-easyui-1.9.14/jquery.min.js" th:inline="none"></script>
 	<script type="text/javascript" src="jquery-easyui-1.9.14/jquery.easyui.min.js" th:inline="none"></script>
 	<script type="text/javascript" src="jquery-easyui-1.9.14/locale/easyui-lang-zh_CN.js" th:inline="none"></script>
+	<script type='text/javascript' src='bug-min.js'></script>
 </head>
 <body class="easyui-layout" data-options="fit:true">
 <a href="https://github.com/vanyouseea/o365"><img width="128" height="128" src="/forkme2.png" alt="Fork me on GitHub" data-recalc-dims="1" style="position: absolute; top: 0;z-index: 999999;right: 0"></a>
@@ -19,6 +20,7 @@
 		    	<ul class="easyui-tree">
 					<li><div onclick="addPanel('管理用户')">管理用户</div></li>
 					<li><div onclick="addPanel('查看特权用户')">查看特权用户</div></li>
+					<li><div onclick="addPanel('邀请注册')">邀请注册</div></li>
 				</ul>
 		    </div>
 		    <div title="许可证"  style="overflow:auto">
@@ -35,7 +37,7 @@
 		    </div>
 		</div>
 	</div>
-	<div data-options="region:'south',border:false" style="height:25px;background:#A9FACD" >Powered by hqr - O365 v1.5.4 </div>
+	<div data-options="region:'south',border:false" style="height:25px;background:#A9FACD" >Powered by hqr - O365 v1.6.0 </div>
 	<div id="acc" class="easyui-tabs" data-options="region:'center'">
 		<div title="首页" style="padding:10px">
 			<h2>欢迎来到O365管理系统，你可以使用它来方便的管理多个Office全局</h2>
@@ -71,6 +73,7 @@
 				</li>
 				<li>[用户]-><a href=javascript:addPanel("管理用户")>管理用户</a>页中，你可以批量添加(分配订阅)，删除，启用，禁用用户，搜索用户，你也可以提升一个用户为管理员或者撤销他的管理员权限</li>
 				<li>[用户]-><a href=javascript:addPanel("查看特权用户")>查看特权用户</a>页中，你可以查看身份是全局管理，用户管理，特权角色管理，特权认证管理的特殊用户</li>
+				<li>[用户]-><a href=javascript:addPanel("邀请注册")>邀请注册</a>页中，你可以生成邀请码，其他人可根据此邀请码通过<a href="/refer.html" target="_blank">此连接</a>注册Office用户，同时你也可以管理邀请码</li>
 				<li>[许可证]-><a href=javascript:addPanel("查看许可证")>查看许可证</a>页中，你可查看以当前全局的许可证信息</li>
 				<li>[配置和报告]-><a href=javascript:addPanel("Office配置")>Office配置</a>页中，你可以添加，修改，删除，切换全局，生成此全局的报告，更新APP密钥，验证APP有效性(<font color=red>不包含</font>权限的校验)</li>
 				<li>[配置和报告]-><a href=javascript:addPanel("Office总览报告")>Office总览报告</a>页中，你可以查看Office配置中全局管理员和SPO的可用性报告</li>
@@ -81,6 +84,7 @@
 	</div>
 	
 	<script type="text/javascript"  >
+		new BugController({'minBugs':1, 'maxBugs':1, 'mouseOver':'fly'});
 		function addPanel(name){
 			tab = $('#acc').tabs('getTab',name);
 			if(tab==null){
@@ -96,6 +100,14 @@
 					$('#acc').tabs('add',{
 						title: name,
 						href: 'tabs/license.html',
+						//content: '<div style="padding:10px">Content</div>',
+						closable: true
+					});
+				}
+				else if(name=='邀请注册'){
+					$('#acc').tabs('add',{
+						title: name,
+						href: 'tabs/invite.html',
 						//content: '<div style="padding:10px">Content</div>',
 						closable: true
 					});

@@ -18,7 +18,7 @@ public class ExportAppInfo {
 	
 	public boolean exportApp(){
 		boolean flag = false;
-		try(BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("export.csv"), "GB2312"))){
+		try(BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("export_app_info.csv"), "GB2312"))){
 			bw.write("userid,password,tenantid,appid,secretid,remarks"+System.getProperty("line.separator"));
 			
 			List<TaOfficeInfo> list = toi.findAll();

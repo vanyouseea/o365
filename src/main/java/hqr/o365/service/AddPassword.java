@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -34,6 +35,7 @@ public class AddPassword {
 	@Value("${UA}")
     private String ua;
 	
+	@CacheEvict(value="cacheOfficeInfo", allEntries = true)
 	public HashMap<String, String> add(int seqNo, String tenantId, String appId, String secretId) {
 		HashMap<String, String> map = new HashMap<String, String>();
 		

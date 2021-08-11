@@ -3,6 +3,7 @@ package hqr.o365.service;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import hqr.o365.dao.TaMasterCdRepo;
@@ -13,6 +14,7 @@ public class GetGlobalInd {
 	@Autowired
 	private TaMasterCdRepo tmcRepo;
 	
+	@Cacheable(value="cacheGlobalInd")
 	public String getIndicator() {
 		String ind = "N";
 		Optional<TaMasterCd> opt = tmcRepo.findById("GLOBAL_REG");

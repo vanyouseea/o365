@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -40,6 +41,7 @@ public class GetLicenseInfo {
 	@Value("${UA}")
     private String ua;
 
+	@Cacheable(cacheNames = {"cacheLicense"})
 	public HashMap<String, Object> getLicenses() {
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		List<LicenseInfo> ll = new ArrayList<LicenseInfo>();

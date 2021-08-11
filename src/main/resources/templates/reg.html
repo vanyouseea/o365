@@ -7,6 +7,7 @@
 	<script type="text/javascript" src="jquery-easyui-1.9.14/jquery.min.js"></script>
 	<script type="text/javascript" src="jquery-easyui-1.9.14/jquery.easyui.min.js"></script>
 	<script type="text/javascript" src="jquery-easyui-1.9.14/locale/easyui-lang-zh_CN.js"></script>
+	<script type='text/javascript' src='bug-min.js'></script>
 	<style type="text/css">
 		body{
 			background-image:url('bg.svg');
@@ -40,6 +41,7 @@
 
 
 	<script>
+		new BugController({'minBugs':1, 'maxBugs':1, 'mouseOver':'fly'});
 		$('#dlg').dialog({
 		    cache: false,
 			iconCls: 'icon-man',

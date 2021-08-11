@@ -11,30 +11,29 @@ import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
 
-import hqr.o365.dao.TaOfficeInfoRepo;
-import hqr.o365.domain.TaOfficeInfo;
+import hqr.o365.dao.TaInviteInfoRepo;
+import hqr.o365.domain.TaInviteInfo;
+
 
 @Service
-public class GetOfficeInfo {
-	
+public class GetInviteInfo {
 	@Autowired
-	private TaOfficeInfoRepo repo;
+	private TaInviteInfoRepo repo;
 	
 	@Value("${UA}")
     private String ua;
-
-	@Cacheable(value="cacheOfficeInfo")
-	public String getAllOfficeInfo(int intRows, int intPage) {
+	
+	@Cacheable(value="cacheInviteInfo")
+	public String getAllInviteInfo(int intRows, int intPage) {
 		long total = repo.count();
-		List<TaOfficeInfo> rows = new ArrayList<TaOfficeInfo>();
+		List<TaInviteInfo> rows = new ArrayList<TaInviteInfo>();
 		if(total>0) {
-			rows = repo.getOfficeInfos(intRows * (intPage - 1), intRows * intPage );
+			rows = repo.getInviteInfos(intRows * (intPage - 1), intRows * intPage );
 		}
 		
 		HashMap map = new HashMap();
 		map.put("total", total);
 		map.put("rows", rows);
-		
 		return JSON.toJSON(map).toString();
 	}
 	

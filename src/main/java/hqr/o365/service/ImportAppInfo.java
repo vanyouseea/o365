@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,6 +18,7 @@ public class ImportAppInfo {
 	@Autowired
 	private TaOfficeInfoRepo toi;
 	
+	@CacheEvict(value="cacheOfficeInfo", allEntries = true)
 	public HashMap<String, int[]> importApp(MultipartFile file){
 		int succ = 0;
 		int fail = 0;

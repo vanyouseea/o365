@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import hqr.o365.dao.TaMasterCdRepo;
@@ -20,6 +21,7 @@ public class RegUser {
 	@Autowired
 	private TaMasterCdRepo tmc;
 	
+	@CacheEvict(value="cacheTaUser", allEntries = true)
 	public void save(TaUser user) {
 		tur.save(user);
 		//stop reg the admin user

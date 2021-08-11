@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.support.EncodedResource;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -25,6 +26,7 @@ public class ResetSystemInfo {
 	@Autowired
 	private ScanAppStatusService sass;
 	
+	@CacheEvict(value= {"cacheSysInfo","cacheGlobalInd","cacheDefaultPwd"}, allEntries = true)
 	public boolean executeSql() {
 		boolean flag = false;
 		

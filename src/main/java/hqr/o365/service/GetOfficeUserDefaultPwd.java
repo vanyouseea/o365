@@ -3,6 +3,7 @@ package hqr.o365.service;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import hqr.o365.dao.TaMasterCdRepo;
@@ -14,6 +15,7 @@ public class GetOfficeUserDefaultPwd {
 	@Autowired
 	private TaMasterCdRepo tmc;
 	
+	@Cacheable(value="cacheDefaultPwd")
 	public String getDefaultPwd() {
 		String pwd = "Mjj@1234";
 		

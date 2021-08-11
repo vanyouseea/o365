@@ -9,7 +9,7 @@
 	<table style="padding:10px">
 		<tr>
 			<td >数量：</td>
-			<td colSpan="2"><input id="count" class="easyui-textbox" data-options="required:true" style="width: 310px" ></td>
+			<td colSpan="2"><input id="count" class="easyui-textbox" value="10" data-options="required:true" style="width: 310px" ></td>
 		</tr>
 		<tr>
 			<td >前缀：</td>
@@ -43,7 +43,9 @@
 			<td >订阅：</td>
 			<td colSpan="2" id="licenseTd" >
 				<div th:each="list : ${session.licenseVo}" style="font-size: 12px">
-					<input class="easyui-checkbox" name="checkbox2" th:value="${list.skuId}" th:label="${list.skuIdDesc}" labelWidth="290px" ><br>
+					<span th:if="${list.capabilityStatus} eq 'Enabled'">
+						<input class="easyui-checkbox" name="checkbox2" th:value="${list.skuId}" th:label="${list.skuIdDesc}" labelWidth="290px" ><br>
+					</span>
 				</div>
 			</td>
 		</tr>
