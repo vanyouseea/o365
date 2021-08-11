@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -40,6 +41,7 @@ public class ScanAppStatusServiceForOne {
 	@Value("${UA}")
     private String ua;
 	
+	@CacheEvict(value="cacheApprpt", allEntries = true)
 	public void execute(String seqNos) {
 		//copy the tenant id from ta_office_info to ta_app_rpt
 		String arr[] = seqNos.split(",");

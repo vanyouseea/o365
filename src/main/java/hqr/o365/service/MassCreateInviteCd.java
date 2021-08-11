@@ -11,6 +11,7 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import hqr.o365.dao.TaInviteInfoRepo;
@@ -40,6 +41,7 @@ public class MassCreateInviteCd {
 	
 	private SimpleDateFormat yyyyMMdd = new SimpleDateFormat("yyyy-MM-dd");
 	
+	@CacheEvict(value="cacheInviteInfo", allEntries = true)
 	public String create(int count, String licenses, String startDt, String endDt, String domain) {
 		String result = "";
 		

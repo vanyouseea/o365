@@ -13,7 +13,8 @@ public class SwitchConfig {
 	@Autowired
 	private TaOfficeInfoRepo repo;
 	
-	@CacheEvict(value= {"cacheOfficeInfo","cacheOrg","cacheLicense","cacheRoleUser","cacheOfficeUser"}, allEntries = true)
+	//Clean all the cache which switch the App
+	@CacheEvict(value= {"cacheDomain","cacheLicense","cacheOfficeInfo","cacheRoleUser","cacheOfficeUser","cacheOfficeUserSearch","cacheDefaultPwd","cacheUserRole","cacheOrg","cacheTaUser","cacheInviteInfo","cacheApprpt","cacheSysInfo","cacheGlobalInd"}, allEntries = true)
 	public boolean updateConfig(TaOfficeInfo enti) {
 		boolean flag = false;
 		try {

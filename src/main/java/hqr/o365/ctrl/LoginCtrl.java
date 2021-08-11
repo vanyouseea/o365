@@ -13,19 +13,6 @@ public class LoginCtrl {
 	@Autowired
 	private ChkUser cu;
 	
-	/*
-	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public String goHome(@RequestParam(name="userid") String userid,@RequestParam(name="pwd") String pwd, HttpServletRequest req) {
-		TaUser user = cu.checkCredential(userid, pwd);
-		if(user!=null) {
-			req.getSession().setAttribute("userName", user.getUserId());
-			return "home";
-		}
-		else {
-			return "login";
-		}
-	}
-	*/
 	@RequestMapping(value = "/loginPage", method = RequestMethod.GET)
 	public String goLogin() {
 		return "login";

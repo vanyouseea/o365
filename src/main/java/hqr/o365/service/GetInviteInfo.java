@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
@@ -22,6 +23,7 @@ public class GetInviteInfo {
 	@Value("${UA}")
     private String ua;
 	
+	@Cacheable(value="cacheInviteInfo")
 	public String getAllInviteInfo(int intRows, int intPage) {
 		long total = repo.count();
 		List<TaInviteInfo> rows = new ArrayList<TaInviteInfo>();

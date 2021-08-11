@@ -45,7 +45,6 @@ public class GetOfficeUser {
 
 	@Cacheable(value = "cacheOfficeUser")
 	public HashMap<String, String> getUsers(int page, int rows){
-		System.out.println("Retrieve user");
 		HashMap<String, String> map = new HashMap<String, String>();
 		List<OfficeUser> ll = new ArrayList<OfficeUser>();
 		HashMap jsonTmp = new HashMap();
