@@ -86,7 +86,7 @@ O365管理系统是一个以java语言开发的基于Microsoft Graph Restful API
 
 
 # Docker 
-基于v1.5.4版的docker
+基于v1.6.0版的docker
 ```bash
 docker pull vanyouseea/o365
 docker run -d -p 9527:9527 vanyouseea/o365
