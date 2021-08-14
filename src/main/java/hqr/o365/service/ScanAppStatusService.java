@@ -16,7 +16,9 @@ import org.springframework.scheduling.annotation.SchedulingConfigurer;
 import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpClientErrorException.BadRequest;
+import org.springframework.web.client.HttpClientErrorException.TooManyRequests;
+import org.springframework.web.client.HttpServerErrorException.BadGateway;
 import org.springframework.web.client.RestTemplate;
 import cn.hutool.core.util.URLUtil;
 import hqr.o365.dao.TaAppRptRepo;
@@ -230,14 +232,14 @@ public class ScanAppStatusService implements SchedulingConfigurer{
 						}
 					}
 					catch (Exception e) {
-						if(e instanceof HttpClientErrorException.BadRequest) {
+						if(e instanceof BadRequest) {
 							taAppRpt.setSpo("无SPO订阅");
 						}
-						else if(e instanceof HttpClientErrorException.TooManyRequests) {
+						else if(e instanceof TooManyRequests || e instanceof BadGateway) {
 							taAppRpt.setSpo("不可用");
 						}
 						else {
-							taAppRpt.setSpo("未知的:"+e);
+							taAppRpt.setSpo("未知的");
 						}
 					}
 					
