@@ -457,56 +457,57 @@
 			pagination:true,
 			pageSize:100,
 			pageList : [100,200,500],
+			remoteSort: false,
 			method:'post',
 			toolbar:toolbar,
 			columns : [[
 				{field : 'ck',title : '选中',align : 'center',checkbox: true}, 
-				{field : 'selected',title : '当前全局',align : 'center',
+				{field : 'selected',title : '当前全局',align : 'center',sortable:true,
 					formatter: function(value,row,index){
 						return "<font size='2'>"+value+"</font>";
 					}
 				}, 
-				{field : 'seqNo',title : '编号',align : 'center',
+				{field : 'seqNo',title : '编号',align : 'center',sortable:true,
 					formatter: function(value,row,index){
 						return "<font size='2'>"+value+"</font>";
 					}
 				}, 
-				{field : 'userId',title : '用户名',align : 'center',
+				{field : 'userId',title : '用户名',align : 'center',sortable:true,
 					formatter: function(value,row,index){
 						return "<font size='2'>"+value+"</font>";
 					}
 				}, 
-				{field : 'passwd',title : '密码',align : 'center',
+				{field : 'passwd',title : '密码',align : 'center',sortable:true,
 					formatter: function(value,row,index){
 						return "<font size='2'>"+value+"</font>";
 					}
 				}, 
-				{field : 'tenantId',title : '租户ID',align : 'center',
+				{field : 'tenantId',title : '租户ID',align : 'center',sortable:true,
 					formatter: function(value,row,index){
 						return "<font size='2'>"+value+"</font>";
 					}
 				}, 
-				{field : 'appId',title : '应用ID',hidden:'true',align : 'center',
+				{field : 'appId',title : '应用ID',hidden:'true',align : 'center',sortable:true,
 					formatter: function(value,row,index){
 						return "<font size='2'>"+value+"</font>";
 					}
 				}, 
-				{field : 'maskAppId',title : '应用ID',align : 'center',
+				{field : 'maskAppId',title : '应用ID',align : 'center',sortable:true,
 					formatter: function(value,row,index){
 						return "<font size='2'>"+value+"</font>";
 					}
 				}, 
-				{field : 'secretId',title : '应用密码',hidden:'true',align : 'center',
+				{field : 'secretId',title : '应用密码',hidden:'true',align : 'center',sortable:true,
 					formatter: function(value,row,index){
 						return "<font size='2'>"+value+"</font>";
 					}
 				}, 
-				{field : 'maskSecretId',title : '应用密码',align : 'center',
+				{field : 'maskSecretId',title : '应用密码',align : 'center',sortable:true,
 					formatter: function(value,row,index){
 						return "<font size='2'>"+value+"</font>";
 					}
 				}, 
-				{field : 'remarks',title : '备注',align : 'center',
+				{field : 'remarks',title : '备注',align : 'center',sortable:true,
 					formatter: function(value,row,index){
 						return "<font size='2'>"+value+"</font>";
 					}

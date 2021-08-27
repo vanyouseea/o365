@@ -17,6 +17,7 @@
 			pagination:true,
 			pageSize : 100,
 			pageList : [100,200,500],
+			remoteSort: false,
 			autoRowHeight:false,
 			url:'/getAppRpt',
 			method:'post',
@@ -70,7 +71,7 @@
 				}
 			}],
 			columns : [[
-				{field : 'rptDt',title : '报告时间',align : 'center',
+				{field : 'rptDt',title : '报告时间',align : 'center',sortable:true,
 					formatter: function(value,row,index){
 						if(value==null||value==''){
 							return '';
@@ -83,13 +84,13 @@
 						}
 					}	
 				},
-				{field : 'tenantId',title : '租户ID',align : 'center'},
-				{field : 'remarks',title : '备注',align : 'center'},
-				{field : 'totalUser',title : '用户总数',align : 'center'},
-				{field : 'totalGlobalAdmin',title : '总管理员数',align : 'center'},
-				{field : 'enableGlobalAdmin',title : '可用管理员数',align : 'center'},
-				{field : 'disableGloablAdmin',title : '不可用管理员数',align : 'center'},
-				{field : 'spo',title : 'SPO',align : 'center'}
+				{field : 'tenantId',title : '租户ID',align : 'center',sortable:true},
+				{field : 'remarks',title : '备注',align : 'center',sortable:true},
+				{field : 'totalUser',title : '用户总数',align : 'center',sortable:true},
+				{field : 'totalGlobalAdmin',title : '总管理员数',align : 'center',sortable:true},
+				{field : 'enableGlobalAdmin',title : '可用管理员数',align : 'center',sortable:true},
+				{field : 'disableGloablAdmin',title : '不可用管理员数',align : 'center',sortable:true},
+				{field : 'spo',title : 'SPO',align : 'center',sortable:true}
 			]],
             onLoadError: function (data){
             	console.log(data);

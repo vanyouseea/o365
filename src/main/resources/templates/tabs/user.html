@@ -43,6 +43,7 @@
 			pagination:true,
 			pageSize : 100,
 			pageList : [100,200,500],
+			remoteSort: false,
 			url:'/getOfficeUser',
 			method:'post',
 			toolbar: [{
@@ -359,7 +360,7 @@
 			}],
 			columns : [[
 				{field : 'ck',title : '选中',align : 'center',checkbox: true}, 
-				{field : 'accountEnabled',title : '用户状态',align : 'center',
+				{field : 'accountEnabled',title : '用户状态',align : 'center',sortable:true,
 					formatter: function(value,row,index){
 						if(value=='true'){
 							return "<font color='green'>可用</font>";
@@ -370,10 +371,10 @@
 					}
 				}, 
 				//{field : 'id',title : 'UID',align : 'center'}, 
-				{field : 'userPrincipalName',title : '邮箱',align : 'center'}, 
-				{field : 'displayName',title : '名字',align : 'center'},
-				{field : 'assignedLicenses',title : '已分配订阅',align : 'center'},
-				{field : 'usageLocation',title : '国家/地区',align : 'center'}
+				{field : 'userPrincipalName',title : '邮箱',align : 'center',sortable:true}, 
+				{field : 'displayName',title : '名字',align : 'center',sortable:true},
+				{field : 'assignedLicenses',title : '已分配订阅',align : 'center',sortable:true},
+				{field : 'usageLocation',title : '国家/地区',align : 'center',sortable:true}
 			]],
             onLoadError: function (data){
             	console.log(data);
@@ -381,7 +382,6 @@
 				$('#tb3').datagrid('loadData',{'total':0,'rows':[]});
             }
 		});
-		
 	</script>
 	
 </body>
