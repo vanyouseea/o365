@@ -104,14 +104,15 @@
 			pagination:true,
 			pageSize:100,
 			pageList : [100,200,500],
+			remoteSort: false,
 			method:'post',
 			toolbar:toolbar,
 			columns : [[
 				{field : 'ck',title : '选中',align : 'center',checkbox: true}, 
-				{field : 'inviteId',title : '邀请码',align : 'center' }, 
-				{field : 'licensesCn',title : '所选订阅',align : 'center' }, 
-				{field : 'seqNo',title : '全局编号',align : 'center' }, 
-				{field : 'startDt',title : '生效时间',align : 'center' ,
+				{field : 'inviteId',title : '邀请码',align : 'center',sortable:true }, 
+				{field : 'licensesCn',title : '所选订阅',align : 'center',sortable:true }, 
+				{field : 'seqNo',title : '全局编号',align : 'center',sortable:true }, 
+				{field : 'startDt',title : '生效时间',align : 'center',sortable:true ,
 					formatter: function(value,row,index){
 						if(value==null||value==''){
 							return '';
@@ -124,7 +125,7 @@
 						}
 					}	
 				},
-				{field : 'endDt',title : '失效时间',align : 'center',
+				{field : 'endDt',title : '失效时间',align : 'center',sortable:true,
 					formatter: function(value,row,index){
 						if(value==null||value==''){
 							return '';
@@ -137,7 +138,7 @@
 						}
 					}	
 				},
-				{field : 'inviteStatus',title : '状态',align : 'center',
+				{field : 'inviteStatus',title : '状态',align : 'center',sortable:true,
 					formatter: function(value,row,index){
 						if(value=='1'){
 							return "<font color='green'>可用</font>";
@@ -156,8 +157,8 @@
 						}
 					}
 				},
-				{field : 'suffix',title : '后缀',align : 'center' },
-				{field : 'result',title : '信息',align : 'center' }
+				{field : 'suffix',title : '后缀',align : 'center',sortable:true },
+				{field : 'result',title : '信息',align : 'center',sortable:true }
 			]]
 		});
 		
