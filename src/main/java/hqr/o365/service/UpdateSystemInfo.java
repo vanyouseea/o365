@@ -19,7 +19,7 @@ public class UpdateSystemInfo {
 	@Autowired
 	private ScanAppStatusService genRpt;
 	
-	@CacheEvict(value= {"cacheSysInfo","cacheGlobalInd","cacheDefaultPwd","cacheLicense","cacheOfficeUser"}, allEntries = true)
+	@CacheEvict(value= {"cacheSysInfo","cacheGlobalInd","cacheDefaultPwd","cacheLicense","cacheOfficeUser","cacheOfficeUserSearch"}, allEntries = true)
 	public boolean updateInfo(String keyTy, String cd, String decode) {
 		boolean flag = false;
 		System.out.println("key_ty :"+keyTy);

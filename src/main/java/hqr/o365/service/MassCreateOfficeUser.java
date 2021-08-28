@@ -57,7 +57,7 @@ public class MassCreateOfficeUser {
 	
 	private SecureRandom ran = new SecureRandom();
 	
-	@CacheEvict(value="cacheOfficeUser", allEntries = true)
+	@CacheEvict(value= {"cacheOfficeUser","cacheOfficeUserSearch"}, allEntries = true)
 	public HashMap<String, int[]> createCommonUser(String prefix, String domain, String licenses, String userPwd, int count, String strategy){
 		String forceInd = "Y";
 		Optional<TaMasterCd> opt = tmr.findById("FORCE_CHANGE_PASSWORD");
