@@ -32,7 +32,7 @@ public class UpdateOfficeUser {
 	@Value("${UA}")
     private String ua;
 
-	@CacheEvict(value="cacheOfficeUser", allEntries = true)
+	@CacheEvict(value= {"cacheOfficeUser","cacheOfficeUserSearch"}, allEntries = true)
 	public HashMap<String, int[]> patchOfficeUser(String uids, String accountEnabled) {
 		String uidArr[] = uids.split(",");
 		int succ = 0;
