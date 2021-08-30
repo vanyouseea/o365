@@ -77,8 +77,6 @@ public class CallBackService {
 							
 							NodeList nodelist2 = root.getElementsByTagName("Content");
 							String content = nodelist2.item(0).getTextContent();
-							System.out.println("Sender is " + sender);
-							System.out.println("Content is " + content);
 							
 							//check if have key_ty USER_RESPONSE in DB, if no, there is no login request, if yes, update the user response in db
 							Optional<TaMasterCd> opt4 = tmc.findById("USER_RESPONSE");
