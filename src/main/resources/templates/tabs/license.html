@@ -14,6 +14,7 @@
 			fit:true,
 			singleSelect:true,
 			autoRowHeight:false,
+			remoteSort: false,
 			url:'/getLicense',
 			method:'post',
 			toolbar: [{
@@ -30,7 +31,7 @@
 				}
 			}],
 			columns : [[
-				{field : 'capabilityStatus',title : '订阅状态',align : 'center',
+				{field : 'capabilityStatus',title : '订阅状态',align : 'center',sortable:true,
 					formatter: function(value,row,index){
 						if(value=='Enabled'){
 							return "<font color='green'>可用</font>";
@@ -40,11 +41,11 @@
 						}
 					}
 				}, 
-				{field : 'skuId',title : 'SKUID',align : 'center'}, 
-				{field : 'skuPartNumber',title : '名称',align : 'center'}, 
-				{field : 'skuIdDesc',title : '中文名称',align : 'center'}, 
-				{field : 'consumedUnits',title : '已分配',align : 'center'}, 
-				{field : 'prepaidUnits',title : '总配额',align : 'center'}
+				{field : 'skuId',title : 'SKUID',align : 'center',sortable:true}, 
+				{field : 'skuPartNumber',title : '名称',align : 'center',sortable:true}, 
+				{field : 'skuIdDesc',title : '中文名称',align : 'center',sortable:true}, 
+				{field : 'consumedUnits',title : '已分配',align : 'center',sortable:true}, 
+				{field : 'prepaidUnits',title : '总配额',align : 'center',sortable:true}
 			]],
             onLoadError: function (data){
             	console.log(data);

@@ -112,7 +112,6 @@ public class ConfigTabCtrl {
 			@RequestParam(name="remarks") String remarks,
 			@RequestParam(name="selected") String selected) {
 		TaOfficeInfo ti = new TaOfficeInfo();
-		System.out.println("seqNo is "+ seqNo);
 		//seqNo==-1 -> insert; seqNo!=-1 -> update
 		if(seqNo!=-1) {
 			ti.setSeqNo(seqNo);
@@ -200,9 +199,9 @@ public class ConfigTabCtrl {
 			
 		}
 		else {
+			//invalid info, update the licenseVo & domain Vo to null
 			req.getSession().setAttribute("licenseVo", null);
 			req.getSession().setAttribute("domainVo", "[]");
-			System.out.println("invalid info, update the licenseVo & domain Vo to null");
 		}
 		return flag;
 	}

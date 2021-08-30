@@ -82,7 +82,6 @@ public class GetDomainInfo {
 				}
 			}
 		}
-		System.out.println("The combobox json is "+json);
 		return json;
 	}
 	

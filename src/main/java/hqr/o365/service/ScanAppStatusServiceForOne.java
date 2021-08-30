@@ -10,8 +10,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.HttpClientErrorException.BadRequest;
+import org.springframework.web.client.HttpClientErrorException.TooManyRequests;
+import org.springframework.web.client.HttpServerErrorException.BadGateway;
+
 import cn.hutool.core.util.URLUtil;
 import hqr.o365.dao.TaAppRptRepo;
 import hqr.o365.dao.TaMasterCdRepo;
@@ -168,14 +171,14 @@ public class ScanAppStatusServiceForOne {
 						}
 					}
 					catch (Exception e) {
-						if(e instanceof HttpClientErrorException.BadRequest) {
+						if(e instanceof BadRequest) {
 							taAppRpt.setSpo("无SPO订阅");
 						}
-						else if(e instanceof HttpClientErrorException.TooManyRequests) {
+						else if(e instanceof TooManyRequests || e instanceof BadGateway) {
 							taAppRpt.setSpo("不可用");
 						}
 						else {
-							taAppRpt.setSpo("未知的:"+e);
+							taAppRpt.setSpo("未知的");
 						}
 					}
 					

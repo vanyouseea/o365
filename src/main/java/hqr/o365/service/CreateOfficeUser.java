@@ -52,7 +52,7 @@ public class CreateOfficeUser {
 	@Value("${UA}")
     private String ua;
 	
-	@CacheEvict(value="cacheOfficeUser", allEntries = true)
+	@CacheEvict(value= {"cacheOfficeUser","cacheOfficeUserSearch"}, allEntries = true)
 	public HashMap<String, String> createCommonUser(String mailNickname, String userPrincipalName, String displayName, String licenses, String userPwd){
 		HashMap<String, String> map = new HashMap<String, String>();
 		String forceInd = "Y";
