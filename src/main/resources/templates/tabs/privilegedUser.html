@@ -14,6 +14,7 @@
 			fit:true,
 			singleSelect:true,
 			autoRowHeight:false,
+			remoteSort: false,
 			url:'/getOfficeRoleUser',
 			method:'post',
 			toolbar: [{
@@ -30,7 +31,7 @@
 				}
 			}],
 			columns : [[
-				{field : 'accountEnabled',title : '用户状态',align : 'center',
+				{field : 'accountEnabled',title : '用户状态',align : 'center',sortable:true,
 					formatter: function(value,row,index){
 						if(value=='true'){
 							return "<font color='green'>可用</font>";
@@ -40,11 +41,11 @@
 						}
 					}
 				}, 
-				{field : 'roleName',title : '角色',align : 'center'}, 
-				{field : 'id',title : 'UID',align : 'center'}, 
-				{field : 'userPrincipalName',title : '邮箱',align : 'center'}, 
-				{field : 'displayName',title : '名字',align : 'center'}, 
-				{field : 'usageLocation',title : '国家/地区',align : 'center'}
+				{field : 'roleName',title : '角色',align : 'center',sortable:true}, 
+				{field : 'id',title : 'UID',align : 'center',sortable:true}, 
+				{field : 'userPrincipalName',title : '邮箱',align : 'center',sortable:true}, 
+				{field : 'displayName',title : '名字',align : 'center',sortable:true}, 
+				{field : 'usageLocation',title : '国家/地区',align : 'center',sortable:true}
 			]],
             onLoadError: function (data){
             	console.log(data);

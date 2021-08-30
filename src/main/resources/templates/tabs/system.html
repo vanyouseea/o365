@@ -87,6 +87,7 @@
 			fit:true,
 			singleSelect:true,
 			autoRowHeight:false,
+			remoteSort: false,
 			url:'/getSystemInfo',
 			method:'post',
 			toolbar: [{
@@ -239,10 +240,10 @@
 				}
 			}],
 			columns : [[
-				{field : 'keyTy',title : '关键字',align : 'center'}, 
-				{field : 'cd',title : '值',align : 'center'}, 
-				{field : 'decode',title : '描述',align : 'center'}, 
-				{field : 'lastUpdateId',title : '更新者',align : 'center'},
+				{field : 'keyTy',title : '关键字',align : 'center',sortable:true}, 
+				{field : 'cd',title : '值',align : 'center',sortable:true}, 
+				{field : 'decode',title : '描述',align : 'center',sortable:true}, 
+				{field : 'lastUpdateId',title : '更新者',align : 'center',sortable:true},
 			]],
             onLoadError: function (data){
             	console.log(data);

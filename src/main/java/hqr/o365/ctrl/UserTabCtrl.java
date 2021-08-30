@@ -77,7 +77,7 @@ public class UserTabCtrl {
 			req.getSession().setAttribute("licenseVo", vo);
 		}
 		else {
-			System.out.println("licenseVo already exist,skip to get");
+			//licenseVo already exist,skip to get
 		}
 		return "tabs/dialogs/createUser";
 	}
@@ -95,7 +95,7 @@ public class UserTabCtrl {
 			req.getSession().setAttribute("licenseVo", vo);
 		}
 		else {
-			System.out.println("licenseVo already exist,skip to get");
+			//licenseVo already exist,skip to get
 		}
 		return "tabs/dialogs/massCreateUser";
 	}
@@ -142,7 +142,6 @@ public class UserTabCtrl {
 		}
 		else {
 			String keyword = (String)obj;
-			System.out.println("keyword is "+keyword);
 			if(!"".equals(keyword)) {
 				map = goubk.getUsers(intPage, intRows, keyword);
 			}

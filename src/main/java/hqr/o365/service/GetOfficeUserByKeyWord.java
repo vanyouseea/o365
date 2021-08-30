@@ -3,6 +3,7 @@ package hqr.o365.service;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,8 +20,10 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import cn.hutool.core.util.URLUtil;
+import hqr.o365.dao.TaMasterCdRepo;
 import hqr.o365.dao.TaOfficeInfoRepo;
 import hqr.o365.domain.OfficeUser;
+import hqr.o365.domain.TaMasterCd;
 import hqr.o365.domain.TaOfficeInfo;
 
 @Service
@@ -33,6 +36,9 @@ public class GetOfficeUserByKeyWord {
 	
 	@Autowired
 	private ValidateAppInfo vai;
+	
+	@Autowired
+	private TaMasterCdRepo tmc;
 	
 	@Value("${UA}")
     private String ua;
@@ -128,7 +134,16 @@ public class GetOfficeUserByKeyWord {
 							for (Object object2 : licen) {
 								JSONObject newJb = (JSONObject)object2;
 								String skuId = newJb.getString("skuId");
-								ou.getAssignedLicenses().add(skuId);
+								
+								//get decode value,else use skuid to display
+								Optional<TaMasterCd> rlc = tmc.findById(skuId);
+								if(rlc.isPresent()) {
+									TaMasterCd skuenti = rlc.get();
+									ou.getAssignedLicenses().add(skuenti.getDecode());
+								}
+								else {
+									ou.getAssignedLicenses().add(skuId);
+								}
 							}
 						}
 						ou.setAccountEnabled(accountEnabled);
@@ -189,7 +204,16 @@ public class GetOfficeUserByKeyWord {
 					for (Object object2 : licen) {
 						JSONObject newJb = (JSONObject)object2;
 						String skuId = newJb.getString("skuId");
-						ou.getAssignedLicenses().add(skuId);
+						
+						//get decode value,else use skuid to display
+						Optional<TaMasterCd> rlc = tmc.findById(skuId);
+						if(rlc.isPresent()) {
+							TaMasterCd skuenti = rlc.get();
+							ou.getAssignedLicenses().add(skuenti.getDecode());
+						}
+						else {
+							ou.getAssignedLicenses().add(skuId);
+						}
 					}
 				}
 				ou.setAccountEnabled(accountEnabled);
