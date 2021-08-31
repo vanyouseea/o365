@@ -54,7 +54,7 @@ O365管理系统是一个以java语言开发的基于Microsoft Graph Restful API
   - **添加**  
     ![alt 添加](https://github.com/vanyouseea/o365/blob/master/pic/007.5.PNG)  
   - **批量添加**  
-    批量添加有2中策略，一种是随机5字符，另外一种是自增长数字
+    批量添加有2种策略，一种是随机5字符，另外一种是自增长数字  
     ![alt 批量添加](https://github.com/vanyouseea/o365/blob/master/pic/008.PNG)  
   - **删除**，**刷新**不做介绍  
   - **启用**，**禁用**  
@@ -86,7 +86,7 @@ O365管理系统是一个以java语言开发的基于Microsoft Graph Restful API
 
 
 # Docker 
-基于v1.6.0版的docker
+基于v1.6.1版的docker
 ```bash
 docker pull vanyouseea/o365
 docker run -d -p 9527:9527 vanyouseea/o365
