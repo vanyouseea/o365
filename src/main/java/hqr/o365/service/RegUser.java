@@ -21,7 +21,7 @@ public class RegUser {
 	@Autowired
 	private TaMasterCdRepo tmc;
 	
-	@CacheEvict(value="cacheTaUser", allEntries = true)
+	@CacheEvict(value={"cacheTaUser","cacheGlobalInd"}, allEntries = true)
 	public void save(TaUser user) {
 		tur.save(user);
 		//stop reg the admin user
