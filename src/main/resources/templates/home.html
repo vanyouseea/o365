@@ -2,12 +2,13 @@
 <head>
 	<meta charset="UTF-8">
 	<title>O365管理系统</title>
-	<link rel="stylesheet" href="jquery-easyui-1.9.14/themes/default/easyui.css" />
+	<link rel="stylesheet" id="easyuiTheme" href="jquery-easyui-1.9.14/themes/default/easyui.css" />
 	<link rel="stylesheet" href="jquery-easyui-1.9.14/themes/icon.css" />
 	<script type="text/javascript" src="jquery-easyui-1.9.14/jquery.min.js" th:inline="none"></script>
 	<script type="text/javascript" src="jquery-easyui-1.9.14/jquery.easyui.min.js" th:inline="none"></script>
 	<script type="text/javascript" src="jquery-easyui-1.9.14/locale/easyui-lang-zh_CN.js" th:inline="none"></script>
 	<script type='text/javascript' src='bug-min.js'></script>
+	<script type='text/javascript' src='changeEasyuiTheme.js'></script>
 </head>
 <body class="easyui-layout" data-options="fit:true">
 <a href="https://github.com/vanyouseea/o365"><img width="128" height="128" src="/forkme2.png" alt="Fork me on GitHub" data-recalc-dims="1" style="position: absolute; top: 0;z-index: 999999;right: 0"></a>
@@ -37,7 +38,23 @@
 		    </div>
 		</div>
 	</div>
-	<div data-options="region:'south',border:false" style="height:25px;background:#A9FACD" >Powered by hqr - O365 v1.6.1 </div>
+	<div data-options="region:'south',border:false" style="height:25px;background:#A9FACD" ><div style="float:left">Powered by hqr - O365 v1.6.1</div> 
+		<div style="float:right">主题选择 <select id="themeCb" class="easyui-combobox" style="width:120px;height:25px" data-options="editable:false,onChange: onchangeThemeFun" >
+					<option value="default">默认</option>
+				    <option value="gray">灰色</option>
+				    <option value="black">黑色</option>
+				    <option value="material-blue">原色</option>
+				    <option value="metro-blue">Metro蓝</option>
+				    <option value="metro-gray">Metro灰</option>
+				    <option value="metro-green">Metro绿</option>
+				    <option value="metro-orange">Metro橙</option>
+				    <option value="metro-red">Metro红</option>
+				    <option value="ui-cupertino">Cupertino</option>
+				    <option value="ui-pepper-grinder">PepperGrinder</option>
+				    <option value="ui-sunny">Sunny</option>
+				</select>
+				</div>
+	</div>
 	<div id="acc" class="easyui-tabs" data-options="region:'center'">
 		<div title="首页" style="padding:10px">
 			<h2>欢迎来到O365管理系统，你可以使用它来方便的管理多个Office全局</h2>
@@ -85,6 +102,7 @@
 	
 	<script type="text/javascript"  >
 		new BugController({'minBugs':1, 'maxBugs':1, 'mouseOver':'fly'});
+		
 		function addPanel(name){
 			tab = $('#acc').tabs('getTab',name);
 			if(tab==null){
@@ -149,6 +167,12 @@
 				$('#acc').tabs('select',name);
 			}
 		}
+		
+		function onchangeThemeFun(){
+			var theme = $('#themeCb').combobox('getValue');
+			changeThemeFun(theme);
+		}
+		
 	</script>
 </body>
 </html>
