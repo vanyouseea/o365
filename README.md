@@ -4,6 +4,8 @@ O365管理系统是一个以java语言开发的基于Microsoft Graph Restful API
 一般示例请参考
 https://hostloc.com/thread-846732-1-1.html  
 
+看看你发现了什么  
+
 此版本加入自签名证书，端口为8443，访问为 https://ip:8443  
 可以部署到CF，点开小云朵之后可享受CF的不同IP去call微软的API  
 
