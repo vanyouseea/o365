@@ -80,7 +80,15 @@ O365管理系统是一个以java语言开发的基于Microsoft Graph Restful API
     + 灰色代表无效全局  
     + 红色代表代表全局无管理员或者无管理员存活的全局  
     + 橙色代表SPO为0的全局  
-    
+  - **下载Exchange报告**  
+    生成选中全局的Exchange报告，此报告包含了所有用户的邮件使用情况   
+  - **下载Onedrive报告**  
+    生成选中全局的Onedrive报告，此报告包含了所有用户的Onedrive使用情况  
+    由于微软更新了隐私策略，以上2个报告中的用户的信息和url会以乱码代替，如果想要查看真实的用户，请以管理员账号登录
+    https://admin.microsoft.com/?auth_upn=admin%40hlhhrl.onmicrosoft.com&source=applauncher#/Settings/Services
+    选择**报告**，取消勾选 **在所有报告中，显示用户、组和站点的已取消识别的名称**  
+ 
+
 ### [配置和报告] -> 系统配置  
    
   
