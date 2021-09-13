@@ -56,7 +56,7 @@
 				}
 			},{
 				text:'下载Exchange报告',
-				iconCls:'icon-reload',
+				iconCls:'icon-outlook16',
 				handler:function(){
 					row6 = $('#tb6').datagrid('getSelections');
 					if(row6!=null&&row6.length==1){
@@ -73,7 +73,7 @@
 				}
 			},{
 				text:'下载Onedrive报告',
-				iconCls:'icon-reload',
+				iconCls:'icon-od16',
 				handler:function(){
 					row6 = $('#tb6').datagrid('getSelections');
 					if(row6!=null&&row6.length==1){
@@ -98,11 +98,13 @@
 				text:'帮助',
 				iconCls:'icon-help',
 				handler:function(){
-					$.messager.alert('帮助','系统会每2天随机扫描所有APP的管理员状态，并生成此可用性报告，此功能默认关闭，你可以在系统配置通过配置GEN_APP_RPT=Y来打开它并可以通过修改GEN_APP_RPT_CRON来重新定义时间，你也可以手动执行。<br>'+
+					$.messager.alert('帮助','系统会每2天随机扫描所有APP的管理员状态，并生成此可用性报告，此功能默认关闭，你可以在系统配置通过配置GEN_APP_RPT=Y来打开它并可以通过修改GEN_APP_RPT_CRON来重新定义时间<br>'+
 							'1.无颜色代表至少一个管理员存活<br>'+
 							'2.<font color=red>红色</font>代表全局无管理员或者无管理员存活<br>'+
 							'3.<font color="#A9A9A9">灰色</font>代表无效全局<br>'+
-							'4.<font color="#FFA500">橙色</font>代表SPO=0的全局','');
+							'4.<font color="#FFA500">橙色</font>代表SPO=0的全局<br>'+
+							'下载Exchange报告可以查看选中全局下所有用户30日内的Outlook使用状态<br>'+
+							'下载Onedrive报告可以查看选中全局下所有用户30日内的Onedrive使用状态','');
 				}
 			}],
 			columns : [[
