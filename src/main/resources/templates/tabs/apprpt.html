@@ -7,9 +7,10 @@
 </head>
 <body>
 	<div id="tb6" ></div>
+
 	<script type="text/javascript" th:inline="none">
 		var row6;
-	
+
 		$('#tb6').datagrid({
 			border:false,
 			fit:true,
@@ -52,6 +53,40 @@
 							}); 
 						}
 					});
+				}
+			},{
+				text:'下载Exchange报告',
+				iconCls:'icon-reload',
+				handler:function(){
+					row6 = $('#tb6').datagrid('getSelections');
+					if(row6!=null&&row6.length==1){
+						window.location.href="/getExchangeRpt?seqNo="+row6[0].seqNo;
+					}
+					else{
+						$.messager.show({
+							title:'错误',
+							msg:'请选择一行',
+							timeout:2000,
+							showType:'slide'
+						});
+					}
+				}
+			},{
+				text:'下载Onedrive报告',
+				iconCls:'icon-reload',
+				handler:function(){
+					row6 = $('#tb6').datagrid('getSelections');
+					if(row6!=null&&row6.length==1){
+						window.location.href="/getOnedriveRpt?seqNo="+row6[0].seqNo;
+					}
+					else{
+						$.messager.show({
+							title:'错误',
+							msg:'请选择一行',
+							timeout:2000,
+							showType:'slide'
+						});
+					}
 				}
 			},{
 				text:'刷新',
