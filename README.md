@@ -12,7 +12,7 @@ O365管理系统是一个以java语言开发的基于Microsoft Graph Restful API
 ## 功能介绍
 ### 首页预览  
   ![alt 首页](https://github.com/vanyouseea/o365/blob/master/pic/001.PNG)
-  登录后请根据首页介绍，先创建APP，然后赋予以下6个权限，需要注意的是，API权限请务必选择**应用程序**
+  登录后请根据首页介绍，先创建APP，然后赋予以下7个权限，需要注意的是，API权限请务必选择**应用程序**
   | API名 | 大致作用 |
   | ---- | ----|
   | Application.ReadWrite.All | 用于新增密钥的功能 |
@@ -21,6 +21,7 @@ O365管理系统是一个以java语言开发的基于Microsoft Graph Restful API
   | RoleManagement.ReadWrite.Directory | 用于特权角色的管理 |
   | User.ManageIdentities.All | 用于用户的管理 |
   | User.ReadWrite.All | 用于用户的管理 |
+  | Reports.Read.All | 用于生成Onedrive,Exchange详细报告 |
 
 ### [配置和报告] -> Office配置  
   - **新增**  
