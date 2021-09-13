@@ -84,11 +84,10 @@ O365管理系统是一个以java语言开发的基于Microsoft Graph Restful API
     生成选中全局的Exchange报告，此报告包含了所有用户的邮件使用情况   
   - **下载Onedrive报告**  
     生成选中全局的Onedrive报告，此报告包含了所有用户的Onedrive使用情况  
-    由于微软更新了隐私策略，以上2个报告中的用户的信息和url会以乱码代替，如果想要查看真实的用户，请以管理员账号登录
-    https://admin.microsoft.com/?auth_upn=admin%40hlhhrl.onmicrosoft.com&source=applauncher#/Settings/Services
-    选择**报告**，取消勾选 **在所有报告中，显示用户、组和站点的已取消识别的名称**  
+    由于微软更新了隐私策略，以上2个报告中的用户的信息和url会以乱码代替，如果想要查看真实的用户，请以管理员账号登录https://admin.microsoft.com/#/homepage
+    选择**设置**->**组织设置**->**报告**，取消勾选 **在所有报告中，显示用户、组和站点的已取消识别的名称**即可显示真实信息  
  
-
+  
 ### [配置和报告] -> 系统配置  
    
   
