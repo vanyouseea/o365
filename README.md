@@ -96,7 +96,7 @@ O365管理系统是一个以java语言开发的基于Microsoft Graph Restful API
   WX_AGENTID  
   WX_CALLBACK_AESKEY  
   以上6个参数的设置请参考word文档, https://github.com/vanyouseea/o365/blob/master/docs/%E9%85%8D%E7%BD%AE%E5%BE%AE%E4%BF%A1%E5%93%8D%E5%BA%94.docx  
-
+  **请谨慎使用，如果未通过，请立即把WX_CALLBACK_IND设为N，避免把自己关外面**
 
 # Docker 
 基于v1.7.0版的docker
