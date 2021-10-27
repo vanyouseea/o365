@@ -1,6 +1,7 @@
 package hqr.o365.service;
 
 import java.security.SecureRandom;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -57,7 +58,7 @@ public class MassCreateOfficeUser {
 	
 	private SecureRandom ran = new SecureRandom();
 	
-	@CacheEvict(value= {"cacheOfficeUser","cacheOfficeUserSearch"}, allEntries = true)
+	@CacheEvict(value= {"cacheOfficeUser","cacheOfficeUserSearch", "cacheLicense"}, allEntries = true)
 	public HashMap<String, int[]> createCommonUser(String prefix, String domain, String licenses, String userPwd, int count, String strategy){
 		String forceInd = "Y";
 		Optional<TaMasterCd> opt = tmr.findById("FORCE_CHANGE_PASSWORD");
@@ -94,6 +95,7 @@ public class MassCreateOfficeUser {
 				//set usage location
 				ou.setUsageLocation(goi.getUsageLocation(accessToken));
 				
+				List<String> userList = new ArrayList<String>();
 				//create users
 				for(int massCount=0; massCount<count; massCount++) {
 					//st1 = gen 5 random character
@@ -139,38 +141,7 @@ public class MassCreateOfficeUser {
 							response.getBody();
 							userSucc ++;
 							System.out.println( "成功创建用户："+ou.getUserPrincipalName());
-							
-							if(licenses!=null&&!"".equals(licenses)) {
-								Thread.sleep(200);
-								System.out.println("开始分配订阅："+licenses);
-								String acs [] = licenses.split(",");
-								for (String license : acs) {
-									String licenseJson = "{\"addLicenses\": [{\"disabledPlans\": [],\"skuId\": \""+license+"\",}],\"removeLicenses\": [ ]}";
-									
-									endpoint = "https://graph.microsoft.com/v1.0/users/"+ou.getUserPrincipalName()+"/assignLicense";
-									
-									HttpHeaders headers2 = new HttpHeaders();
-									headers2.set(HttpHeaders.USER_AGENT, ua);
-									headers2.add("Authorization", "Bearer "+accessToken);
-									headers2.setContentType(MediaType.APPLICATION_JSON);
-									HttpEntity<String> requestEntity2 = new HttpEntity<String>(licenseJson, headers2);
-									
-									try {
-										ResponseEntity<String> response2= restTemplate.postForEntity(endpoint, requestEntity2, String.class);
-										if(response2.getStatusCodeValue()==200) {
-											response2.getBody();
-											licenseSucc ++;
-										}
-										else {
-											licenseFail++;
-										}
-									}
-									catch (Exception e) {
-										e.printStackTrace();
-										licenseFail++;
-									}
-								}
-							}
+							userList.add(ou.getUserPrincipalName());
 						}
 						else {
 							userFail++;
@@ -193,6 +164,43 @@ public class MassCreateOfficeUser {
 						}
 					}
 				}
+				
+				if(licenses!=null&&!"".equals(licenses)) {
+					try {
+						Thread.sleep(400);
+					}
+					catch (Exception e) {}
+					System.out.println("开始分配订阅："+licenses);
+					for(String userId : userList) {
+						String acs [] = licenses.split(",");
+						for (String license : acs) {
+							String licenseJson = "{\"addLicenses\": [{\"disabledPlans\": [],\"skuId\": \""+license+"\",}],\"removeLicenses\": [ ]}";
+							
+							String endpoint = "https://graph.microsoft.com/v1.0/users/"+userId+"/assignLicense";
+							
+							HttpHeaders headers2 = new HttpHeaders();
+							headers2.set(HttpHeaders.USER_AGENT, ua);
+							headers2.add("Authorization", "Bearer "+accessToken);
+							headers2.setContentType(MediaType.APPLICATION_JSON);
+							HttpEntity<String> requestEntity2 = new HttpEntity<String>(licenseJson, headers2);
+							
+							try {
+								ResponseEntity<String> response2= restTemplate.postForEntity(endpoint, requestEntity2, String.class);
+								if(response2.getStatusCodeValue()==200) {
+									response2.getBody();
+									licenseSucc ++;
+								}
+								else {
+									licenseFail++;
+								}
+							}
+							catch (Exception e) {
+								licenseFail++;
+							}
+						}
+					}
+				}
+				
 			}
 			else {
 				userFail = count;
