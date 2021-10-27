@@ -1,6 +1,7 @@
 package hqr.o365.service;
 
 import java.security.SecureRandom;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -20,6 +21,10 @@ import org.springframework.web.client.HttpClientErrorException.BadRequest;
 import org.springframework.web.client.HttpClientErrorException.TooManyRequests;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.client.HttpServerErrorException.BadGateway;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 
 import cn.hutool.core.util.URLUtil;
 import hqr.o365.dao.TaAppRptRepo;
@@ -216,6 +221,7 @@ public class ScanAppStatusService implements SchedulingConfigurer{
 					}
 					
 					//check spo
+					/*
 					String endpoint5 = "https://graph.microsoft.com/v1.0/sites/root";
 					HttpHeaders headers5 = new HttpHeaders();
 					headers5.set(HttpHeaders.USER_AGENT, ua);
@@ -243,7 +249,8 @@ public class ScanAppStatusService implements SchedulingConfigurer{
 							taAppRpt.setSpo("未知的");
 						}
 					}
-					
+					*/
+					checkSPO(taAppRpt, accessToken);
 					System.out.println("SPO for "+taAppRpt.getTenantId()+ " is "+taAppRpt.getSpo());
 					
 					taAppRpt.setRptDt(new Date());
@@ -314,4 +321,92 @@ public class ScanAppStatusService implements SchedulingConfigurer{
         return this.cron;
     }
 	
+	private void checkSPO(TaAppRpt taAppRpt, String accessToken) {
+		List<String> testUserList = new ArrayList<String>();
+
+		String endpoint1 = "https://graph.microsoft.com/v1.0/users?$select=userPrincipalName";
+		HttpHeaders headers1 = new HttpHeaders();
+		headers1.set(HttpHeaders.USER_AGENT, ua);
+		headers1.add("Authorization", "Bearer "+accessToken);
+		String body1="";
+		HttpEntity<String> requestEntity1 = new HttpEntity<String>(body1, headers1);
+		try {
+			ResponseEntity<String> response1 = restTemplate.exchange(URLUtil.decode(endpoint1), HttpMethod.GET, requestEntity1, String.class);
+			if(response1.getStatusCodeValue()==200) {
+				JSONObject jo = JSON.parseObject(response1.getBody());
+				JSONArray ja = jo.getJSONArray("value");
+				int userCnt = ja.size();
+				if(userCnt<2) {
+					String userPrincipalName = ja.getJSONObject(0).getString("userPrincipalName");
+					testUserList.add(userPrincipalName);
+				}
+				else {
+					//get 2 consecutive random user
+					SecureRandom sran = new SecureRandom();
+					int r0 = sran.nextInt(userCnt);
+					int r1 = 0;
+					if(r0+1>=userCnt) {
+						r1 = r0 - 1;
+					}
+					else {
+						r1 = r0 + 1;
+					}
+					String userPrincipalName1 = ja.getJSONObject(r0).getString("userPrincipalName");
+					String userPrincipalName2 = ja.getJSONObject(r1).getString("userPrincipalName");
+					testUserList.add(userPrincipalName1);
+					testUserList.add(userPrincipalName2);
+				}
+			}
+		}
+		catch (Exception e) {
+		}
+		
+		//200 -> has SPO license and init the OD
+		//404 -> No SPO license/Not inital OD/No license
+		//400 -> ?
+		//429 -> SPO0 (All user 429, no matter has license or not)
+		//592 -> ?
+		//if 2 users = 429, then all consider as SPO0
+		String spoStatus = "未知的";
+		int spo0Cnt = 0;
+		if(testUserList.size()>0) {
+			for(String userId: testUserList) {
+				String endpoint2 = "https://graph.microsoft.com/v1.0/users/"+userId+"/drive";
+				HttpHeaders headers2 = new HttpHeaders();
+				headers2.set(HttpHeaders.USER_AGENT, ua);
+				headers2.add("Authorization", "Bearer "+accessToken);
+				String body2="";
+				HttpEntity<String> requestEntity2 = new HttpEntity<String>(body2, headers2);
+				try {
+					ResponseEntity<String> response2 = restTemplate.exchange(URLUtil.decode(endpoint2), HttpMethod.GET, requestEntity2, String.class);
+					if(response2.getStatusCodeValue()==200) {
+						response2.getBody();
+						break;
+					}
+				}
+				catch (Exception e) {
+					if(e instanceof TooManyRequests ) {
+						spo0Cnt ++;
+					}
+					else {
+						//if other issue happen, then stop checking
+						System.out.println(e);
+						break;
+					}
+				}
+			}
+			
+			if(spo0Cnt==testUserList.size()) {
+				spoStatus = "不可用";
+			}
+			else {
+				spoStatus = "可用";
+			}
+			taAppRpt.setSpo(spoStatus);
+		}
+		else {
+			taAppRpt.setSpo("未知的");
+		}
+	}
+    
 }
