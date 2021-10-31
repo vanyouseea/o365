@@ -5,7 +5,7 @@ O365管理系统是一个以java语言开发的基于Microsoft Graph Restful API
 | 类型 | - |
 | ---- | ----|
 | CPU | 1C |
-| RAM | 0.5G |
+| RAM | 0.75G |
 | 硬盘 | 5GB |
 
 ## 体验o365 in heroku  
