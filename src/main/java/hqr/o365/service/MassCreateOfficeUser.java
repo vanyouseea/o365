@@ -198,6 +198,16 @@ public class MassCreateOfficeUser {
 								licenseFail++;
 							}
 						}
+						Optional<TaMasterCd> cgfu =  tmr.findById("CREATE_GRP_FOR_USER");
+						if(cgfu.isPresent()) {
+							if("Y".equals(cgfu.get().getCd())) {
+								try {
+									Thread.sleep(200);
+								}
+								catch (Exception e) {}
+								createGroupForUser(userId.split("@")[0], userId, accessToken);
+							}
+						}
 					}
 				}
 				
@@ -218,7 +228,6 @@ public class MassCreateOfficeUser {
 		
 		return map;
 	}
-
 	
 	private String padLeft(String in, char pad, int size) {
         StringBuffer str = in==null?new StringBuffer(""):new StringBuffer(in.trim());
@@ -229,4 +238,44 @@ public class MassCreateOfficeUser {
             str.insert(0,pad);
         return str.toString();
     }
+	
+	/*
+	 * Json for create group (when create group, SP site will be created automatically later)
+		{
+		    "expirationDateTime": null,
+		    "groupTypes": [
+		        "Unified"
+		    ],
+		    "mailEnabled": false,
+		    "mailNickname": mailNickname,
+		    "securityEnabled": false,
+		    "visibility": "private",
+			"owners@odata.bind": [
+				"https://graph.microsoft.com/v1.0/users/userPrincipalName"
+			]
+		}
+	 */
+	public void createGroupForUser(String mailNickname, String userPrincipalName, String accessToken) {
+		String json = "{\"displayName\": \""+mailNickname+"\",\"expirationDateTime\": null,\"groupTypes\": [\"Unified\"],\"mailEnabled\": false,\"mailNickname\": \""+mailNickname+"\",\"securityEnabled\": false,\"visibility\": \"private\",\"owners@odata.bind\": [\"https://graph.microsoft.com/v1.0/users/"+userPrincipalName+"\"]}";
+		
+		String endpoint = "https://graph.microsoft.com/v1.0/groups";
+		HttpHeaders headers = new HttpHeaders();
+		headers.set(HttpHeaders.USER_AGENT, ua);
+		headers.add("Authorization", "Bearer "+accessToken);
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		HttpEntity<String> requestEntity = new HttpEntity<String>(json, headers);
+		try {
+			ResponseEntity<String> response = restTemplate.postForEntity(endpoint, requestEntity, String.class);
+			if(response.getStatusCodeValue()==201) {
+				System.out.println("成功创建Group:"+mailNickname);
+				response.getBody();
+			}
+			else {
+				System.out.println("fail to create the group for user "+userPrincipalName);
+			}
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }
