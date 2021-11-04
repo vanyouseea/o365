@@ -30,7 +30,7 @@ public class DeleteOfficeUser {
 	@Value("${UA}")
     private String ua;
 
-	@CacheEvict(value= {"cacheOfficeUser","cacheOfficeUserSearch"}, allEntries = true)
+	@CacheEvict(value= {"cacheOfficeUser","cacheOfficeUserSearch","cacheLicense"}, allEntries = true)
 	public HashMap<String, int[]> deleteUser(String uids) {
 		String uidArr[] = uids.split(",");
 		int succ = 0;
