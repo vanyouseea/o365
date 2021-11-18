@@ -102,7 +102,7 @@ https://oo365.herokuapp.com
   WX_AGENTID  
   WX_CALLBACK_AESKEY  
   以上6个参数的设置请参考word文档, https://github.com/vanyouseea/o365/blob/master/docs/%E9%85%8D%E7%BD%AE%E5%BE%AE%E4%BF%A1%E5%93%8D%E5%BA%94.docx  
-  **请谨慎使用，如果未通过，请立即把WX_CALLBACK_IND设为N，避免把自己关外面**
+  **请谨慎使用，此6个变量的配置非必须，只是为了增强管理员账号的安全，如果未通过，请立即把WX_CALLBACK_IND设为N，避免把自己关外面**
 
 # Docker 
 基于v1.7.1版的docker
