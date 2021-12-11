@@ -1,5 +1,6 @@
 package hqr.o365.service;
 
+import java.io.IOException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Date;
@@ -13,6 +14,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.scheduling.annotation.SchedulingConfigurer;
 import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 import org.springframework.scheduling.support.CronTrigger;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException.BadRequest;
 import org.springframework.web.client.HttpClientErrorException.NotFound;
 import org.springframework.web.client.HttpClientErrorException.TooManyRequests;
+import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.client.HttpServerErrorException.BadGateway;
 
@@ -365,7 +368,7 @@ public class ScanAppStatusService implements SchedulingConfigurer{
 		//200 -> has SPO license and init the OD
 		//401 -> not init OD
 		//403 -> no license
-		//404 -> SPO0 (All user 429, no matter has license or not)
+		//404 -> SPO0 or user does not reset password
 		//400 -> ?
 		//429 -> SPO0 (All user 429, no matter has license or not)
 		//592 -> ?
@@ -380,23 +383,35 @@ public class ScanAppStatusService implements SchedulingConfigurer{
 				headers2.add("Authorization", "Bearer "+accessToken);
 				String body2="";
 				HttpEntity<String> requestEntity2 = new HttpEntity<String>(body2, headers2);
-				try {
-					ResponseEntity<String> response2 = restTemplate.exchange(URLUtil.decode(endpoint2), HttpMethod.GET, requestEntity2, String.class);
-					if(response2.getStatusCodeValue()==200) {
-						response2.getBody();
-						break;
+				
+				restTemplate.setErrorHandler(new ResponseErrorHandler() {
+					@Override
+					public boolean hasError(ClientHttpResponse response) throws IOException {
+						return false;
 					}
-				}
-				catch (Exception e) {
-					if(e instanceof TooManyRequests || e instanceof NotFound) {
+					@Override
+					public void handleError(ClientHttpResponse response) throws IOException {}
+				});
+				ResponseEntity<String> response2 = restTemplate.exchange(URLUtil.decode(endpoint2), HttpMethod.GET, requestEntity2, String.class);
+				String body = response2.getBody();
+				//404 maybe SPO0
+				if(response2.getStatusCodeValue()==404) {
+					JSONObject jb = JSON.parseObject(body);
+					JSONObject jb404 = jb.getJSONObject("error");
+					String errorCd = jb404.getString("code");
+					if("UnknownError".equalsIgnoreCase(errorCd)) {
 						spo0Cnt ++;
 					}
-					else {
-						//if other issue happen, then stop checking
-						System.out.println(e);
-						break;
-					}
 				}
+				//429 SPO0
+				else if(response2.getStatusCodeValue()==429) {
+					spo0Cnt ++;
+				}
+				//other value not SPO0
+				else {
+					break;
+				}
+
 			}
 			
 			if(spo0Cnt==testUserList.size()) {
@@ -411,5 +426,4 @@ public class ScanAppStatusService implements SchedulingConfigurer{
 			taAppRpt.setSpo("未知的");
 		}
 	}
-    
 }
