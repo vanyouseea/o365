@@ -11,7 +11,7 @@
 	<script type='text/javascript' src='changeEasyuiTheme.js'></script>
 </head>
 <body class="easyui-layout" data-options="fit:true">
-<a href="https://github.com/vanyouseea/o365"><img width="128" height="128" src="/forkme2.png" alt="Fork me on GitHub" data-recalc-dims="1" style="position: absolute; top: 0;z-index: 999999;right: 0"></a>
+<a id="follow" href="https://github.com/vanyouseea/o365"><img width="128" height="128" src="/forkme2.png" alt="Fork me on GitHub" data-recalc-dims="1" style="position: absolute; top: 0;z-index: 999999;right: 0"></a>
 	<div data-options="region:'north',border:false" style="height:60px;background:#B3DFDA;">
 		<h3><img src="logo.svg" /></h3> 
 	</div>
@@ -38,7 +38,7 @@
 		    </div>
 		</div>
 	</div>
-	<div data-options="region:'south',border:false" style="height:25px;background:#A9FACD" ><div style="float:left">Powered by hqr - O365 v1.7.1</div> 
+	<div data-options="region:'south',border:false" style="height:25px;background:#A9FACD" ><div style="float:left">Powered by hqr - O365 <a href=javascript:showVersionInfo()>v1.7.2</a></div> 
 		<div style="float:right">主题选择 <select id="themeCb" class="easyui-combobox" style="width:120px;height:25px" data-options="editable:false,onChange: onchangeThemeFun" >
 					<option value="default">默认</option>
 				    <option value="gray">灰色</option>
@@ -56,7 +56,7 @@
 				</div>
 	</div>
 	<div id="acc" class="easyui-tabs" data-options="region:'center'">
-		<div title="首页" style="padding:10px">
+		<div title="首页" style="padding:10px;overflow: move">
 			<h2>欢迎来到O365管理系统，你可以使用它来方便的管理多个Office全局</h2>
 			<ul style="font-size: 15px">
 				<li>如果你是<font color="red">首次使用</font>，请先前往[配置]-><a href=javascript:addPanel("Office配置")>Office配置</a>配置你的APP信息，如果你不知道如何创建APP，请参考<a href="https://github.com/vanyouseea/msautocreate" target="_blank" >GitHub</a></li>
@@ -106,6 +106,10 @@
 	
 	<script type="text/javascript"  >
 		new BugController({'minBugs':1, 'maxBugs':1, 'mouseOver':'fly'});
+		
+		if(window.screen.width<960){
+			$('#follow').css('display','none');
+		}
 		
 		function addPanel(name){
 			tab = $('#acc').tabs('getTab',name);
@@ -175,6 +179,10 @@
 		function onchangeThemeFun(){
 			var theme = $('#themeCb').combobox('getValue');
 			changeThemeFun(theme);
+		}
+		
+		function showVersionInfo(){
+			$.messager.alert('版本信息', '1. 加多了检测SPO的手段，可以检测更多的SPO0全局<br>2. 稍微增强了一点体验<br>3. 修复了一些问题' ,'');
 		}
 		
 	</script>

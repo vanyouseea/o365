@@ -26,7 +26,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				// 登录处理
 				.formLogin() // 表单方式，或httpBasic
 				.loginPage("/loginPage").loginProcessingUrl("/login").defaultSuccessUrl("/home") // 成功登陆后跳转页面
-				.failureUrl("/loginError").permitAll().and();
+				.failureUrl("/error/401.html").permitAll().and();
 		http.authorizeRequests() // 授权配置
 				// 无需权限访问
 				.antMatchers("/h2/**","/*.png","/*.js", "/*.svg", "/jquery-easyui-1.9.14/**", "/", "/index.html", "/loginPage","/reg","/reg.html",

@@ -191,6 +191,12 @@ public class CreateOfficeUserByInviteCd {
 								}
 							}
 						}
+						else {
+							tiiDo.setResult(ou.getUserPrincipalName());
+							tiiDo.setInviteStatus("3");
+							tii.save(tiiDo);
+							resultMsg = "0|"+ou.getUserPrincipalName();
+						}
 					}
 					else {
 						tiiDo.setResult("无效的全局");

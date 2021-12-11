@@ -1,6 +1,7 @@
 --sys use prop
 insert into ta_master_cd(key_ty,cd,decode,start_dt,end_dt,create_dt,last_update_id,last_update_dt) values ('GLOBAL_REG','Y','Y为允许再次注册O365管理员',sysdate,null,sysdate,'o365',sysdate);
 insert into ta_master_cd(key_ty,cd,decode,start_dt,end_dt,create_dt,last_update_id,last_update_dt) values ('DEFAULT_PASSWORD','Mjj@1234','Office用户的默认密码',sysdate,null,sysdate,'o365',sysdate);
+insert into ta_master_cd(key_ty,cd,decode,start_dt,end_dt,create_dt,last_update_id,last_update_dt) values ('CREATE_GRP_FOR_USER','N','Y为创建用户并分配订阅的同时也尽量创建一个以其为名的私有SP site给他',sysdate,null,sysdate,'o365',sysdate);
 insert into ta_master_cd(key_ty,cd,decode,start_dt,end_dt,create_dt,last_update_id,last_update_dt) values ('DEFAULT_ADMIN_ROLE_ID','62e90394-69f5-4237-9190-012177145e10','默认授予或撤回的管理员角色ID',sysdate,null,sysdate,'o365',sysdate);
 
 insert into ta_master_cd(key_ty,cd,decode,start_dt,end_dt,create_dt,last_update_id,last_update_dt) values ('SEARCH_ROLE_1','62e90394-69f5-4237-9190-012177145e10','Global Administrator',sysdate,null,sysdate,'o365',sysdate);
