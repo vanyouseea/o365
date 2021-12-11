@@ -42,7 +42,6 @@
 								timeout:3000,
 								showType:'slide'
 							});
-							$('#tb6').datagrid('reload');
 						},
 						error : function(){
 					       	$.messager.show({
@@ -53,6 +52,7 @@
 							}); 
 						}
 					});
+					$('#tb6').datagrid('reload');
 				}
 			},{
 				text:'下载Exchange报告',
