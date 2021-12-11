@@ -131,13 +131,8 @@
 			    url : "/massCreateOfficeUser",
 			    data : { "prefix": prefix1, "domain":domain , "count": count, "licenses": licenses2, "userPwd": userPwd2, "strategy": strategy },
 			    success : function(result) {
-			      	$.messager.show({
-						title:'结果',
-						msg: result,
-						timeout:10000,
-						showType:'slide'
-					});
-			      	$('#tb3').datagrid('reload');
+			    	$('#tb3').datagrid('reload');
+			    	$.messager.alert('结果', result ,'');
 				},
 				error : function(){
 			       	$.messager.show({
@@ -146,6 +141,7 @@
 						timeout:2000,
 						showType:'slide'
 					}); 
+			       	$('#tb3').datagrid('reload');
 				}
 			});
 			
