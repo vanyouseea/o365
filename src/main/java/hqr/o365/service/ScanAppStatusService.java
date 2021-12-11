@@ -18,6 +18,7 @@ import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException.BadRequest;
+import org.springframework.web.client.HttpClientErrorException.NotFound;
 import org.springframework.web.client.HttpClientErrorException.TooManyRequests;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.client.HttpServerErrorException.BadGateway;
@@ -362,11 +363,13 @@ public class ScanAppStatusService implements SchedulingConfigurer{
 		}
 		
 		//200 -> has SPO license and init the OD
-		//404 -> No SPO license/Not inital OD/No license
+		//401 -> not init OD
+		//403 -> no license
+		//404 -> SPO0 (All user 429, no matter has license or not)
 		//400 -> ?
 		//429 -> SPO0 (All user 429, no matter has license or not)
 		//592 -> ?
-		//if 2 users = 429, then all consider as SPO0
+		//if 2 users = 429 or 404, then all consider as SPO0
 		String spoStatus = "未知的";
 		int spo0Cnt = 0;
 		if(testUserList.size()>0) {
@@ -385,7 +388,7 @@ public class ScanAppStatusService implements SchedulingConfigurer{
 					}
 				}
 				catch (Exception e) {
-					if(e instanceof TooManyRequests ) {
+					if(e instanceof TooManyRequests || e instanceof NotFound) {
 						spo0Cnt ++;
 					}
 					else {
