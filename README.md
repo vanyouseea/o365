@@ -105,7 +105,7 @@ https://oo365.herokuapp.com
   **请谨慎使用，此6个变量的配置非必须，只是为了增强管理员账号的安全，如果未通过，请立即把WX_CALLBACK_IND设为N，避免把自己关外面**
 
 # Docker 
-基于v1.7.1版的docker
+基于v1.7.2版的docker
 ```bash
 docker pull vanyouseea/o365
 docker run -d -p 9527:9527 vanyouseea/o365
