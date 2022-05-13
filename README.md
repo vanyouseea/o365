@@ -28,7 +28,7 @@ https://oo365.herokuapp.com
   | User.ManageIdentities.All | 用于用户的管理 |
   | User.ReadWrite.All | 用于用户的管理 |
   | Reports.Read.All | 用于生成Onedrive,Exchange详细报告 |
-  | Sites.FullControl.All | 用于检验SPO(MS再改API下个版本就拿掉检验SPO) |
+  | Sites.FullControl.All | 用于检验SPO |
 
 ### [配置和报告] -> Office配置  
   - **新增**  
