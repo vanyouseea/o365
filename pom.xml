@@ -12,7 +12,7 @@
 	<artifactId>o365</artifactId>
 	<version>1.7.3</version>
 	<name>o365</name>
-	<description>Manage office 365</description>
+	<description>Manage office 365(Public)</description>
 	<properties>
 		<java.version>1.8</java.version>
 	</properties>
