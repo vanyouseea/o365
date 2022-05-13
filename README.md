@@ -18,7 +18,7 @@ https://oo365.herokuapp.com
 ## 功能介绍
 ### 首页预览  
   ![alt 首页](https://github.com/vanyouseea/o365/blob/master/pic/001.PNG)
-  登录后请根据首页介绍，先创建APP，然后赋予以下7个权限，需要注意的是，API权限请务必选择**应用程序**
+  登录后请根据首页介绍，先创建APP，然后赋予以下8个权限，需要注意的是，API权限请务必选择**应用程序**
   | API名 | 大致作用 |
   | ---- | ----|
   | Application.ReadWrite.All | 用于新增密钥的功能 |
@@ -28,6 +28,7 @@ https://oo365.herokuapp.com
   | User.ManageIdentities.All | 用于用户的管理 |
   | User.ReadWrite.All | 用于用户的管理 |
   | Reports.Read.All | 用于生成Onedrive,Exchange详细报告 |
+  | Sites.FullControl.All | 用于检验SPO(MS再改API下个版本就拿掉检验SPO) |
 
 ### [配置和报告] -> Office配置  
   - **新增**  
