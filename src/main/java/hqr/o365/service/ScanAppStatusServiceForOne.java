@@ -170,8 +170,7 @@ public class ScanAppStatusServiceForOne {
 					}
 					
 					//check spo
-					/*
-					String endpoint5 = "https://graph.microsoft.com/v1.0/sites/root/lists";
+					String endpoint5 = "https://graph.microsoft.com/v1.0/sites/root/drive/root/permissions";
 					HttpHeaders headers5 = new HttpHeaders();
 					headers5.set(HttpHeaders.USER_AGENT, ua);
 					headers5.add("Authorization", "Bearer "+accessToken);
@@ -179,9 +178,11 @@ public class ScanAppStatusServiceForOne {
 					HttpEntity<String> requestEntity5 = new HttpEntity<String>(body5, headers5);
 					try {
 						ResponseEntity<String> response5 = restTemplate.exchange(URLUtil.decode(endpoint5), HttpMethod.GET, requestEntity5, String.class);
-						//200 -> if sites has drive then normal, else SPO=0
+						//200 -> OD is normal
 						//429 -> SPO=0
 						//400 -> No OD
+						//403 -> Do not has enough permission provided in the API Need Sites.FullControl.All
+						//404 -> SPO=0
 						if(response5.getStatusCodeValue()==200) {
 							JSONObject jo = JSON.parseObject(response5.getBody());
 							System.out.println(jo);
@@ -196,19 +197,19 @@ public class ScanAppStatusServiceForOne {
 						}
 					}
 					catch (Exception e) {
+						System.out.println("Error code:"+e.toString());
 						if(e instanceof BadRequest) {
 							taAppRpt.setSpo("无SPO订阅");
 						}
-						else if(e instanceof TooManyRequests || e instanceof BadGateway) {
+						else if(e instanceof TooManyRequests || e instanceof BadGateway || e instanceof NotFound) {
 							taAppRpt.setSpo("不可用");
 						}
 						else {
 							taAppRpt.setSpo("未知的");
 						}
 					}
-					*/
 					
-					checkSPO(taAppRpt, accessToken);
+					//checkSPO(taAppRpt, accessToken);
 					System.out.println("SPO for "+taAppRpt.getTenantId()+ " is "+taAppRpt.getSpo());
 					
 					taAppRpt.setRptDt(new Date());

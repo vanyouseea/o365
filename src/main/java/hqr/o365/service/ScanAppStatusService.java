@@ -225,12 +225,10 @@ public class ScanAppStatusService implements SchedulingConfigurer{
 					}
 					
 					//check spo
-					/*
-					String endpoint5 = "https://graph.microsoft.com/v1.0/sites/root";
+					String endpoint5 = "https://graph.microsoft.com/v1.0/sites/root/drive/root/permissions";
 					HttpHeaders headers5 = new HttpHeaders();
 					headers5.set(HttpHeaders.USER_AGENT, ua);
 					headers5.add("Authorization", "Bearer "+accessToken);
-					headers5.add("ConsistencyLevel", "eventual");
 					String body5="";
 					HttpEntity<String> requestEntity5 = new HttpEntity<String>(body5, headers5);
 					try {
@@ -238,23 +236,34 @@ public class ScanAppStatusService implements SchedulingConfigurer{
 						//200 -> OD is normal
 						//429 -> SPO=0
 						//400 -> No OD
+						//403 -> Do not has enough permission provided in the API Need Sites.FullControl.All
+						//404 -> SPO=0
 						if(response5.getStatusCodeValue()==200) {
-							taAppRpt.setSpo("可用");
+							JSONObject jo = JSON.parseObject(response5.getBody());
+							System.out.println(jo);
+							JSONArray ja = jo.getJSONArray("value");
+							
+							if(ja.size()>0) {
+								taAppRpt.setSpo("可用");	
+							}
+							else {
+								taAppRpt.setSpo("不可用");	
+							}
 						}
 					}
 					catch (Exception e) {
 						if(e instanceof BadRequest) {
 							taAppRpt.setSpo("无SPO订阅");
 						}
-						else if(e instanceof TooManyRequests || e instanceof BadGateway) {
+						else if(e instanceof TooManyRequests || e instanceof BadGateway || e instanceof NotFound) {
 							taAppRpt.setSpo("不可用");
 						}
 						else {
 							taAppRpt.setSpo("未知的");
 						}
 					}
-					*/
-					checkSPO(taAppRpt, accessToken);
+					
+					//checkSPO(taAppRpt, accessToken);
 					System.out.println("SPO for "+taAppRpt.getTenantId()+ " is "+taAppRpt.getSpo());
 					
 					taAppRpt.setRptDt(new Date());
@@ -370,7 +379,7 @@ public class ScanAppStatusService implements SchedulingConfigurer{
 		//403 -> no license
 		//404 -> SPO0 or user does not reset password
 		//400 -> ?
-		//429 -> SPO0 (All user 429, no matter has license or not)
+		//429 -> SPO0 (user that init OD will get 429, other user not init OD or do not have SPI license is 404)
 		//592 -> ?
 		//if 2 users = 429 or 404, then all consider as SPO0
 		String spoStatus = "未知的";

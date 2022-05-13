@@ -76,6 +76,7 @@
 			var inviteCd = $('#inviteCd').textbox('getText');
 			var password = passwordGen();
 			
+			
 			if(displayName!=''&&mailNickname!=''&&inviteCd!=''){
 				$.ajax({
 					type : "POST",
@@ -91,6 +92,7 @@
 						var strs = result.split("|");
 						if(strs[0]=="0"){
 							var userPrincipalName = strs[1];
+							$.messager.alert('请求成功', "<div><font color='green'>账号已创建，请登录<a href='https://www.office.com' target='_blank'>office.com</a>重置密码后进行使用<br>邮箱："+userPrincipalName+"<br>密码："+password+"</font></div>" ,'');							
 							$('#refertips').html("<div><font color='green'>账号已创建，请登录<a href='https://www.office.com' target='_blank'>office.com</a>重置密码后进行使用<br>邮箱："+userPrincipalName+"<br>密码："+password+"</font></div>");
 							flag = true;
 						}
