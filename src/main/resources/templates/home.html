@@ -90,6 +90,10 @@
 							<td><font color="blue">Reports.Read.All</font></td>
 							<td>用于生成Onedrive,Exchange详细报告</td>
 						</tr>
+						<tr>
+							<td><font color="blue">Sites.FullControl.All</font></td>
+							<td>用于检验SPO</td>
+						</tr>
 					</table>
 				</li>
 				<li>[用户]-><a href=javascript:addPanel("管理用户")>管理用户</a>页中，你可以批量添加(分配订阅)，删除，启用，禁用用户，搜索用户，你也可以提升一个用户为管理员或者撤销他的管理员权限</li>
@@ -182,7 +186,7 @@
 		}
 		
 		function showVersionInfo(){
-			$.messager.alert('版本信息', '1. 加多了检测SPO的手段，可以检测更多的SPO0全局<br>2. 稍微增强了一点体验<br>3. 修复了一些问题' ,'');
+			$.messager.alert('版本信息', '1. 修复了某些情况下SPO检验不准确的问题<br>2. 邀请用户注册成功时，在前台弹出账号和密码，在后台保存账号和密码' ,'');
 		}
 		
 	</script>
