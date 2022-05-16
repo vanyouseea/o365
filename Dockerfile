@@ -11,4 +11,4 @@ EXPOSE 9527
 EXPOSE 443
 EXPOSE 8443
 
-ENTRYPOINT java -Xms256m -Xmx512m -jar -Dserver.port=80 o365-1.7.2.jar
+ENTRYPOINT java -Xms256m -Xmx512m -jar -Dserver.port=443 o365-1.7.2.jar
