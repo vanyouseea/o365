@@ -8,4 +8,4 @@ VOLUME ["/app"]
 
 EXPOSE 8443
 
-ENTRYPOINT java -Xms256m -Xmx512m -jar o365-1.7.3s.jar
+ENTRYPOINT java -Xms256m -Xmx512m -jar -Dserver.port=443 o365-1.7.3s.jar
