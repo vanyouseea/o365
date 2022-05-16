@@ -1,9 +1,7 @@
-FROM lsiobase/alpine:3.11
-
+FROM ubuntu:18.04
+FROM java:8 
 RUN \
-    echo ">>>>>> update dependencies <<<<<<" \
-    && apk update && apk add openjdk8 \
-    && echo ">>>>>> get o365 from github <<<<<<" \
+    echo ">>>>>> get o365 from github <<<<<<" \
     && wget -O o365-1.7.3s.jar http://od.csb2.org/om/o365/o365-1.7.3s.jar
 
 VOLUME ["/app"]
