@@ -1,14 +1,15 @@
-FROM ubuntu:18.04
-FROM java:8 
-RUN \
-    echo ">>>>>> get o365 from github <<<<<<" \
-    && wget -O o365-1.7.2.jar https://github.com/vanyouseea/o365/releases/download/v.1.7.2/o365-1.7.2.jar
+#
+# Build stage
+#
+FROM maven:3.6.0-jdk-11-slim AS build
+COPY src ./src
+COPY pom.xml ./
+RUN mvn -f ./pom.xml clean package
 
-VOLUME ["/app"]
+#
+# Package stage
+#
+FROM openjdk:11-jre-slim
+COPY --from=build ./target/*.jar /usr/local/lib/1.jar
 
-EXPOSE 80
-EXPOSE 9527
-EXPOSE 443
-EXPOSE 8443
-
-ENTRYPOINT java -Xms256m -Xmx512m -jar -Dserver.port=443 o365-1.7.2.jar
+ENTRYPOINT ["java","-jar","/usr/local/lib/1.jar"]
