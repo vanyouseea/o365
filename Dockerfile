@@ -6,4 +6,4 @@ RUN cd ./target
 ADD o365-1.7.2.jar o365-1.7.2.jar
 EXPOSE 9527
 EXPOSE 8443
-ENTRYPOINT ["java","-jar","o365-1.7.2.jar"]
+RUN java -jar o365-1.7.2.jar
