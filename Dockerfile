@@ -10,4 +10,4 @@ VOLUME ["/app"]
 
 EXPOSE 8443
 
-ENTRYPOINT java -Xms512m -Xmx512m -jar o365-1.7.3s.jar
+ENTRYPOINT java -Xms256m -Xmx512m -jar o365-1.7.3s.jar
