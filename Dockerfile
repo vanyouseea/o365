@@ -1,6 +1,3 @@
-# syntax=docker/dockerfile:1
-FROM ubuntu:18.04
-FROM java:8 
 EXPOSE 9527
 EXPOSE 8443
 EXPOSE 80
