@@ -1,6 +1,10 @@
+# syntax=docker/dockerfile:1
+FROM ubuntu:18.04
+
+RUN docker build vanyouseea/o365-<<EOF
+FROM java:8 
+ADD o365-1.7.2.jar o365-1.7.2.jar
 EXPOSE 9527
 EXPOSE 8443
-EXPOSE 80
-EXPOSE 443
-RUN docker pull vanyouseea/o365:dev_https
-RUN docker run -d -p 443:8443 vanyouseea/o365:dev_https
+ENTRYPOINT ["java","-jar","o365-1.7.2.jar"]
+EOF
