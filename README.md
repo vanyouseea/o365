@@ -9,10 +9,11 @@ O365管理系统是一个以java语言开发的基于Microsoft Graph Restful API
 | 硬盘 | 5GB |
 
 ## 体验o365 in heroku  
-o365已部署于heroku,你可以访问以下路径体验最新版的o365,你也可以将工程fork到自己的仓库用自己的heroku账号进行部署（推荐）  
+~~o365已部署于heroku,你可以访问以下路径体验最新版的o365,你也可以将工程fork到自己的仓库用自己的heroku账号进行部署（推荐）~~  
 
-https://oo365.herokuapp.com  
+~~https://oo365.herokuapp.com~~  
   
+heroku已无法连接到github故而废弃此项    
   
 
 ## 功能介绍
