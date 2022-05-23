@@ -107,7 +107,7 @@ heroku已无法连接到github故而废弃此项
   **请谨慎使用，此6个变量的配置非必须，只是为了增强管理员账号的安全，如果未通过，请立即把WX_CALLBACK_IND设为N，避免把自己关外面**
 
 # Docker 
-基于v1.7.2版的docker
+### 基于v1.7.2版的docker
 ```bash
 docker pull vanyouseea/o365
 docker run -d -p 9527:9527 vanyouseea/o365
@@ -116,3 +116,5 @@ docker run -d -p 9527:9527 vanyouseea/o365
 #建议使用这种方法，以后你如果想要迁移数据，直接拷贝/root/o365/data文件就行了
 docker run -d -p 9527:9527 -v /root/o365/data:/data vanyouseea/o365
 ```
+### 手动构建  
+docker build -t vanyouseea/o365 https://github.com/vanyouseea/o365.git#master  
