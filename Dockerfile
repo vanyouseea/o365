@@ -12,4 +12,6 @@ RUN mvn -f ./pom.xml clean package
 FROM openjdk:11-jre-slim
 COPY --from=build ./target/*.jar /usr/local/lib/1.jar
 
+EXPOSE 9527 8443
+
 ENTRYPOINT ["java","-jar","/usr/local/lib/1.jar"]
