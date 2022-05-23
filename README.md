@@ -116,5 +116,5 @@ docker run -d -p 9527:9527 vanyouseea/o365
 #建议使用这种方法，以后你如果想要迁移数据，直接拷贝/root/o365/data文件就行了
 docker run -d -p 9527:9527 -v /root/o365/data:/data vanyouseea/o365
 ```
-### 手动构建  
+### 手动构建master分支的docker  
 docker build -t vanyouseea/o365 https://github.com/vanyouseea/o365.git#master  
