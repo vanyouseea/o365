@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Client Side Pagination in DataGrid - jQuery EasyUI Demo</title>
+
+</head>
+<body>
+	<table style="padding:10px">
+		<tr>
+			<td>
+				域名： <input id="cc4" name="dept" value="Loading..." style="width:315px">
+			</td>
+		</tr>
+		<tr>
+			<td align="left">
+				<a href="javascript:void(0)" class="easyui-linkbutton" onclick="sb1()" style="width:80px">绑定域名</a>
+				<a href="javascript:void(0)" class="easyui-linkbutton" onclick="sb2()" style="width:80px">解绑域名</a>
+			</td>
+		</tr>
+		<tr>
+			<td align="left">
+				<div id="domainMsg" style="font-size: 12">Tips: 域名的绑定和解绑都需要花费一定时间,操作之后请耐心等待,根据网络的好坏等待时间可能会有长有短,默认域名不允许被删除(.onmicrosoft.com)</div>
+			</td>
+		</tr>
+	</table>
+	<script type="text/javascript" th:inline="none">
+		$('#cc4').combobox({
+		    url:'/getDomains2',
+		    valueField:'id',
+		    textField:'text',
+		    editable: false
+		});
+		
+		function sb1(){
+			$.messager.prompt('绑定域名', '请输入待绑定的域名', function(r){
+				if (r){
+					$('#domainMsg').html('绑定域名 '+r+' 中,请稍等,根据网络的好坏等待时间可能会有长有短');
+					$.ajax({
+					    type : "POST", 
+					    url : "/domainAction",
+					    data : { "domain": r, "action": "add" },
+					    success : function(result) {
+					    	console.log(result);
+					    	if(result=="fail"){
+					    		$.messager.alert('结果','创建失败，请确保提供了足够的权限');
+					    		$('#domainMsg').html('Tips: 域名的绑定和解绑都需要花费一定时间,操作之后请耐心等待,根据网络的好坏等待时间可能会有长有短,默认域名不允许被删除(.onmicrosoft.com)');
+					    	}
+					    	else{
+					    		$('#cc4').combobox('reload');
+					    		const obj = JSON.parse(result);
+					    		const valOjb = obj.value;
+					    		//TXT record
+					    		var recordType1 = valOjb[0].recordType;
+					    		var ttl1 = valOjb[0].ttl;
+					    		var text1 = valOjb[0].text;
+					    		console.log(recordType1+"|"+ttl1+"|"+text1);
+					    		//MX record
+					    		var recordType2 = valOjb[1].recordType;
+					    		var ttl2 = valOjb[1].ttl;
+					    		var mailExchange2 = valOjb[1].mailExchange;
+					    		var preference2 = valOjb[1].preference;
+					    		console.log(recordType2+"|"+ttl2+"|"+mailExchange2+"|"+preference2);
+					    		
+					    		$('#domainMsg').html('请将以下任意记录添加到域名注册商或DNS服务器配置中后点击校验<br>'+
+					    				'TXT 记录 ttl:'+valOjb[0].ttl+' text:'+valOjb[0].text+'<br>'+
+					    				'MX 记录 ttl:'+valOjb[1].ttl+' mailExchange:'+valOjb[1].mailExchange+' preference:'+valOjb[1].preference+'<br>'+
+					    				'<a href="javascript:void(0)" class="easyui-linkbutton" onclick="sb3()" style="width:80px">校验</a>');
+					    	}
+						},
+						error : function(){
+							$('#domainMsg').html('Tips: 域名的绑定和解绑都需要花费一定时间,操作之后请耐心等待,根据网络的好坏等待时间可能会有长有短,默认域名不允许被删除(.onmicrosoft.com)');
+							$.messager.alert('结果','无法连接到服务器');
+						}
+					});
+					
+				}
+			});
+		}
+		
+		function sb2(){
+			$.messager.confirm('解绑域名', '你确认要解绑此域名吗?请注意如果此域名绑定关联了对象，将会花费至多24小时来解除绑定(PS:默认域名无法被解除绑定)', function(r){
+				if (r){
+					domain = $('#cc4').combobox('getText');
+					console.log('delete '+domain);
+					$.ajax({
+					    type : "POST", 
+					    url : "/domainAction",
+					    data : { "domain": domain, "action": "del" },
+					    success : function(result) {
+					    	console.log(result);
+					    	if(result=="fail"){
+					    		$('#domainMsg').html('Tips: 域名的绑定和解绑都需要花费一定时间,操作之后请耐心等待,根据网络的好坏等待时间可能会有长有短,默认域名不允许被删除(.onmicrosoft.com)');
+					    		$.messager.alert('结果', '删除失败，请确保提供了足够的权限' ,'');
+					    	}
+					    	else{
+					    		$('#domainMsg').html('删除请求已成功提交，请注意如果此域名绑定关联了对象，将会花费至多24小时来解除绑定');
+					    		$('#cc4').combobox('reload');
+					    		$.messager.alert('结果', '删除请求已成功提交，将会在后台异步删除此域名，请注意如果此域名关联了对象，将会花费至多24小时来解除绑定' ,'');
+					    	}
+						},
+						error : function(){
+							$('#domainMsg').html('Tips: 域名的绑定和解绑都需要花费一定时间,操作之后请耐心等待,根据网络的好坏等待时间可能会有长有短,默认域名不允许被删除(.onmicrosoft.com)');
+							$.messager.alert('结果', '无法连接到服务器' ,'');
+						}
+					});
+
+				}
+			});
+		}
+		
+		function sb3(){
+			domain = $('#cc4').combobox('getText');
+			console.log('delete '+domain);
+			$.ajax({
+			    type : "POST", 
+			    url : "/domainAction",
+			    data : { "domain": domain, "action": "verify" },
+			    success : function(result) {
+			    	console.log(result);
+			    	if(result=="fail"){
+			    		$.messager.alert('结果', '绑定失败,这可能是由于以下原因引起的<br>1.服务器网络不稳定<br>2.域名已被绑定<br>3.服务端出现问题<br>4.权限不足' ,'');
+			    	}
+			    	else{
+			    		$('#cc4').combobox('reload');
+			    		$('#domainMsg').html('域名已成功绑定，您现在可以使用它了');
+			    		$.messager.alert('结果', '域名已成功绑定，您现在可以使用它了' ,'');
+			    		$('#dlg9').dialog('close');
+			    	}
+				},
+				error : function(){
+					$.messager.alert('结果', '无法连接到服务器，或许你可以尝试重新校验' ,'');
+				}
+			});
+		}
+	</script>
+	
+</body>
+</html>
