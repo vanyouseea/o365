@@ -77,6 +77,8 @@ heroku已无法连接到github故而废弃此项
     你可以绑定或者解绑全局上的非默认域名，删除域名时是异步删除，如果域名依赖越多则花费越久，最多需要花费24小时，MS原话如下  
     > Prior to calling forceDelete, you must update or remove any references to Exchange as the provisioning service  
     > It can take up to 24 hours to remove a domain. Domains with many dependencies tend to take longer than others  
+    
+    PS: 如果域名托管在CF，并且在系统中配置了正确的CF_AUTH_EMAIL和CF_AUTH_KEY，那么程序会自动添加TXT记录到CF并进行认证，无需人工干涉，实现域名一键绑定  
   - **搜索**  
     可以搜索名字和邮箱前缀  
   - **帮助**  
