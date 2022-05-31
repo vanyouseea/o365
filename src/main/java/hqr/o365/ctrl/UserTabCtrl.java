@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import hqr.o365.domain.LicenseInfo;
 import hqr.o365.service.CreateOfficeUser;
 import hqr.o365.service.DeleteOfficeUser;
+import hqr.o365.service.DomainAction;
 import hqr.o365.service.GetDomainInfo;
+import hqr.o365.service.GetDomainInfo2;
 import hqr.o365.service.GetLicenseInfo;
 import hqr.o365.service.GetOfficeUser;
 import hqr.o365.service.GetOfficeUserByKeyWord;
@@ -39,6 +41,9 @@ public class UserTabCtrl {
 	private GetDomainInfo gdi;
 	
 	@Autowired
+	private GetDomainInfo2 gdi2;
+	
+	@Autowired
 	private CreateOfficeUser cou;
 	
 	@Autowired
@@ -58,6 +63,9 @@ public class UserTabCtrl {
 	
 	@Autowired
 	private MassCreateOfficeUser mcou;
+	
+	@Autowired
+	private DomainAction da;
 	
 	@RequestMapping(value = {"/tabs/user.html"})
 	public String dummy() {
@@ -100,6 +108,24 @@ public class UserTabCtrl {
 		return "tabs/dialogs/massCreateUser";
 	}
 	
+	@RequestMapping(value = {"tabs/dialogs/domain.html"})
+	public String dummyDomain(HttpServletRequest req) {
+		Object tmp2 = req.getSession().getAttribute("licenseVo");
+		if(tmp2==null) {
+			HashMap<String, Object> map2 = gli.getLicenses();
+			List<LicenseInfo> vo = new ArrayList<LicenseInfo>();
+			Object obj = map2.get("licenseVo");
+			if(obj!=null) {
+				vo = (List<LicenseInfo>)obj;
+			}
+			req.getSession().setAttribute("licenseVo", vo);
+		}
+		else {
+			//licenseVo already exist,skip to get
+		}
+		return "tabs/dialogs/domain";
+	}
+	
 	@ResponseBody
 	@RequestMapping(value = {"/getDomains"})
 	public String getDomains(HttpServletRequest req) {
@@ -114,6 +140,12 @@ public class UserTabCtrl {
 			return (String)tmp;
 		}
 		
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = {"/getDomains2"})
+	public String getDomains2() {
+		return gdi2.getAllDomains();
 	}
 	
 	@ResponseBody
@@ -249,5 +281,41 @@ public class UserTabCtrl {
 	public String getDefaultPassword() {
 		return goud.getDefaultPwd();
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = {"/domainAction"}, method = RequestMethod.POST)
+	public String domainAction(@RequestParam(name="domain") String domain, @RequestParam(name="action") String action, HttpServletRequest req) {
+		if("add".equals(action)) {
+			if(da.createDomain(domain)) {
+				return da.verificationDnsRecords(domain);
+			}
+			else {
+				return "fail";
+			}
+		}
+		else if("del".equals(action)){
+			if(da.deleteDomain(domain)) {
+				System.out.println("del - reset domainVo");
+				req.getSession().setAttribute("domainVo", null);
+				return "succ";
+			}
+			else {
+				return "fail";
+			}
+		}
+		else if("verify".equals(action)){
+			//reset Vo
+			String res = da.verifyDomain(domain);
+			if("succ".equals(res)) {
+				System.out.println("verify reset domainVo");
+				req.getSession().setAttribute("domainVo", null);
+			}
+			return res;
+		}
+		else {
+			return "fail";
+		}
+	}
+	
 	
 }

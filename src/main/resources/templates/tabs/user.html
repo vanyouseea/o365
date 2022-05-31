@@ -9,6 +9,7 @@
 	<div id="tb3"></div>
 	<div id="dlg3"></div>
 	<div id="dlg5"></div>
+	<div id="dlg9"></div>
 	
 	<script type="text/javascript" th:inline="none">
 		var row3;
@@ -32,6 +33,16 @@
 			height: 360,
 		    cache: false,
 		    href: 'tabs/dialogs/massCreateUser.html'
+		});
+		$('#dlg9').dialog({
+		    title: '域名管理',
+			iconCls: 'icon-cf',
+			modal : true,
+			closed : true,
+			width: 430,
+			height: 210,
+		    cache: false,
+		    href: 'tabs/dialogs/domain.html'
 		});
 		$('#tb3').datagrid({
 			border:false,
@@ -321,29 +332,37 @@
 						});
 					}
 				}
+			},{
+				text:'域名',
+				iconCls:'icon-cf',
+				handler:function(){
+					$('#dlg9').dialog('open');
+				}
 			},'-',{
 				text:'搜索',
 				iconCls:'icon-search',
 				handler:function(){
 					$.messager.prompt('请输入关键字', '可以搜索名字和邮箱前缀', function(r){
-						console.log("keyword is "+r);
-						$.ajax({
-						    type : "POST", 
-						    url : "/saveKeyWord",
-						    data : { "keyword": r},
-						    success : function(result) {
-						    	console.log("keyword saved");
-							},
-							error : function(){
-						       	$.messager.show({
-									title:'失败',
-									msg:'搜索失败，这可能是由于服务器出现问题引起的',
-									timeout:2000,
-									showType:'slide'
-								}); 
-							}							
-						});
-						$('#tb3').datagrid('reload');
+						if(r){
+							console.log("keyword is "+r);
+							$.ajax({
+							    type : "POST", 
+							    url : "/saveKeyWord",
+							    data : { "keyword": r},
+							    success : function(result) {
+							    	console.log("keyword saved");
+								},
+								error : function(){
+							       	$.messager.show({
+										title:'失败',
+										msg:'搜索失败，这可能是由于服务器出现问题引起的',
+										timeout:2000,
+										showType:'slide'
+									}); 
+								}							
+							});
+							$('#tb3').datagrid('reload');
+						}
 					});
 				}
 			},{
