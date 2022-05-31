@@ -1,5 +1,5 @@
 # o365
-O365管理系统是一个以java语言开发的基于Microsoft Graph Restful API的多全局管理系统，理论上支持任何Office全局的管理(A1,A3,A1P,E3,E5等)，你可以很方便的使用它来批量添加，批量删除，批量启用，批量禁用，搜索和查看用户，生成邀请码，邀请朋友注册，提升和收回管理员权限，更新密钥，查看订阅，分配订阅(创新用户时)，查看单全局或多全局报告，登录同时需要微信许可（此功能默认关闭）
+O365管理系统是一个以java语言开发的基于Microsoft Graph Restful API的多全局管理系统，理论上支持任何Office全局的管理(A1,A3,A1P,E3,E5等)，你可以很方便的使用它来批量添加，批量删除，批量启用，批量禁用，搜索和查看用户，绑定解绑域名，生成邀请码，邀请朋友注册，提升和收回管理员权限，更新密钥，查看订阅，分配订阅(创新用户时)，查看单全局或多全局报告，登录同时需要微信许可（此功能默认关闭）
 
 ## 最低环境需求
 | 类型 | - |
@@ -74,7 +74,9 @@ heroku已无法连接到github故而废弃此项
     同时他们支持更多角色的权限赋予与收回， 你可以在[配置和报告] -> 系统配置中修改关键字DEFAULT_ADMIN_ROLE_ID的值为其他的admin的role，比如通过这种方式，你可以提升一个用户为用户管理员  
     ![alt 批量添加](https://github.com/vanyouseea/o365/blob/master/pic/009.PNG)  
   - **域名**  
-    你可以绑定或者解绑全局上的非默认域名域名  
+    你可以绑定或者解绑全局上的非默认域名域名，删除域名时是异步删除，如果域名依赖越多则花费越久，最多需要花费24小时，MS原话如下  
+    > Prior to calling forceDelete, you must update or remove any references to Exchange as the provisioning service  
+    > It can take up to 24 hours to remove a domain. Domains with many dependencies tend to take longer than others  
   - **搜索**  
     可以搜索名字和邮箱前缀  
   - **帮助**  
