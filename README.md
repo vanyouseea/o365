@@ -30,7 +30,7 @@ heroku已无法连接到github故而废弃此项
   | User.ReadWrite.All | 用于用户的管理 |
   | Reports.Read.All | 用于生成Onedrive,Exchange详细报告 |
   | Sites.FullControl.All | 用于检验SPO |
-  | Domain.FullControl.All | 用于域名操作 |
+  | Domain.ReadWrite.All | 用于域名操作 |
 
 ### [配置和报告] -> Office配置  
   - **新增**  
@@ -74,7 +74,7 @@ heroku已无法连接到github故而废弃此项
     同时他们支持更多角色的权限赋予与收回， 你可以在[配置和报告] -> 系统配置中修改关键字DEFAULT_ADMIN_ROLE_ID的值为其他的admin的role，比如通过这种方式，你可以提升一个用户为用户管理员  
     ![alt 批量添加](https://github.com/vanyouseea/o365/blob/master/pic/009.PNG)  
   - **域名**  
-    你可以绑定或者解绑全局上的非默认域名域名，删除域名时是异步删除，如果域名依赖越多则花费越久，最多需要花费24小时，MS原话如下  
+    你可以绑定或者解绑全局上的非默认域名，删除域名时是异步删除，如果域名依赖越多则花费越久，最多需要花费24小时，MS原话如下  
     > Prior to calling forceDelete, you must update or remove any references to Exchange as the provisioning service  
     > It can take up to 24 hours to remove a domain. Domains with many dependencies tend to take longer than others  
   - **搜索**  
