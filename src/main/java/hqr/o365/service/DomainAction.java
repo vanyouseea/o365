@@ -97,6 +97,7 @@ public class DomainAction {
 		return res;
 	}
 	
+	@CacheEvict(value= {"cacheDomain"}, allEntries = true)
 	public String verificationDnsRecords(String domain) {
 		String dnsRecords = "fail";
 		
@@ -128,8 +129,8 @@ public class DomainAction {
 						//automatic create DNS record in CF and verfiy
 						String res = autoProcessInCF(dnsRecords);
 						if("succ".equals(res)) {
-							//Try 3 times verify DNS record
-							for(int i=0;i<3;i++) {
+							//Try 4 times verify DNS record
+							for(int i=0;i<4;i++) {
 								Thread.sleep(2000);
 								System.out.println((i+1)+" time, try to verify domain:"+domain);
 								String res2 = verifyDomain(domain);
