@@ -128,10 +128,15 @@ public class DomainAction {
 						//automatic create DNS record in CF and verfiy
 						String res = autoProcessInCF(dnsRecords);
 						if("succ".equals(res)) {
-							Thread.sleep(1000);
-							String res2 = verifyDomain(domain);
-							if("succ".equals(res2)) {
-								dnsRecords = "succ";
+							//Try 3 times verify DNS record
+							for(int i=0;i<3;i++) {
+								Thread.sleep(2000);
+								System.out.println((i+1)+" time, try to verify domain:"+domain);
+								String res2 = verifyDomain(domain);
+								if("succ".equals(res2)) {
+									dnsRecords = "succ";
+									break;
+								}
 							}
 						}
 					}
