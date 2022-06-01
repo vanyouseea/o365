@@ -110,10 +110,22 @@ public class CreateDnsRecordInCf {
 	public String create(String domain, String type, String ttl, String content, String cfAuthEmail, String cfAuthKey) {
 		String res = "fail";
 		String zoneId = "";
+		String mainDomain = "";
 		initlRestTemplate();
 		
+		//substring the domain in-case user bind subdomain
+		String stparts[] = domain.split("\\.");
+		if(stparts.length>=2) {
+			mainDomain = stparts[stparts.length-2] + "." + stparts[stparts.length-1];
+		}
+		
+		if("".equals(mainDomain)) {
+			System.out.println("fail to parse mainDomain");
+			return "fail";
+		}
+		
 		//get the zoneId
-		String endpoint = "https://api.cloudflare.com/client/v4/zones?name="+domain;
+		String endpoint = "https://api.cloudflare.com/client/v4/zones?name="+mainDomain;
 		HttpHeaders headers = new HttpHeaders();
 		headers.set(HttpHeaders.USER_AGENT, ua);
 		headers.add("X-Auth-Email", cfAuthEmail);
