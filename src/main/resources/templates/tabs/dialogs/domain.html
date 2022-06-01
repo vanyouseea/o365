@@ -46,6 +46,12 @@
 					    		$.messager.alert('结果','创建失败，请确保提供了足够的权限');
 					    		$('#domainMsg').html('Tips: 域名的绑定和解绑都需要花费一定时间,操作之后请耐心等待,根据网络的好坏等待时间可能会有长有短,默认域名不允许被删除(.onmicrosoft.com)');
 					    	}
+					    	else if(result=="succ"){
+					    		$('#cc4').combobox('reload');
+					    		$('#domainMsg').html('域名已成功绑定，您现在可以使用它了');
+					    		$.messager.alert('结果', '域名已成功绑定，您现在可以使用它了' ,'');
+					    		$('#dlg9').dialog('close');
+					    	}
 					    	else{
 					    		$('#cc4').combobox('reload');
 					    		const obj = JSON.parse(result);
