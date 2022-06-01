@@ -71,5 +71,8 @@ insert into ta_master_cd(key_ty,cd,decode,start_dt,end_dt,create_dt,last_update_
 insert into ta_master_cd(key_ty,cd,decode,start_dt,end_dt,create_dt,last_update_id,last_update_dt) values ('WX_AGENTID','','corp agent id',sysdate,null,sysdate,'o365',sysdate);
 insert into ta_master_cd(key_ty,cd,decode,start_dt,end_dt,create_dt,last_update_id,last_update_dt) values ('WX_CALLBACK_AESKEY','','callback aeskey',sysdate,null,sysdate,'o365',sysdate);
 
+--CF info
+insert into ta_master_cd(key_ty,cd,decode,start_dt,end_dt,create_dt,last_update_id,last_update_dt) values ('CF_AUTH_EMAIL','337845818@qq.com','注册在CF的邮件',sysdate,null,sysdate,'o365',sysdate);
+insert into ta_master_cd(key_ty,cd,decode,start_dt,end_dt,create_dt,last_update_id,last_update_dt) values ('CF_AUTH_KEY','','CF账号个人资料中的api-token',sysdate,null,sysdate,'o365',sysdate);
 
 commit;

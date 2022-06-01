@@ -287,6 +287,8 @@ public class UserTabCtrl {
 	public String domainAction(@RequestParam(name="domain") String domain, @RequestParam(name="action") String action, HttpServletRequest req) {
 		if("add".equals(action)) {
 			if(da.createDomain(domain)) {
+				System.out.println("create - reset domainVo");
+				req.getSession().setAttribute("domainVo", null);
 				return da.verificationDnsRecords(domain);
 			}
 			else {
@@ -304,7 +306,6 @@ public class UserTabCtrl {
 			}
 		}
 		else if("verify".equals(action)){
-			//reset Vo
 			String res = da.verifyDomain(domain);
 			if("succ".equals(res)) {
 				System.out.println("verify reset domainVo");
