@@ -107,21 +107,62 @@ public class CreateDnsRecordInCf {
 		}
 	}
 	
-	public String create(String zoneId, String type, String ttl, String content, String cfAuthEmail, String cfAuthKey) {
+	public String create(String domain, String type, String ttl, String content, String cfAuthEmail, String cfAuthKey) {
 		String res = "fail";
+		String zoneId = "";
 		initlRestTemplate();
 		
-		String endpoint = "https://api.cloudflare.com/client/v4/zones/"+zoneId+"/dns_records";
+		//get the zoneId
+		String endpoint = "https://api.cloudflare.com/client/v4/zones?name="+domain;
 		HttpHeaders headers = new HttpHeaders();
 		headers.set(HttpHeaders.USER_AGENT, ua);
 		headers.add("X-Auth-Email", cfAuthEmail);
 		headers.add("X-Auth-Key", cfAuthKey);
 		headers.add("Content-Type", "application/json");
-		String json = "{\"type\":\""+type+"\",\"name\":\""+zoneId+"\",\"content\":\""+content+"\",\"ttl\":"+ttl+"}";
-		System.out.println("CreateDnsJson:"+json);
-		HttpEntity<String> requestEntity = new HttpEntity<String>(json, headers);
+		String body="";
+		HttpEntity<String> requestEntity = new HttpEntity<String>(body, headers);
 		try {
-			ResponseEntity<String> response= restTemplate.exchange(endpoint, HttpMethod.POST, requestEntity, String.class);
+			ResponseEntity<String> response= restTemplate.exchange(endpoint, HttpMethod.GET, requestEntity, String.class);
+			JSONObject jo = JSON.parseObject(response.getBody());
+			boolean flag = jo.getBoolean("success");
+			if(flag) {
+				JSONArray ja = jo.getJSONArray("result");
+				for (Object obj : ja) {
+					JSONObject jb = (JSONObject)obj;
+					String zoneStatus = jb.getString("status");
+					//only get the active id
+					if("active".equals(zoneStatus)) {
+						zoneId = jb.getString("id");
+						break;
+					}
+				}
+			}
+			else {
+				JSONArray ja = jo.getJSONArray("errors");
+				System.out.println("Error to retrieve zoneId:"+ja);
+			}
+		}
+		catch (Exception e) {
+			System.out.println("CF_AUTH_EMAIL or CF_AUTH_KEY does not correct");
+		}
+		
+		if("".equals(zoneId)) {
+			System.out.println("not find zoneId for "+domain);
+			return "fail";
+		}
+		
+		//Create dns record for domain
+		String endpoint2 = "https://api.cloudflare.com/client/v4/zones/"+zoneId+"/dns_records";
+		HttpHeaders headers2 = new HttpHeaders();
+		headers2.set(HttpHeaders.USER_AGENT, ua);
+		headers2.add("X-Auth-Email", cfAuthEmail);
+		headers2.add("X-Auth-Key", cfAuthKey);
+		headers2.add("Content-Type", "application/json");
+		String json2 = "{\"type\":\""+type+"\",\"name\":\""+domain+"\",\"content\":\""+content+"\",\"ttl\":"+ttl+"}";
+		System.out.println("CreateDnsJson:"+json2);
+		HttpEntity<String> requestEntity2 = new HttpEntity<String>(json2, headers2);
+		try {
+			ResponseEntity<String> response= restTemplate.exchange(endpoint2, HttpMethod.POST, requestEntity2, String.class);
 			if(response.getStatusCodeValue()==200) {
 				//200 Succ
 				/*
@@ -151,7 +192,7 @@ public class CreateDnsRecordInCf {
 			}
 		}
 		catch (Exception e) {
-			System.out.println("fail to connect to CF:"+e.toString());
+			System.out.println("CF_AUTH_EMAIL or CF_AUTH_KEY does not correct");
 		}
 		
 		return res;
