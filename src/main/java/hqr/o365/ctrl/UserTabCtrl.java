@@ -24,6 +24,7 @@ import hqr.o365.service.GetOfficeUserRole;
 import hqr.o365.service.MassCreateOfficeUser;
 import hqr.o365.service.UpdateOfficeUser;
 import hqr.o365.service.UpdateOfficeUserRole;
+import hqr.o365.service.ValidateCfConfig;
 
 @Controller
 public class UserTabCtrl {
@@ -66,6 +67,9 @@ public class UserTabCtrl {
 	
 	@Autowired
 	private DomainAction da;
+	
+	@Autowired
+	private ValidateCfConfig vcc;
 	
 	@RequestMapping(value = {"/tabs/user.html"})
 	public String dummy() {
@@ -318,5 +322,9 @@ public class UserTabCtrl {
 		}
 	}
 	
-	
+	@ResponseBody
+	@RequestMapping(value = {"/validateCf"}, method = RequestMethod.GET)
+	public boolean validateCf() {
+		return vcc.validateCf();
+	}
 }

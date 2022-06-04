@@ -16,11 +16,12 @@
 			<td align="left">
 				<a href="javascript:void(0)" class="easyui-linkbutton" onclick="sb1()" style="width:80px">绑定域名</a>
 				<a href="javascript:void(0)" class="easyui-linkbutton" onclick="sb2()" style="width:80px">解绑域名</a>
+				<a id="cfinfo" onclick="cftips()"></a>
 			</td>
 		</tr>
 		<tr>
 			<td align="left">
-				<div id="domainMsg" style="font-size: 12">Tips: 域名的绑定和解绑都需要花费一定时间,操作之后请耐心等待,根据网络的好坏等待时间可能会有长有短,默认域名不允许被删除(.onmicrosoft.com)</div>
+				<div id="domainMsg" style="font-size: 12">Tips: 域名的绑定和解绑都需要花费一定时间,操作之后请耐心等待,根据网络的好坏等待时间可能会有长有短,默认域名(.onmicrosoft.com)不允许被删除</div>
 			</td>
 		</tr>
 	</table>
@@ -30,6 +31,31 @@
 		    valueField:'id',
 		    textField:'text',
 		    editable: false
+		});
+		
+		var cfstatus = false;
+		
+		$.ajax({
+		    type : "GET", 
+		    url : "/validateCf",
+		    success : function(result) {
+		    	if(result){
+		    		$('#cfinfo').linkbutton({
+		    		    iconCls: 'icon-enable'
+		    		});
+		    		cfstatus = true;
+		    	}
+		    	else{
+		    		$('#cfinfo').linkbutton({
+		    		    iconCls: 'icon-disable'
+		    		});
+		    	}
+		    },
+			error : function(){
+	    		$('#cfinfo').linkbutton({
+	    		    iconCls: 'icon-disable'
+	    		});
+			}
 		});
 		
 		function sb1(){
@@ -43,8 +69,8 @@
 					    success : function(result) {
 					    	console.log(result);
 					    	if(result=="fail"){
-					    		$.messager.alert('结果','创建失败，请确保提供了足够的权限');
-					    		$('#domainMsg').html('Tips: 域名的绑定和解绑都需要花费一定时间,操作之后请耐心等待,根据网络的好坏等待时间可能会有长有短,默认域名不允许被删除(.onmicrosoft.com)');
+					    		$('#domainMsg').html('Tips: 域名的绑定和解绑都需要花费一定时间,操作之后请耐心等待,根据网络的好坏等待时间可能会有长有短,默认域名(.onmicrosoft.com)不允许被删除');
+					    		$.messager.alert('结果', '绑定失败,这可能是由于以下原因引起的<br>1.服务器网络不稳定<br>2.域名已被绑定<br>3.权限不足<br>4.短时间内对同一域名进行多次绑定解绑操作' ,'');
 					    	}
 					    	else if(result=="succ"){
 					    		$('#cc4').combobox('reload');
@@ -75,7 +101,7 @@
 					    	}
 						},
 						error : function(){
-							$('#domainMsg').html('Tips: 域名的绑定和解绑都需要花费一定时间,操作之后请耐心等待,根据网络的好坏等待时间可能会有长有短,默认域名不允许被删除(.onmicrosoft.com)');
+							$('#domainMsg').html('Tips: 域名的绑定和解绑都需要花费一定时间,操作之后请耐心等待,根据网络的好坏等待时间可能会有长有短,默认域名(.onmicrosoft.com)不允许被删除');
 							$.messager.alert('结果','无法连接到服务器');
 						}
 					});
@@ -96,8 +122,8 @@
 					    success : function(result) {
 					    	console.log(result);
 					    	if(result=="fail"){
-					    		$('#domainMsg').html('Tips: 域名的绑定和解绑都需要花费一定时间,操作之后请耐心等待,根据网络的好坏等待时间可能会有长有短,默认域名不允许被删除(.onmicrosoft.com)');
-					    		$.messager.alert('结果', '删除失败，请确保提供了足够的权限' ,'');
+					    		$('#domainMsg').html('Tips: 域名的绑定和解绑都需要花费一定时间,操作之后请耐心等待,根据网络的好坏等待时间可能会有长有短,默认域名(.onmicrosoft.com)不允许被删除');
+					    		$.messager.alert('结果', '绑定失败,这可能是由于以下原因引起的<br>1.服务器网络不稳定<br>2.域名已被绑定<br>3.权限不足<br>4.短时间内对同一域名进行多次绑定解绑操作' ,'');
 					    	}
 					    	else{
 					    		$('#domainMsg').html('删除请求已成功提交，请注意如果此域名绑定关联了对象，将会花费至多24小时来解除绑定');
@@ -106,7 +132,7 @@
 					    	}
 						},
 						error : function(){
-							$('#domainMsg').html('Tips: 域名的绑定和解绑都需要花费一定时间,操作之后请耐心等待,根据网络的好坏等待时间可能会有长有短,默认域名不允许被删除(.onmicrosoft.com)');
+							$('#domainMsg').html('Tips: 域名的绑定和解绑都需要花费一定时间,操作之后请耐心等待,根据网络的好坏等待时间可能会有长有短,默认域名(.onmicrosoft.com)不允许被删除');
 							$.messager.alert('结果', '无法连接到服务器' ,'');
 						}
 					});
@@ -125,7 +151,7 @@
 			    success : function(result) {
 			    	console.log(result);
 			    	if(result=="fail"){
-			    		$.messager.alert('结果', '绑定失败,这可能是由于以下原因引起的<br>1.服务器网络不稳定<br>2.域名已被绑定<br>3.服务端出现问题<br>4.权限不足' ,'');
+			    		$.messager.alert('结果', '绑定失败,这可能是由于以下原因引起的<br>1.服务器网络不稳定<br>2.域名已被绑定<br>3.权限不足<br>4.短时间内对同一域名进行多次绑定解绑操作' ,'');
 			    	}
 			    	else{
 			    		$('#cc4').combobox('reload');
@@ -139,6 +165,16 @@
 				}
 			});
 		}
+		
+		function cftips(){
+			if(cfstatus){
+				$.messager.alert('CF配置', '已正确CF信息，可以一键绑定域名，免除人工干涉' ,'');
+			}
+			else{
+				$.messager.alert('CF配置', '无法读取CF配置信息或CF配置不正确，但这并不影响域名的绑定解绑，你同样可以根据提示信息进行域名操作' ,'');
+			}
+		}
+
 	</script>
 	
 </body>
