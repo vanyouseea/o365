@@ -70,7 +70,7 @@
 					    	console.log(result);
 					    	if(result=="fail"){
 					    		$('#domainMsg').html('Tips: 域名的绑定和解绑都需要花费一定时间,操作之后请耐心等待,根据网络的好坏等待时间可能会有长有短,默认域名(.onmicrosoft.com)不允许被删除');
-					    		$.messager.alert('结果', '绑定失败,这可能是由于以下原因引起的<br>1.服务器网络不稳定<br>2.域名已被绑定<br>3.权限不足<br>4.短时间内对同一域名进行多次绑定解绑操作' ,'');
+					    		$.messager.alert('结果', '绑定/解绑失败,这可能是由于以下原因引起的<br>1.服务器网络不稳定<br>2.域名已被绑定<br>3.权限不足<br>4.短时间内对同一域名多次进行绑定解绑操作' ,'');
 					    	}
 					    	else if(result=="succ"){
 					    		$('#cc4').combobox('reload');
@@ -111,7 +111,7 @@
 		}
 		
 		function sb2(){
-			$.messager.confirm('解绑域名', '你确认要解绑此域名吗?请注意如果此域名绑定关联了对象，将会花费至多24小时来解除绑定(PS:默认域名无法被解除绑定)', function(r){
+			$.messager.confirm('解绑域名', '你确认要解绑此域名吗?请注意如果此域名关联了对象，将会花费至多24小时来解除绑定(PS:默认域名无法被解除绑定)', function(r){
 				if (r){
 					domain = $('#cc4').combobox('getText');
 					console.log('delete '+domain);
@@ -123,7 +123,7 @@
 					    	console.log(result);
 					    	if(result=="fail"){
 					    		$('#domainMsg').html('Tips: 域名的绑定和解绑都需要花费一定时间,操作之后请耐心等待,根据网络的好坏等待时间可能会有长有短,默认域名(.onmicrosoft.com)不允许被删除');
-					    		$.messager.alert('结果', '绑定失败,这可能是由于以下原因引起的<br>1.服务器网络不稳定<br>2.域名已被绑定<br>3.权限不足<br>4.短时间内对同一域名进行多次绑定解绑操作' ,'');
+					    		$.messager.alert('结果', '绑定/解绑失败,这可能是由于以下原因引起的<br>1.服务器网络不稳定<br>2.域名已被绑定<br>3.权限不足<br>4.短时间内对同一域名多次进行绑定解绑操作' ,'');
 					    	}
 					    	else{
 					    		$('#domainMsg').html('删除请求已成功提交，请注意如果此域名绑定关联了对象，将会花费至多24小时来解除绑定');
@@ -151,7 +151,7 @@
 			    success : function(result) {
 			    	console.log(result);
 			    	if(result=="fail"){
-			    		$.messager.alert('结果', '绑定失败,这可能是由于以下原因引起的<br>1.服务器网络不稳定<br>2.域名已被绑定<br>3.权限不足<br>4.短时间内对同一域名进行多次绑定解绑操作' ,'');
+			    		$.messager.alert('结果', '绑定/解绑失败,这可能是由于以下原因引起的<br>1.服务器网络不稳定<br>2.域名已被绑定<br>3.权限不足<br>4.短时间内对同一域名多次进行绑定解绑操作' ,'');
 			    	}
 			    	else{
 			    		$('#cc4').combobox('reload');
@@ -168,7 +168,7 @@
 		
 		function cftips(){
 			if(cfstatus){
-				$.messager.alert('CF配置', '已正确CF信息，可以一键绑定域名，免除人工干涉' ,'');
+				$.messager.alert('CF配置', '已正确配置CF信息，可以一键绑定域名，免除人工干涉' ,'');
 			}
 			else{
 				$.messager.alert('CF配置', '无法读取CF配置信息或CF配置不正确，但这并不影响域名的绑定解绑，你同样可以根据提示信息进行域名操作' ,'');
