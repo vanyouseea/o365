@@ -25,7 +25,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http
 				// 登录处理
 				.formLogin() // 表单方式，或httpBasic
-				.loginPage("/loginPage").loginProcessingUrl("/login").defaultSuccessUrl("/home") // 成功登陆后跳转页面
+				.loginPage("/loginPage").loginProcessingUrl("/login").defaultSuccessUrl("/home", true) // 成功登陆后跳转页面
 				.failureUrl("/error/401.html").permitAll().and();
 		http.authorizeRequests() // 授权配置
 				// 无需权限访问
