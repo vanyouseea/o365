@@ -8,7 +8,7 @@ public class ErrorCtrl {
 	
 	@RequestMapping(value = {"/error/401.html"})
 	public String err401() {
-		return "/error/401";
+		return "error/401";
 	}
 	
 }
