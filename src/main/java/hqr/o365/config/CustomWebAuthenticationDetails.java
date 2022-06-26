@@ -24,7 +24,7 @@ public class CustomWebAuthenticationDetails extends WebAuthenticationDetails {
 		sb.append(getClass().getSimpleName()).append(" [");
 		sb.append("RemoteIpAddress=").append(this.getRemoteAddress()).append(", ");
 		sb.append("SessionId=").append(this.getSessionId()).append(", ");
-		sb.append("Token=").append(this.getSessionId()).append("]");
+		sb.append("Token=").append(this.getToken()).append("]");
         return sb.toString();
     }
 }

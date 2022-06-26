@@ -50,20 +50,17 @@ public class MyAuthenticationProvider implements AuthenticationProvider {
         System.out.println("getDetails:"+authentication.getDetails());
         System.out.println("getPrincipal:"+authentication.getPrincipal());
         String remoteIP = "UnKnown";
-        try {
-        	CustomWebAuthenticationDetails webDtls = (CustomWebAuthenticationDetails)authentication.getDetails();
-            remoteIP = webDtls.getRemoteAddress();
+    	CustomWebAuthenticationDetails webDtls = (CustomWebAuthenticationDetails)authentication.getDetails();
+        remoteIP = webDtls.getRemoteAddress();
 
-            //recaptcha v3
-            if(!recaptchaV3.verify(webDtls.getToken())) {
-            	System.out.println("fail to verify");
-            	throw new BadCredentialsException("人机认证失败");
-            }
-            else {
-            	System.out.println("recaptcha verify success");
-            }
+        //recaptcha v3
+        if(!recaptchaV3.verify(webDtls.getToken())) {
+        	System.out.println("fail to verify");
+        	throw new BadCredentialsException("人机认证失败");
         }
-        catch (Exception e) {}
+        else {
+        	System.out.println("recaptcha verify success");
+        }
         
         
         UserDetails userInfo = userDetailsService.loadUserByUsername(userName); // 这里调用我们的自己写的获取用户的方法；

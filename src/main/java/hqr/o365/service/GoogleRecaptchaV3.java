@@ -23,6 +23,7 @@ public class GoogleRecaptchaV3 {
 		boolean res = false;
 		
 		String endpoint = "https://www.google.com/recaptcha/api/siteverify?secret=6LcN96MZAAAAAKTsXbR831q6ELKtm6qA3XlXed6J&response="+token;
+		System.out.println("google endpoint:"+endpoint);
 		HttpHeaders headers = new HttpHeaders();
 		headers.set(HttpHeaders.USER_AGENT, ua);
 		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
