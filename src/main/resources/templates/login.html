@@ -8,6 +8,7 @@
 	<script type="text/javascript" src="jquery-easyui-1.9.14/jquery.easyui.min.js"></script>
 	<script type="text/javascript" src="jquery-easyui-1.9.14/locale/easyui-lang-zh_CN.js"></script>
 	<script type='text/javascript' src='bug-min.js'></script>
+	<script src="https://www.google.com/recaptcha/api.js?render=6LcPZIEgAAAAANMEdb8g-ZFUWJyWdsBL_jlZla_Z"></script>
 	<style type="text/css">
 		body{
 			background-image:url('bg.jpg');
@@ -40,6 +41,7 @@
 			<div style="margin-bottom:18px">
 				<b>密码:</b><input id="password" name="password" type="password" style="width:100%" /><div id="useridtip" style="font-size: 10px"><font color="gray">请输入密码</font></div>
 			</div>
+			<input id="ggtoken" name="ggtoken" type="hidden" value="nono"/>
 		</form>
 		<a href="reg"><font style="font-size: 10px">没有账号？点此注册</font></a>
 	</div>
@@ -67,9 +69,14 @@
 		});
 	
 		function submitForm(){
-			if(checkUserId()&&checkPwd()){
-				$('#ff').submit();
-			}
+	        grecaptcha.ready(function() {
+				grecaptcha.execute('6LcPZIEgAAAAANMEdb8g-ZFUWJyWdsBL_jlZla_Z', {action: 'submit'}).then(function(token) {
+					$('#ggtoken').val(token);
+					if(checkUserId()&&checkPwd()){
+						$('#ff').submit();
+					}
+				});
+		    });
 		}
 		function clearForm(){
 			$('#ff').form('clear');

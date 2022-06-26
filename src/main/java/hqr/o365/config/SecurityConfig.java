@@ -11,12 +11,17 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import hqr.o365.service.CustomAuthenticationDetailsSource;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private AuthenticationProvider provider;  //注入我们自己的AuthenticationProvider
 
+    @Autowired
+    private CustomAuthenticationDetailsSource authenticationDetailsSource;
+    
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
@@ -26,7 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				// 登录处理
 				.formLogin() // 表单方式，或httpBasic
 				.loginPage("/loginPage").loginProcessingUrl("/login").defaultSuccessUrl("/home", true) // 成功登陆后跳转页面
-				.failureUrl("/error/401.html").permitAll().and();
+				.failureUrl("/error/401.html").authenticationDetailsSource(authenticationDetailsSource).permitAll().and();
 		http.authorizeRequests() // 授权配置
 				// 无需权限访问
 				.antMatchers("/h2/**","/*.png","/*.js", "/*.svg", "/jquery-easyui-1.9.14/**", "/", "/index.html", "/loginPage","/reg","/reg.html",
