@@ -33,7 +33,7 @@ public class GetOfficeUserRole {
 	@Cacheable(value="cacheUserRole")
 	public String getRole(String uid) {
 		String role = "";
-		List<TaOfficeInfo> list = repo.getSelectedApp();
+		List<TaOfficeInfo> list = repo.findBySelected("是");
 		if(list!=null&&list.size()>0) {
 			TaOfficeInfo ta = list.get(0);
 			String accessToken = "";

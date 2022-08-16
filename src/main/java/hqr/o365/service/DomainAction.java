@@ -58,7 +58,7 @@ public class DomainAction {
 			return true;
 		}
 		
-		List<TaOfficeInfo> list = repo.getSelectedApp();
+		List<TaOfficeInfo> list = repo.findBySelected("是");
 		if(list!=null&&list.size()>0) {
 			TaOfficeInfo ta = list.get(0);
 			String accessToken = "";
@@ -101,7 +101,7 @@ public class DomainAction {
 	public String verificationDnsRecords(String domain) {
 		String dnsRecords = "fail";
 		
-		List<TaOfficeInfo> list = repo.getSelectedApp();
+		List<TaOfficeInfo> list = repo.findBySelected("是");
 		if(list!=null&&list.size()>0) {
 			TaOfficeInfo ta = list.get(0);
 			String accessToken = "";
@@ -157,7 +157,7 @@ public class DomainAction {
 		
 		String arr[] = domain.split(" - ");
 		
-		List<TaOfficeInfo> list = repo.getSelectedApp();
+		List<TaOfficeInfo> list = repo.findBySelected("是");
 		if(list!=null&&list.size()>0) {
 			TaOfficeInfo ta = list.get(0);
 			String accessToken = "";
@@ -201,7 +201,7 @@ public class DomainAction {
 			return false;
 		}
 		
-		List<TaOfficeInfo> list = repo.getSelectedApp();
+		List<TaOfficeInfo> list = repo.findBySelected("是");
 		if(list!=null&&list.size()>0) {
 			TaOfficeInfo ta = list.get(0);
 			String accessToken = "";

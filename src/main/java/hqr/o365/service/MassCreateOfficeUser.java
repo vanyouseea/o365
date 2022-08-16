@@ -74,7 +74,7 @@ public class MassCreateOfficeUser {
 		int licenseFail = 0;
 		
 		//get info
-		List<TaOfficeInfo> list = repo.getSelectedApp();
+		List<TaOfficeInfo> list = repo.findBySelected("是");
 		if(list!=null&&list.size()>0) {
 			TaOfficeInfo ta = list.get(0);
 			String accessToken = "";

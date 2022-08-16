@@ -6,6 +6,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import hqr.o365.dao.TaUserRepo;
+import hqr.o365.domain.TaUser;
 
 @Service
 public class ChkUser {
@@ -14,8 +15,8 @@ public class ChkUser {
 	
 	@Cacheable(value="cacheTaUser")
 	public String checkCanReg(String userid) {
-		int cnt = tup.chkUserId(userid);
-		if(cnt>0) {
+		TaUser user = tup.findByUserId(userid);
+		if(user!=null) {
 			return "N";
 		}
 		else{
