@@ -48,7 +48,7 @@ public class GetOfficeRoleUser {
 		List<PrivilegedUser> ll = new ArrayList<PrivilegedUser>();
 		HashMap jsonTmp = new HashMap();
 		
-		List<TaOfficeInfo> list = repo.getSelectedApp();
+		List<TaOfficeInfo> list = repo.findBySelected("是");
 		if(list!=null&&list.size()>0) {
 			TaOfficeInfo ta = list.get(0);
 			String accessToken = "";
@@ -57,7 +57,8 @@ public class GetOfficeRoleUser {
 			}
 			
 			if(!"".equals(accessToken)) {
-				List<TaMasterCd> roleList = tmc.getSearchRoles();
+				//List<TaMasterCd> roleList = tmc.getSearchRoles();
+				List<TaMasterCd> roleList = tmc.findByKeyTyStartsWith("SEARCH_ROLE_");
 				int total = 0;
 				if(roleList!=null&&roleList.size()>0) {
 					for (TaMasterCd taMasterCd : roleList) {

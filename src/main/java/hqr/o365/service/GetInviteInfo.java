@@ -1,12 +1,11 @@
 package hqr.o365.service;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
@@ -26,14 +25,13 @@ public class GetInviteInfo {
 	@Cacheable(value="cacheInviteInfo")
 	public String getAllInviteInfo(int intRows, int intPage) {
 		long total = repo.count();
-		List<TaInviteInfo> rows = new ArrayList<TaInviteInfo>();
-		if(total>0) {
-			rows = repo.getInviteInfos(intRows * (intPage - 1), intRows * intPage );
-		}
+		
+		Page<TaInviteInfo> pages = repo.findAll(PageRequest.of(intPage-1, intRows));
 		
 		HashMap map = new HashMap();
 		map.put("total", total);
-		map.put("rows", rows);
+		map.put("rows", pages.getContent());
+		
 		return JSON.toJSON(map).toString();
 	}
 	
