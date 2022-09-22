@@ -342,27 +342,32 @@
 				text:'搜索',
 				iconCls:'icon-search',
 				handler:function(){
-					$.messager.prompt('请输入关键字', '可以搜索名字和邮箱前缀', function(r){
+					$.messager.prompt('请输入关键字', '可以搜索名字和邮箱前缀，搜索空串或取消将会显示所有用户', function(r){
+						var keyword;
+						console.log("keyword is "+r);
 						if(r){
-							console.log("keyword is "+r);
-							$.ajax({
-							    type : "POST", 
-							    url : "/saveKeyWord",
-							    data : { "keyword": r},
-							    success : function(result) {
-							    	console.log("keyword saved");
-								},
-								error : function(){
-							       	$.messager.show({
-										title:'失败',
-										msg:'搜索失败，这可能是由于服务器出现问题引起的',
-										timeout:2000,
-										showType:'slide'
-									}); 
-								}							
-							});
-							$('#tb3').datagrid('reload');
+							keyword = r;
 						}
+						else{
+							keyword = "";
+						}
+						$.ajax({
+						    type : "POST", 
+						    url : "/saveKeyWord",
+						    data : { "keyword": r},
+						    success : function(result) {
+						    	console.log("keyword saved");
+							},
+							error : function(){
+						       	$.messager.show({
+									title:'失败',
+									msg:'搜索失败，这可能是由于服务器出现问题引起的',
+									timeout:2000,
+									showType:'slide'
+								}); 
+							}							
+						});
+						$('#tb3').datagrid('reload');
 					});
 				}
 			},{
