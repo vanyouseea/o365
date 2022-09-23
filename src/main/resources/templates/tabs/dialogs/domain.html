@@ -9,7 +9,7 @@
 	<table style="padding:10px">
 		<tr>
 			<td>
-				域名： <input id="cc4" name="dept" value="Loading..." style="width:315px">
+				域名： <input id="cc5" name="dept" value="Loading..." style="width:315px">
 			</td>
 		</tr>
 		<tr>
@@ -26,7 +26,7 @@
 		</tr>
 	</table>
 	<script type="text/javascript" th:inline="none">
-		$('#cc4').combobox({
+		$('#cc5').combobox({
 		    url:'/getDomains2',
 		    valueField:'id',
 		    textField:'text',
@@ -73,13 +73,13 @@
 					    		$.messager.alert('结果', '绑定/解绑失败,这可能是由于以下原因引起的<br>1.服务器网络不稳定<br>2.域名已被绑定<br>3.权限不足<br>4.短时间内对同一域名多次进行绑定解绑操作' ,'');
 					    	}
 					    	else if(result=="succ"){
-					    		$('#cc4').combobox('reload');
+					    		$('#cc5').combobox('reload');
 					    		$('#domainMsg').html('域名已成功绑定，您现在可以使用它了');
 					    		$.messager.alert('结果', '域名已成功绑定，您现在可以使用它了' ,'');
 					    		$('#dlg9').dialog('close');
 					    	}
 					    	else{
-					    		$('#cc4').combobox('reload');
+					    		$('#cc5').combobox('reload');
 					    		const obj = JSON.parse(result);
 					    		const valOjb = obj.value;
 					    		//TXT record
@@ -113,7 +113,7 @@
 		function sb2(){
 			$.messager.confirm('解绑域名', '你确认要解绑此域名吗?请注意如果此域名关联了对象，将会花费至多24小时来解除绑定(PS:默认域名无法被解除绑定)', function(r){
 				if (r){
-					domain = $('#cc4').combobox('getText');
+					domain = $('#cc5').combobox('getText');
 					console.log('delete '+domain);
 					$.ajax({
 					    type : "POST", 
@@ -127,7 +127,7 @@
 					    	}
 					    	else{
 					    		$('#domainMsg').html('删除请求已成功提交，请注意如果此域名绑定关联了对象，将会花费至多24小时来解除绑定');
-					    		$('#cc4').combobox('reload');
+					    		$('#cc5').combobox('reload');
 					    		$.messager.alert('结果', '删除请求已成功提交，将会在后台异步删除此域名，请注意如果此域名关联了对象，将会花费至多24小时来解除绑定' ,'');
 					    	}
 						},
@@ -142,7 +142,7 @@
 		}
 		
 		function sb3(){
-			domain = $('#cc4').combobox('getText');
+			domain = $('#cc5').combobox('getText');
 			console.log('delete '+domain);
 			$.ajax({
 			    type : "POST", 
@@ -154,7 +154,7 @@
 			    		$.messager.alert('结果', '绑定/解绑失败,这可能是由于以下原因引起的<br>1.服务器网络不稳定<br>2.域名已被绑定<br>3.权限不足<br>4.短时间内对同一域名多次进行绑定解绑操作' ,'');
 			    	}
 			    	else{
-			    		$('#cc4').combobox('reload');
+			    		$('#cc5').combobox('reload');
 			    		$('#domainMsg').html('域名已成功绑定，您现在可以使用它了');
 			    		$.messager.alert('结果', '域名已成功绑定，您现在可以使用它了' ,'');
 			    		$('#dlg9').dialog('close');
